@@ -20,6 +20,9 @@
                                     {{#each this}}
                                         <td data-title="{{@key}}">{{this}}</td>
                                     {{/each}}
+                                    {{#if this.id}}
+                                        <td><a href="/tables/{{../table_name}}/edit?recordId={{this.id}}"><button>Edit</button></a></td>
+                                    {{/if}}
                                     </tr>
                                 {{/each}}
                             </tbody>
