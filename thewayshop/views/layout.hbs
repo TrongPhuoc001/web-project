@@ -47,30 +47,11 @@
                     <div class="text-slid-box">
                         <div id="offer-box" class="carouselTicker">
                             <ul class="offer-box">
+                                {{#each coupons}}
                                 <li>
-                                    <i class="fab fa-opencart"></i> Off 10%! Shop Now Man
+                                    <i class="fab fa-opencart"></i> {{this}}
                                 </li>
-                                <li>
-                                    <i class="fab fa-opencart"></i> 50% - 80% off on Fashion
-                                </li>
-                                <li>
-                                    <i class="fab fa-opencart"></i> 20% off Entire Purchase Promo code: offT20
-                                </li>
-                                <li>
-                                    <i class="fab fa-opencart"></i> Off 50%! Shop Now
-                                </li>
-                                <li>
-                                    <i class="fab fa-opencart"></i> Off 10%! Shop Now Man
-                                </li>
-                                <li>
-                                    <i class="fab fa-opencart"></i> 50% - 80% off on Fashion
-                                </li>
-                                <li>
-                                    <i class="fab fa-opencart"></i> 20% off Entire Purchase Promo code: offT20
-                                </li>
-                                <li>
-                                    <i class="fab fa-opencart"></i> Off 50%! Shop Now
-                                </li>
+                                {{/each}}
                             </ul>
                         </div>
                     </div>
@@ -123,52 +104,18 @@
                             <ul class="dropdown-menu megamenu-content" role="menu">
                                 <li>
                                     <div class="row">
+                                        {{#each categories}}
                                         <div class="col-menu col-md-3">
-                                            <h6 class="title">Top</h6>
+                                            <h6 class="title">{{this.name}}</h6>
                                             <div class="content">
                                                 <ul class="menu-col">
-                                                    <li><a href="product">Jackets</a></li>
-                                                    <li><a href="product">Shirts</a></li>
-                                                    <li><a href="product">Sweaters & Cardigans</a></li>
-                                                    <li><a href="product">T-shirts</a></li>
+                                                    {{#each this.tags}}
+                                                    <li><a href="product">{{this}}</a></li>
+                                                    {{/each}}
                                                 </ul>
                                             </div>
                                         </div>
-                                        <!-- end col-3 -->
-                                        <div class="col-menu col-md-3">
-                                            <h6 class="title">Bottom</h6>
-                                            <div class="content">
-                                                <ul class="menu-col">
-                                                    <li><a href="product">Swimwear</a></li>
-                                                    <li><a href="product">Skirts</a></li>
-                                                    <li><a href="product">Jeans</a></li>
-                                                    <li><a href="product">Trousers</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <!-- end col-3 -->
-                                        <div class="col-menu col-md-3">
-                                            <h6 class="title">Clothing</h6>
-                                            <div class="content">
-                                                <ul class="menu-col">
-                                                    <li><a href="product">Top Wear</a></li>
-                                                    <li><a href="product">Party wear</a></li>
-                                                    <li><a href="product">Bottom Wear</a></li>
-                                                    <li><a href="product">Indian Wear</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="col-menu col-md-3">
-                                            <h6 class="title">Accessories</h6>
-                                            <div class="content">
-                                                <ul class="menu-col">
-                                                    <li><a href="product">Bags</a></li>
-                                                    <li><a href="product">Sunglasses</a></li>
-                                                    <li><a href="product">Fragrances</a></li>
-                                                    <li><a href="product">Wallets</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                                        {{/each}}
                                         <!-- end col-3 -->
                                     </div>
                                     <!-- end row -->
@@ -207,18 +154,18 @@
                 <li class="cart-box">
                     <ul class="cart-list">
                         <li>
-                            <a href="#" class="photo"><img src="images/img-pro-01.jpg" class="cart-thumb" alt="" /></a>
-                            <h6><a href="#">Delica omtantur </a></h6>
+                            <a href="shopdetail" class="photo"><img src="images/img-pro-01.jpg" class="cart-thumb" alt="" /></a>
+                            <h6><a href="shopdetail">Delica omtantur </a></h6>
                             <p>1x - <span class="price">$80.00</span></p>
                         </li>
                         <li>
-                            <a href="#" class="photo"><img src="images/img-pro-02.jpg" class="cart-thumb" alt="" /></a>
-                            <h6><a href="#">Omnes ocurreret</a></h6>
+                            <a href="shopdetail" class="photo"><img src="images/img-pro-02.jpg" class="cart-thumb" alt="" /></a>
+                            <h6><a href="shopdetail">Omnes ocurreret</a></h6>
                             <p>1x - <span class="price">$60.00</span></p>
                         </li>
                         <li>
-                            <a href="#" class="photo"><img src="images/img-pro-03.jpg" class="cart-thumb" alt="" /></a>
-                            <h6><a href="#">Agam facilisis</a></h6>
+                            <a href="shopdetail" class="photo"><img src="images/img-pro-03.jpg" class="cart-thumb" alt="" /></a>
+                            <h6><a href="shopdetail">Agam facilisis</a></h6>
                             <p>1x - <span class="price">$40.00</span></p>
                         </li>
                         <li class="total">

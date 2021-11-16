@@ -4,7 +4,7 @@ const router = express.Router();
 
 /* GET users listing. */
 router.get('/login', function(req, res, next) {
-  return res.render('login',{layout:false});
+  return res.render('login',{layout:false,title:'Login'});
 });
 router.post('/login', function(req, res, next) {
   const {username, password} = req.body;
@@ -23,7 +23,8 @@ router.post('/login', function(req, res, next) {
       else{
         return res.render('login',{
           layout:false,
-          message:'Wrong username or password'
+          message:'Wrong username or password',
+          title:'Login'
         });
       }
     }
