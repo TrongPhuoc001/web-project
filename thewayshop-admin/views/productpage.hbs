@@ -1,0 +1,23 @@
+<section id="main-content">
+    <section class="wrapper">
+        <div class="row">
+            <button><a href="/product/add">Add new product</a></button>
+            {{>products}}
+        </div>
+        <nav class="row"  aria-label="Page navigation" style="left:0;">
+            <div class="col-md-6"></div>
+            <ul class="pagination ">
+                {{#if previous}}
+                <li class="page-item"><a class="page-link" href="/product?page={{previous}}">Previous</a></li>
+                {{/if}}
+                {{#each pages}}
+                <li class="page-item"><a class="page-link" href="/product?page={{this}}">{{this}}</a></li>
+                {{/each}}
+                {{#if next}}
+                <li class="page-item"><a class="page-link" href="/product?page={{next}}">Next</a></li>
+                {{/if}}
+            </ul>
+            <div class="col-md-6"></div>
+        </nav>
+    </section>
+</section>

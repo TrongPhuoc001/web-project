@@ -7,7 +7,8 @@ const exphbs = require('express-handlebars');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const tableRouter = require('./routes/tables')
+const tableRouter = require('./routes/tables');
+const productRouter = require('./routes/product');
 
 const verify = require('./routes/middleware/verify')
 const app = express();
@@ -17,7 +18,9 @@ app.engine('hbs',exphbs({
   defaultLayout: 'layout',
   extname: '.hbs',
   layoutsDir: path.join(__dirname, 'views'),
-  partialsDir : path.join(__dirname, 'views')
+  partialsDir : path.join(__dirname, 'views/partials'),
+  helpers: require('./config/hbsHelper')
+
 }));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -32,6 +35,7 @@ app.use('/users', usersRouter);
 app.use(verify);
 app.use('/', indexRouter);
 app.use('/tables', tableRouter);
+app.use('/product',productRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

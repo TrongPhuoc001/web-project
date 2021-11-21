@@ -42,7 +42,7 @@ CREATE TABLE product(
     id serial PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description VARCHAR(255),
-    price int NOT NULL,
+    price DECIMAL(12,2) NOT NULL,
     image VARCHAR(255),
     brand VARCHAR(255),
     tag_id int,
@@ -137,19 +137,26 @@ VALUES ('Phước', 'Nguyễn','phuoc@gmail.com', '123123','2001-03-19','Gia Lai
 ('Luffy', 'Monkey.D','luffy@gmail.com', '123123','2001-01-01','Gia Lai, Việt Nam',1000.00);
 
 INSERT INTO tag(name)
-VALUES ('Shirts'),('Jean'),('Shoes'),('Bag');
+VALUES ('Shirts'),('Jean'),('Shoes'),('Bag'),('T-Shirts'),('Sweaters'),('Swimware'),('Trousers'),('Sunglasses'),('Walets'),('Watchs'),('Suits');
 
 INSERT INTO category(name)
-VALUES ('Top'),('Bottom'),('Clothing'),('accessories');
+VALUES ('Top'),('Bottom'),('Clothing'),('Accessories');
 
 INSERT INTO tag_category(tag_id,category_id)
-VALUES (1,1),(1,3),(2,2),(2,3),(3,2),(4,4);
+VALUES (1,1),(1,3),(2,2),(2,3),(3,2),(4,4),(5,1),(5,3),(6,1),(7,2),(8,2),(9,4),(10,4),(11,4),(12,3);
 
 INSERT INTO product(title, description, price, image, brand, tag_id, available, sold)
 VALUES ('Shirts','kaki, comfortable',9.99,'https://i.ibb.co/LNrBbpZ/shirt-img.jpg','Local',1,200,80),
 ('Jean','Made from kaki, super comfortable, model and stylist',19.99,'https://i.ibb.co/bgccpjM/jean.jpg','Local',2,1000,200),
 ('Men Shoes','Stylist men shoes, super super comfotable',99.99,'https://i.ibb.co/pd0nW3b/shoes-img.jpg','Hush Puppies',3,500,5),
-('Sliver Modern Watch','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',499.99,'https://i.ibb.co/mqRQfH3/img-pro-04.jpg','Tiffany & Co',4,100,10);
+('Sliver Modern Watch','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',499.99,'https://i.ibb.co/mqRQfH3/img-pro-04.jpg','Tiffany & Co',4,100,10),
+('Walet','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',49.99,'https://i.ibb.co/7JDFRLD/wallet-img.jpg','Abc',10,100,10),
+('T-Shirts black & orange','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',79.99,'https://i.ibb.co/J5RyXN7/t-shirts-img.jpg','DEF',5,100,10),
+('Brown Bag','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',99.99,'https://i.ibb.co/09Qb0W8/women-bag-img.jpg','DEF',4,100,10),
+('Healthy Bag','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',499.99,'https://i.ibb.co/mF1yrX5/instagram-img-08.jpg','Tiffany & Co',4,100,10),
+('Weding Suit','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',49.99,'https://i.ibb.co/YWMW68J/suit.jpg','Abc',12,100,10),
+('Modern Sunglass','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',79.99,'https://i.ibb.co/LgBzcw6/sunglass.jpg','DEF',9,100,10),
+('Pretty Sweater','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',9999.99,'https://i.ibb.co/wJKsnGq/sweater.jpg','DEF',6,100,10),
 
 INSERT INTO wishlist(user_id,product_id)
 VALUES (1,1),(2,2),(3,3),(4,4);

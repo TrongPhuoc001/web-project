@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../dbconnect');
+const pool = require('../models/config/dbconnect');
 /* GET users listing. */
 router.get('/:tb_name', async function(req, res, next) {
   const {tb_name} = req.params;

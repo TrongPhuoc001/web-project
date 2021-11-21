@@ -42,43 +42,6 @@
                 <!--  notification start -->
                 <ul class="nav top-menu">
                     <!-- settings start -->
-                    <li class="dropdown">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
-                            <i class="fa fa-tasks"></i>
-                            <span class="badge bg-theme">{{tasks.length}}</span>
-                        </a>
-                        <ul class="dropdown-menu extended tasks-bar">
-                            <div class="notify-arrow notify-arrow-green"></div>
-                            {{#if tasks}}
-                            <li>
-                            <p class="green">You have {{tasks.length}} pending tasks</p>
-                            </li>
-                            {{#each tasks}}
-                            <li>
-                                <a href="/">
-                                    <div class="task-info">
-                                        <div class="desc">{{this.title}}</div>
-                                        <div class="percent">{{this.percent}}</div>
-                                    </div>
-                                    <div class="progress progress-striped">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{this.percent}}" aria-valuemin="0" aria-valuemax="100" style="width: {{this.percent}}">
-                                            <span class="sr-only">{{this.percent}} Complete (success)</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            {{/each}}
-                            {{else}}
-                            <li>
-                                <p class="green">No messages</p>
-                            </li>
-                            {{/if}}
-                            <li class="external">
-                                <a href="#">See All Tasks</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <!-- settings end -->
                     <!-- inbox dropdown start-->
                     <li id="header_inbox_bar" class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
@@ -97,10 +60,10 @@
                                     <span class="photo"><img alt="avatar" src="/images/ui-zac.jpg"></span>
                                     <span class="subject">
                                     <span class="from">{{this.name}}</span>
-                                    <span class="time">{{this.time}}</span>
+                                    <span class="time">{{this.time}} h ago</span>
                                     </span>
                                     <span class="message">
-                                        {{this.message}}
+                                        {{this.content}}
                                     </span>
                                 </a>
                             </li>
@@ -142,14 +105,20 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
+                    <li class="mt">
+                        <a href="/product?page=1">
+                            <i class="fa fa-th"></i>
+                            <span>Product</span>
+                        </a>
+                    </li>
                     <li class="sub-menu">
                         <a href="javascript:;" >
-                            <i class="fa fa-th"></i>
+                            <i class="fa fa-database"></i>
                             <span>Data Tables</span>
                         </a>
                         <ul class="sub">
                             {{#each tables}}
-                            <li><a  href="/tables/{{this}}">{{this}}</a></li>
+                            <li><a  href="/tables/{{this.table_name}}">{{this.table_name}}</a></li>
                             {{/each}}
                         </ul>
                     </li>
