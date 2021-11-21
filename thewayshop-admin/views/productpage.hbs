@@ -1,12 +1,23 @@
 <section id="main-content">
     <section class="wrapper">
         <div class="row">
-            <button><a href="/product/add">Add new product</a></button>
+            <div class="col-md-6">
+                <h2>All Product</h2>
+            </div>
+            
+            <div class="col-md-6">
+                <button class="btn btn-info" style="margin-top:5px;"> 
+                    <a href="/product/add" style="color:#fcfcfc">Add new product</a>
+                </button>
+            </div>
+            
+        </div>
+        <div class="row">
             {{>products}}
         </div>
         <nav class="row"  aria-label="Page navigation" style="left:0;">
             <div class="col-md-6"></div>
-            <ul class="pagination ">
+            <ul class="pagination justify-content-center col-md-3" style="margin: 0;">
                 {{#if previous}}
                 <li class="page-item"><a class="page-link" href="/product?page={{previous}}">Previous</a></li>
                 {{/if}}
@@ -17,7 +28,9 @@
                 <li class="page-item"><a class="page-link" href="/product?page={{next}}">Next</a></li>
                 {{/if}}
             </ul>
-            <div class="col-md-6"></div>
+            <div class="col-md-3">
+                
+            </div>
         </nav>
     </section>
 </section>

@@ -4,6 +4,7 @@ const productCon = require('../controller/product/mainController')
 /* GET home page. */
 router.get('/',productCon.get)
 router.get('/add',productCon.getAddProduct);
+router.post('/add',productCon.postAddProduct);
 router.get('/:product_id',productCon.getProduct)
 router.post('/:product_id',productCon.postProduct)
 

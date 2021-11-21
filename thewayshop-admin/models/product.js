@@ -40,3 +40,11 @@ exports.updatePro = (pro_id,data)=>{
         WHERE id=$10`,[title,description,price,image,brand,tag_id,available,sold,is_delete,pro_id]
     )
 }
+
+exports.addPro = (data)=>{
+    const {title,description,price,image,brand,tag_id,available,sold} = data;
+    return pool.query(
+        `INSERT INTO product(title,description,price,image,brand,tag_id,available,sold)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,[title,description,price,image,brand,tag_id,available,sold]
+    )
+}

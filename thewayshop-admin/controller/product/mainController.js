@@ -2,11 +2,13 @@ const productModel = require('../../models/product');
 const tableModel = require('../../models/table');
 const chatModel = require('../../models/chat');
 
-const client ='ca-pub-0336101706302200';
+
+
+
 exports.get = async (req,res)=>{
     const username = req.cookies.username;
     const chat = await chatModel.getChat;
-    const table = await tableModel.table;
+    const table = await tableModel.table;  
 
     const page = parseInt(req.query.page)||1;
     let max_page = await productModel.maxPage;
@@ -45,6 +47,7 @@ exports.postProduct = async (req,res)=>{
     const username = req.cookies.username;
     const chat = await chatModel.getChat;
     const table = await tableModel.table;
+
     try{
         await productModel.updatePro(req.params.product_id,req.body);
         res.redirect(`/product/${req.params.product_id}`)
@@ -66,7 +69,8 @@ exports.postProduct = async (req,res)=>{
 exports.getAddProduct = async (req,res)=>{
     const username = req.cookies.username;
     const chat = await chatModel.getChat;
-    const table = await tableModel.table;
+    const table = await tableModel.table; 
+
     const product = {
         title:'product name',
         description:'some thing to say about the product',
@@ -87,5 +91,42 @@ exports.getAddProduct = async (req,res)=>{
 }
 
 exports.postAddProduct = async(req,res)=>{
+    const username = req.cookies.username;
+    const chat = await chatModel.getChat;
+    const table = await tableModel.table; 
+    const product = {
+        title:'product name',
+        description:'some thing to say about the product',
+        price:'price of the product',
+        image:'product image',
+        brand:'Brand of the product',
+        tag_id:'Id of 1 of the tag',
+        available:'Have in store',
+        sold:'Have sold'
+    }
+    try{
+        const newProId = await productModel.addPro(req.body)
+        console.log(newProId.rows[0].id)
+        res.render('productAdd', { 
+            title: 'New product',
+            username: username,
+            tables:table.rows,
+            user_messages:chat.rows,
+            product:product,
+            message:'Add success',
+            new_pro_id:newProId.rows[0].id
+        });
+    }
+    catch(err){
+        res.render('productAdd', { 
+            title: 'New product',
+            username: username,
+            tables:table.rows,
+            user_messages:chat.rows,
+            product:product,
+            error:err.routine
+        });
+    }
+    
     
 }
