@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const {engine} = require('express-handlebars');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -10,7 +11,6 @@ const contactusRouter = require('./routes/contactus');
 const cartRouter = require('./routes/cart');
 const checkoutRouter = require('./routes/checkout');
 const myaccountRouter = require('./routes/myaccount');
-const shopdetailRouter = require('./routes/shopdetail');
 const wishlistRouter = require('./routes/wishlist');
 const loginRouter = require('./routes/login');
 const productRouter = require('./routes/product');
@@ -18,6 +18,13 @@ const productRouter = require('./routes/product');
 const app = express();
 
 // view engine setup
+app.engine('hbs',engine({ 
+  defaultLayout: 'layout',
+  extname: '.hbs',
+  layoutsDir: path.join(__dirname, 'views'),
+  partialsDir : path.join(__dirname, 'views/partials'),
+  helpers: require('./config/hbsHelper')
+}));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
@@ -33,7 +40,6 @@ app.use('/contactus', contactusRouter);
 app.use('/cart', cartRouter);
 app.use('/checkout', checkoutRouter);
 app.use('/myaccount', myaccountRouter);
-app.use('/shopdetail', shopdetailRouter);
 app.use('/wishlist', wishlistRouter);
 app.use('/login', loginRouter);
 app.use('/product', productRouter);

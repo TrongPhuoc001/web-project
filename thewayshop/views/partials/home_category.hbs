@@ -1,0 +1,18 @@
+<!-- Start Categories  -->
+<div class="categories-shop">
+    <div class="container">
+        <div class="row">
+            {{#each index_cate}}
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                {{#each this}}
+                <div class="shop-cat-box">
+                    <img class="img-fluid" src="{{this.image}}" alt="" />
+                    <a class="btn hvr-hover" href="product">{{this.name}}</a>
+                </div>
+                {{/each}}
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>
+<!-- End Categories -->

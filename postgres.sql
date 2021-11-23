@@ -13,7 +13,8 @@ CREATE TABLE users(
     password VARCHAR(255) NOT NULL,
     birthday DATE NOT NULL,
     address VARCHAR(255) NOT NULL,
-    balance DECIMAL(12,2) DEFAULT 0 
+    balance DECIMAL(12,2) DEFAULT 0 ,
+    is_delete BOOLEAN DEFAULT false
 );
 
 CREATE TABLE tag(
@@ -49,7 +50,8 @@ CREATE TABLE product(
     available INT ,
     sold INT,
     create_date TIMESTAMP DEFAULT NOW(),
-
+    is_delete BOOLEAN DEFAULT false,
+    
     CONSTRAINT fk_product_tagid
         FOREIGN KEY (tag_id)
             REFERENCES tag(id)

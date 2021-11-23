@@ -1,0 +1,54 @@
+
+<!-- Start Shop Page  -->
+<div class="shop-box-inner">
+    <div class="container">
+        <div class="row">
+            {{>product_sidebar_left}}
+            <div class="col-xl-9 col-lg-9 col-sm-12 col-xs-12 shop-content-right">
+                <div class="right-product-box">
+                    {{>product_filter}}
+                    <div class="row product-categorie-box">
+                        {{>product_items}}
+                    </div>
+                    <div class="row">
+                        <nav aria-label="...">
+                            <ul class="pagination">
+                                {{#if previous}}
+                                <li class="page-item ">
+                                <a class="page-link" href="/product?page={{previous}}">Previous</a>
+                                </li>
+                                {{else}}
+                                <li class="page-item disabled">
+                                <span class="page-link">Previous</span>
+                                </li>
+                                {{/if}}
+                                {{#each pages}}
+                                {{#ifeq this ../page}}
+                                <li class="page-item active">
+                                <span class="page-link">
+                                    {{this}}
+                                    <span class="sr-only">(current)</span>
+                                </span>
+                                </li>
+                                {{else}}
+                                <li class="page-item"><a class="page-link" href="/product?page={{this}}">{{this}}</a></li>
+                                {{/ifeq}}
+                                {{/each}}
+                                {{#if next}}
+                                <li class="page-item ">
+                                <a class="page-link" href="/product?page={{next}}">Next</a>
+                                </li>
+                                {{else}}
+                                <li class="page-item disabled">
+                                <span class="page-link">Next</span>
+                                </li>
+                                {{/if}}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Shop Page -->
