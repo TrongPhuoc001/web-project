@@ -13,7 +13,7 @@ router.get('/:tb_name', async function(req, res, next) {
   const record = pool.query(
     `SELECT * FROM ${tb_name};`
   );
-  return res.render('table',{
+  return res.render('table/table',{
     title:`Data for table ${tb_name}`,
     username: username,
     tables:['category','order_product','orders','product','tag','tag_category','users'],
@@ -63,7 +63,7 @@ router.get('/:tb_name/edit', async (req,res)=>{
   const data = pool.query(query_string);
   
   delete (await data).rows[0].id;
-  res.render('editpage',{
+  res.render('table/editpage',{
     title:`Edit table ${tb_name}`,
     username: username,
     tables:['category','order_product','orders','product','tag','tag_category','users'],

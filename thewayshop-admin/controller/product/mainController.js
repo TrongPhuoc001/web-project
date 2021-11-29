@@ -15,7 +15,7 @@ exports.get = async (req,res)=>{
     max_page = max_page.rows[0].max_page;
     const products = await productModel.getAll(parseInt(page));
     console.log(max_page,Array.from({length: max_page}, (v, k) => k+1))
-    res.render('productpage', { 
+    res.render('product/productpage', { 
         title: 'TheWayShop Product',
         username: username,
         tables:table.rows,
@@ -34,7 +34,7 @@ exports.getProduct = async (req,res)=>{
 
     const {product_id} = req.params;
     const product = await productModel.getOne(product_id);
-    res.render('productEdit', { 
+    res.render('product/productEdit', { 
         title: product.rows[0].title,
         username: username,
         tables:table.rows,
@@ -55,7 +55,7 @@ exports.postProduct = async (req,res)=>{
     catch(err){
         console.log(err);
         const product = await productModel.getOne(product_id);
-        res.render('productEdit', { 
+        res.render('product/productEdit', { 
             title: product.rows[0].title,
             username: username,
             tables:table.rows,
@@ -81,7 +81,7 @@ exports.getAddProduct = async (req,res)=>{
         available:'Have in store',
         sold:'Have sold'
     }
-    res.render('productAdd', { 
+    res.render('product/productAdd', { 
         title: 'New product',
         username: username,
         tables:table.rows,
@@ -107,7 +107,7 @@ exports.postAddProduct = async(req,res)=>{
     try{
         const newProId = await productModel.addPro(req.body)
         console.log(newProId.rows[0].id)
-        res.render('productAdd', { 
+        res.render('product/productAdd', { 
             title: 'New product',
             username: username,
             tables:table.rows,
@@ -118,7 +118,7 @@ exports.postAddProduct = async(req,res)=>{
         });
     }
     catch(err){
-        res.render('productAdd', { 
+        res.render('product/productAdd', { 
             title: 'New product',
             username: username,
             tables:table.rows,

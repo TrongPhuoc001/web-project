@@ -4,6 +4,10 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const {engine} = require('express-handlebars');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -21,7 +25,7 @@ const app = express();
 app.engine('hbs',engine({ 
   defaultLayout: 'layout',
   extname: '.hbs',
-  layoutsDir: path.join(__dirname, 'views'),
+  layoutsDir: path.join(__dirname, 'views/layout'),
   partialsDir : path.join(__dirname, 'views/partials'),
   helpers: require('./config/hbsHelper')
 }));

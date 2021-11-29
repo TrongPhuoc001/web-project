@@ -1,3 +1,5 @@
+const view = 'product/'
+
 const productModel = require('../models/product');
 const categoryModel = require('../models/category');
 const tagModel = require('../models/tag');
@@ -18,7 +20,7 @@ exports.mainPage = async(req,res)=>{
     let max_page = await productModel.maxPage;
     max_page = parseInt(max_page.rows[0].max_page);
     const brands = await productModel.getBrand;
-    res.render('productList', { 
+    res.render(view+'productList', { 
         title: 'All Product', 
         coupons:['Off 10%! Shop Now Man','50% - 80% off on Fashion','20% off Entire Purchase Promo code: offT20','Off 50%! Shop Now','Off 10%! Shop Now Man','50% - 80% off on Fashion','20% off Entire Purchase Promo code: offT20'],
         categories:category_nav,
@@ -45,7 +47,7 @@ exports.proDetail = async (req,res)=>{
     const pro_id = req.params.product_id;
     const product = await productModel.getOne(pro_id);
     const relate = await productModel.getRelate(pro_id,product.rows[0].tag_id,product.rows[0].brand)
-    res.render('productDetail',{
+    res.render(view+'productDetail',{
         title: product.rows[0].title, 
         coupons:['Off 10%! Shop Now Man','50% - 80% off on Fashion','20% off Entire Purchase Promo code: offT20','Off 50%! Shop Now','Off 10%! Shop Now Man','50% - 80% off on Fashion','20% off Entire Purchase Promo code: offT20'],
         categories:category_nav,
@@ -71,7 +73,7 @@ exports.filterCategory = async (req,res)=>{
     const brands = await productModel.getBrand;
     let max_page = await productModel.maxPageCate(cate_id);
     max_page = max_page.rows[0].max_page;
-    res.render('productList', { 
+    res.render(view+'productList', { 
         title: 'All Product', 
         coupons:['Off 10%! Shop Now Man','50% - 80% off on Fashion','20% off Entire Purchase Promo code: offT20','Off 50%! Shop Now','Off 10%! Shop Now Man','50% - 80% off on Fashion','20% off Entire Purchase Promo code: offT20'],
         categories:category_nav,
@@ -101,7 +103,7 @@ exports.filterTag = async (req,res)=>{
     const brands = await productModel.getBrand;
     let max_page = await productModel.maxPageTag(tag_id);
     max_page = max_page.rows[0].max_page;
-    res.render('productList', { 
+    res.render(view+'productList', { 
         title: 'All Product', 
         coupons:['Off 10%! Shop Now Man','50% - 80% off on Fashion','20% off Entire Purchase Promo code: offT20','Off 50%! Shop Now','Off 10%! Shop Now Man','50% - 80% off on Fashion','20% off Entire Purchase Promo code: offT20'],
         categories:category_nav,
