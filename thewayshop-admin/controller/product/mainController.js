@@ -172,16 +172,5 @@ exports.delete = async(req,res)=>{
     max_page = max_page.rows[0].max_page;
     const products = await productModel.getAll(parseInt(page));
 
-    res.render('product/productpage', { 
-        title: 'TheWayShop Product',
-        username: username,
-        tables:table.rows,
-        user_messages:chat.rows,
-        head:'All Product',
-        products:products.rows,
-        page:page,
-        next:page<max_page?page+1 : false,
-        pages:Array.from({length: max_page}, (v, k) => k+1),
-        previous:page>1?page-1:false
-    });
+    res.redirect('/product')
 }
