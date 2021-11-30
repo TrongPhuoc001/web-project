@@ -2,13 +2,18 @@
     <section class="wrapper">
         <div class="row">
             <div class="col-md-6">
-                <h2>All Product</h2>
+                <h2>{{head}}</h2>
             </div>
             
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <button class="btn btn-info" style="margin-top:5px;"> 
                     <a href="/product/add" style="color:#fcfcfc">Add new product</a>
                 </button>
+            </div>
+            <div class="col-md-3">
+                <form action="/product/search">
+                    <input type="text" class="form-control" placeholder="Search" aria-label="Search"  name="q" aria-describedby="basic-addon1">
+                </form>
             </div>
             
         </div>
@@ -19,13 +24,13 @@
             <div class="col-md-6"></div>
             <ul class="pagination justify-content-center col-md-3" style="margin: 0;">
                 {{#if previous}}
-                <li class="page-item"><a class="page-link" href="/product?page={{previous}}">Previous</a></li>
+                <li class="page-item"><a class="page-link" href="?{{#if q}}q={{q}}&{{/if}}page={{previous}}">Previous</a></li>
                 {{/if}}
                 {{#each pages}}
-                <li class="page-item"><a class="page-link" href="/product?page={{this}}">{{this}}</a></li>
+                <li class="page-item"><a class="page-link" href="?{{#if q}}q={{q}}&{{/if}}page={{this}}">{{this}}</a></li>
                 {{/each}}
                 {{#if next}}
-                <li class="page-item"><a class="page-link" href="/product?page={{next}}">Next</a></li>
+                <li class="page-item"><a class="page-link" href="?{{#if q}}q={{q}}&{{/if}}page={{next}}">Next</a></li>
                 {{/if}}
             </ul>
             <div class="col-md-3">

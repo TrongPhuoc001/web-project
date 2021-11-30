@@ -10,6 +10,7 @@ exports.getAll = (page)=>{
 }
 exports.getRecent = pool.query(
     `SELECT id,title,price,image FROM product
+    WHERE is_delete = 'f'
     ORDER BY create_date ASC
     LIMIT 4;`
 )
@@ -21,7 +22,7 @@ exports.getOne = (product_id)=>{
 }
 
 exports.maxPage = pool.query(
-    `SELECT ceil(COUNT(*)/$1::numeric) as max_page FROM product;`,[limit]
+    `SELECT ceil(COUNT(*)/$1::numeric) as max_page FROM product WHERE is_delete = 'f';`,[limit]
 )
 
 exports.updatePro = (pro_id,data)=>{
@@ -46,5 +47,32 @@ exports.addPro = (data)=>{
     return pool.query(
         `INSERT INTO product(title,description,price,image,brand,tag_id,available,sold)
         VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,[title,description,price,image,brand,tag_id,available,sold]
+    )
+}
+
+exports.searchName = (q,page)=>{
+    const title = '%' + q.toLowerCase() +'%';
+    return pool.query(
+        `SELECT * FROM product 
+        WHERE lower(title) LIKE $1
+        AND is_delete = 'f'
+        LIMIT $2 OFFSET $3;`,[title,limit,(page-1)*limit]
+    )
+}
+exports.countName = (q)=>{
+    const title = '%'+q.toLowerCase()+'%';
+    return pool.query(
+        `SELECT ceil(COUNT(*)/$1::numeric) as max_page 
+        FROM product
+        WHERE lower(title) LIKE $2
+        AND is_delete = 'f';`,[limit,title]
+    )
+}
+
+exports.delete = (id)=>{
+    return pool.query(
+        `UPDATE product
+        SET is_delete = 't'
+        WHERE id = $1`,[id]
     )
 }

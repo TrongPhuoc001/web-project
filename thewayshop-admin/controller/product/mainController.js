@@ -10,16 +10,17 @@ exports.get = async (req,res)=>{
     const chat = await chatModel.getChat;
     const table = await tableModel.table;  
 
-    const page = parseInt(req.query.page)||1;
+    const page = Math.max(parseInt(req.query.page)||1,1);
     let max_page = await productModel.maxPage;
     max_page = max_page.rows[0].max_page;
     const products = await productModel.getAll(parseInt(page));
-    console.log(max_page,Array.from({length: max_page}, (v, k) => k+1))
+
     res.render('product/productpage', { 
         title: 'TheWayShop Product',
         username: username,
         tables:table.rows,
         user_messages:chat.rows,
+        head:'All Product',
         products:products.rows,
         page:page,
         next:page<max_page?page+1 : false,
@@ -127,6 +128,60 @@ exports.postAddProduct = async(req,res)=>{
             error:err.routine
         });
     }
-    
-    
+}
+
+exports.searchProduct = async (req,res)=>{
+    const username = req.cookies.username;
+    const chat = await chatModel.getChat;
+    const table = await tableModel.table;
+
+    let {q,page} = req.query;
+    page = Math.max(parseInt(page)||1,1);
+
+    const search_result = await productModel.searchName(q,page);
+    let max_page = await productModel.countName(q);
+    max_page = max_page.rows[0].max_page;
+
+    res.render('product/productpage',{
+        title: 'Search',
+        username: username,
+        tables:table.rows,
+        user_messages:chat.rows,
+        head : 'Search : '+q,
+        products:search_result.rows,
+        q:q,
+        page:page,
+        next:page<max_page?page+1 : false,
+        pages:Array.from({length: max_page}, (v, k) => k+1),
+        previous:page>1?page-1:false
+    })
+}
+
+exports.delete = async(req,res)=>{
+    const username = req.cookies.username;
+    const chat = await chatModel.getChat;
+    const table = await tableModel.table;
+
+    const {id} = req.params;
+    if(!id) throw false;
+
+   await productModel.delete(id);
+
+    const page = 1;
+    let max_page = await productModel.maxPage;
+    max_page = max_page.rows[0].max_page;
+    const products = await productModel.getAll(parseInt(page));
+
+    res.render('product/productpage', { 
+        title: 'TheWayShop Product',
+        username: username,
+        tables:table.rows,
+        user_messages:chat.rows,
+        head:'All Product',
+        products:products.rows,
+        page:page,
+        next:page<max_page?page+1 : false,
+        pages:Array.from({length: max_page}, (v, k) => k+1),
+        previous:page>1?page-1:false
+    });
 }
