@@ -1,0 +1,69 @@
+<div class="login-wrap">
+	<div class="login-html">
+		{{#if error}}
+		<h4 style="color: rgb(141, 0, 0);">{{error}}</h4>
+		{{/if}}
+		{{#if message}}
+		<h4 style="color: rgb(46, 226, 211);">{{message}}</h4>
+		{{/if}}
+		<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
+		<input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+		<div class="login-form">
+			<form action="/login/login" method="post" class="sign-in-htm">
+				<div class="group">
+					<label for="user" class="label">Email</label>
+					<input id="user" type="text" class="input" name="email">
+				</div>
+				<div class="group">
+					<label for="pass" class="label">Password</label>
+					<input id="pass" type="password" class="input" data-type="password" name="password">
+				</div>
+				<div class="group">
+					<input id="check" type="checkbox" class="check" checked>
+					<label for="check"><span class="icon"></span> Keep me Signed in</label>
+				</div>
+				<div class="group">
+					<input type="submit" class="button" value="Sign In">
+				</div>
+				<div class="hr"></div>
+				<div class="foot-lnk">
+					<a href="#forgot">Forgot Password?</a>
+				</div>
+			</form>
+			<form action="/login/register" method="post" class="sign-up-htm">
+				<div class="group">
+					<label for="user" class="label">Email</label>
+					<input id="user" type="text" class="input" name="email">
+				</div>
+				<div class="group">
+					<label for="fullname" class="label">Full name</label>
+					<input id="fullname" type="text" class="input" name="name">
+				</div>
+				<div class="group">
+					<label for="birthday" class="label">Birthday</label>
+					<input id="birthday" type="date" class="input" name="birthday">
+				</div>
+				<div class="group">
+					<label for="address" class="label">Address</label>
+					<input id="address" type="text" class="input" name="address">
+				</div>
+				<div class="group">
+					<label for="pass" class="label">Password</label>
+					<input id="pass" type="password" class="input" data-type="password" name="password">
+				</div>
+				<div class="group">
+					<label for="pass" class="label">Repeat Password</label>
+					<input id="pass" type="repassword" class="input" data-type="password" name="repassword">
+				</div>
+				
+				<div class="group">
+					<input type="submit" class="button" value="Sign Up">
+				</div>
+				<div class="hr"></div>
+				<div class="foot-lnk">
+					<label for="tab-1">Already Member?</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

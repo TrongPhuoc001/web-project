@@ -65,8 +65,8 @@ exports.postAdd = async(req,res)=>{
             message:"Username already exist, choose another one" 
         })
     }
-    const salt = await bcrypt.genSalt(10);
-    const hashpassword = await bcrypt.hash(password,salt);
+
+    const hashpassword = await bcrypt.hash(password,10);
     try {
         await managerService.add(username,hashpassword,fullname,birthday,image,salary);
         res.redirect('/manager');

@@ -66,12 +66,16 @@
                         </select>
                     </div>
                     <div class="right-phone-box">
-                        <p>Call US :- <a href="./contactus"> +11 900 800 100</a></p>
+                        <p>Call US :- <a href="./shop/contactus"> +11 900 800 100</a></p>
                     </div>
                     <div class="our-link">
                         <ul>
-                            <li><a href="./login">Sign in</a></li>
-                            <li><a href="./">Our location</a></li>
+                            {{#if user}}
+                            <li><a href="#">Wellcome, {{user.name}}</a></li>
+                            <li><a href="/login/logout">Sign out</a></li>
+                            {{else}}
+                            <li><a href="/login">Sign in</a></li>
+                            {{/if}}
                         </ul>
                     </div>
                 </div>
@@ -126,13 +130,13 @@
                         <li class="dropdown">
                             <a href="#" class="nav-link dropdown-toggle arrow" data-toggle="dropdown">SHOP</a>
                             <ul class="dropdown-menu">
-                                <li><a href="/cart">Cart</a></li>
-                                <li><a href="/checkout">Checkout</a></li>
+                                <li><a href="/myaccount/cart">Cart</a></li>
+                                <li><a href="/myaccount/checkout">Checkout</a></li>
                                 <li><a href="/myaccount">My Account</a></li>
-                                <li><a href="/wishlist">Wishlist</a></li>
+                                <li><a href="/myaccount/wishlist">Wishlist</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="contactus">Contact Us</a></li>
+                        <li class="nav-item"><a class="nav-link" href="./shop/contactus">Contact Us</a></li>
                     </ul>
                 </div>
                 <!-- /.navbar-collapse -->
@@ -155,22 +159,22 @@
                 <li class="cart-box">
                     <ul class="cart-list">
                         <li>
-                            <a href="shopdetail" class="photo"><img src="/images/img-pro-01.jpg" class="cart-thumb" alt="" /></a>
+                            <a href="./product" class="photo"><img src="/images/img-pro-01.jpg" class="cart-thumb" alt="" /></a>
                             <h6><a href="shopdetail">Delica omtantur </a></h6>
                             <p>1x - <span class="price">$80.00</span></p>
                         </li>
                         <li>
-                            <a href="shopdetail" class="photo"><img src="/images/img-pro-02.jpg" class="cart-thumb" alt="" /></a>
-                            <h6><a href="shopdetail">Omnes ocurreret</a></h6>
+                            <a href="./product" class="photo"><img src="/images/img-pro-02.jpg" class="cart-thumb" alt="" /></a>
+                            <h6><a href="./product">Omnes ocurreret</a></h6>
                             <p>1x - <span class="price">$60.00</span></p>
                         </li>
                         <li>
-                            <a href="shopdetail" class="photo"><img src="/images/img-pro-03.jpg" class="cart-thumb" alt="" /></a>
-                            <h6><a href="shopdetail">Agam facilisis</a></h6>
+                            <a href="./product" class="photo"><img src="/images/img-pro-03.jpg" class="cart-thumb" alt="" /></a>
+                            <h6><a href="./product">Agam facilisis</a></h6>
                             <p>1x - <span class="price">$40.00</span></p>
                         </li>
                         <li class="total">
-                            <a href="cart" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
+                            <a href="./myaccount/cart" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
                             <span class="float-right"><strong>Total</strong>: $180.00</span>
                         </li>
                     </ul>

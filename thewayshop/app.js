@@ -5,19 +5,18 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const {engine} = require('express-handlebars');
 const dotenv = require('dotenv');
-
 dotenv.config();
+const session = require('express-session');
+const passport = require('./config/passport');
 
+const homeRouter = require('./component/home/route');
+const myaccountRouter = require('./component/account/route');
+const loginRouter = require('./component/auth/route');
+const productRouter = require('./component/product/route');
+const shopRouter = require('./component/shop/route');
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const contactusRouter = require('./routes/contactus');
-const cartRouter = require('./routes/cart');
-const checkoutRouter = require('./routes/checkout');
-const myaccountRouter = require('./routes/myaccount');
-const wishlistRouter = require('./routes/wishlist');
-const loginRouter = require('./routes/login');
-const productRouter = require('./routes/product');
+const layout = require('./config/layout');
+const verify = require('./config/verifyUser');
 
 const app = express();
 
@@ -37,14 +36,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({secret: process.env.SESSION_SECRET, resave:false,saveUninitialized:true})); 
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/contactus', contactusRouter);
-app.use('/cart', cartRouter);
-app.use('/checkout', checkoutRouter);
+app.use(layout);
+app.use(verify);
+app.use('/', homeRouter);
+app.use('/shop', shopRouter);
 app.use('/myaccount', myaccountRouter);
-app.use('/wishlist', wishlistRouter);
 app.use('/login', loginRouter);
 app.use('/product', productRouter);
 

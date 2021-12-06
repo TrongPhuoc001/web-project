@@ -1,4 +1,4 @@
-const view = "shop/"
+const view = "../component/shop/view/"
 
 exports.contactus = (req,res)=>{
     res.render(view+'contactusList', { title: 'ConTact', 

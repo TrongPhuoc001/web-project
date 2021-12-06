@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const proCon = require('../controllers/productController');
+const proCon = require('./controller');
 
 /* GET home page. */
 router.get('/', proCon.mainPage);

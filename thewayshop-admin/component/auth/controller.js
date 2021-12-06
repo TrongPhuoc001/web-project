@@ -1,16 +1,20 @@
 const passport = require("../../passport/passportConfig");
-const authService = require('./service');
+
 
 const view = '../component/auth/view/';
 
 exports.loginGet = (req,res)=>{
-    return res.render(view+'login',{layout:false,title:'Login'});
+    return res.render(view+'login',{
+        layout:false,
+        title:'Login',
+        message: req.query.error?'Invalid email or password':false
+    });
 }
 
 exports.loginPost = passport.authenticate('local', { 
                                 successRedirect: '/',
-                                failureRedirect: '/login',
-                                failureFlash: true 
+                                failureRedirect: '/login?error=true',
+                                failureMessage:'Wrong email or password'
                             });
 
 exports.logout = (req,res)=>{
