@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const productCon = require('../controller/product/mainController')
+const productCon = require('./controller')
 /* GET home page. */
 router.get('/',productCon.get)
 router.get('/add',productCon.getAddProduct);

@@ -1,53 +1,36 @@
 const productModel = require('../../models/product');
-const tableModel = require('../../models/table');
-const chatModel = require('../../models/chat');
 
-
-
+const view = '../component/product/view/';
 
 exports.get = async (req,res)=>{
-    const username = req.cookies.username;
-    const chat = await chatModel.getChat;
-    const table = await tableModel.table;  
-
     const page = Math.max(parseInt(req.query.page)||1,1);
     let max_page = await productModel.maxPage;
     max_page = max_page.rows[0].max_page;
     const products = await productModel.getAll(parseInt(page));
 
-    res.render('product/productpage', { 
+    res.render(view+'productpage', { 
         title: 'TheWayShop Product',
-        username: username,
-        tables:table.rows,
-        user_messages:chat.rows,
         head:'All Product',
         products:products.rows,
         page:page,
         next:page<max_page?page+1 : false,
         pages:Array.from({length: max_page}, (v, k) => k+1),
-        previous:page>1?page-1:false
+        previous:page>1?page-1:false,
+        product_active:true
     });
 }
 exports.getProduct = async (req,res)=>{
-    const username = req.cookies.username;
-    const chat = await chatModel.getChat;
-    const table = await tableModel.table;
 
     const {product_id} = req.params;
     const product = await productModel.getOne(product_id);
-    res.render('product/productEdit', { 
+    res.render(view+'productEdit', { 
         title: product.rows[0].title,
-        username: username,
-        tables:table.rows,
-        user_messages:chat.rows,
         product:product.rows[0],
+        product_active:true
     });
 }
 
 exports.postProduct = async (req,res)=>{
-    const username = req.cookies.username;
-    const chat = await chatModel.getChat;
-    const table = await tableModel.table;
 
     try{
         await productModel.updatePro(req.params.product_id,req.body);
@@ -56,21 +39,16 @@ exports.postProduct = async (req,res)=>{
     catch(err){
         console.log(err);
         const product = await productModel.getOne(product_id);
-        res.render('product/productEdit', { 
+        res.render(view+'productEdit', { 
             title: product.rows[0].title,
-            username: username,
-            tables:table.rows,
-            user_messages:chat.rows,
             product:product.rows[0],
-            message:'Update faile:'+err.routine
+            message:'Update faile:'+err.routine,
+            product_active:true
         });
     }
 }
 
 exports.getAddProduct = async (req,res)=>{
-    const username = req.cookies.username;
-    const chat = await chatModel.getChat;
-    const table = await tableModel.table; 
 
     const product = {
         title:'product name',
@@ -82,19 +60,14 @@ exports.getAddProduct = async (req,res)=>{
         available:'Have in store',
         sold:'Have sold'
     }
-    res.render('product/productAdd', { 
+    res.render(view+'productAdd', { 
         title: 'New product',
-        username: username,
-        tables:table.rows,
-        user_messages:chat.rows,
         product:product,
+        product_active:true
     });
 }
 
 exports.postAddProduct = async(req,res)=>{
-    const username = req.cookies.username;
-    const chat = await chatModel.getChat;
-    const table = await tableModel.table; 
     const product = {
         title:'product name',
         description:'some thing to say about the product',
@@ -108,32 +81,27 @@ exports.postAddProduct = async(req,res)=>{
     try{
         const newProId = await productModel.addPro(req.body)
         console.log(newProId.rows[0].id)
-        res.render('product/productAdd', { 
+        res.render(view+'productAdd', { 
             title: 'New product',
-            username: username,
-            tables:table.rows,
-            user_messages:chat.rows,
             product:product,
             message:'Add success',
-            new_pro_id:newProId.rows[0].id
+            new_pro_id:newProId.rows[0].id,
+            product_active:true
         });
     }
     catch(err){
-        res.render('product/productAdd', { 
+        res.render(view+'productAdd', { 
             title: 'New product',
-            username: username,
-            tables:table.rows,
-            user_messages:chat.rows,
             product:product,
-            error:err.routine
+            error:err.routine,
+            product_active:true
         });
     }
 }
 
 exports.searchProduct = async (req,res)=>{
-    const username = req.cookies.username;
-    const chat = await chatModel.getChat;
-    const table = await tableModel.table;
+
+
 
     let {q,page} = req.query;
     page = Math.max(parseInt(page)||1,1);
@@ -142,26 +110,20 @@ exports.searchProduct = async (req,res)=>{
     let max_page = await productModel.countName(q);
     max_page = max_page.rows[0].max_page;
 
-    res.render('product/productpage',{
+    res.render(view+'productpage',{
         title: 'Search',
-        username: username,
-        tables:table.rows,
-        user_messages:chat.rows,
         head : 'Search : '+q,
         products:search_result.rows,
         q:q,
         page:page,
         next:page<max_page?page+1 : false,
         pages:Array.from({length: max_page}, (v, k) => k+1),
-        previous:page>1?page-1:false
+        previous:page>1?page-1:false,
+        product_active:true
     })
 }
 
 exports.delete = async(req,res)=>{
-    const username = req.cookies.username;
-    const chat = await chatModel.getChat;
-    const table = await tableModel.table;
-
     const {id} = req.params;
     if(!id) throw false;
 

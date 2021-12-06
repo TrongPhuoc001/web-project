@@ -11,7 +11,7 @@ exports.getAll = (page)=>{
 exports.getRecent = pool.query(
     `SELECT id,title,price,image FROM product
     WHERE is_delete = 'f'
-    ORDER BY create_date ASC
+    ORDER BY id DESC
     LIMIT 4;`
 )
 exports.getOne = (product_id)=>{

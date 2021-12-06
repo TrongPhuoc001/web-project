@@ -5,15 +5,18 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const exphbs = require('express-handlebars');
 const dotenv = require('dotenv');
+const session = require('express-session');
+dotenv.config();
+const passport = require('./passport/passportConfig');
 
-dotenv.config()
+const indexRouter = require('./component/dashboard/route');
+const authRouter = require('./component/auth/route')
+const tableRouter = require('./component/table/route');
+const productRouter = require('./component/product/route');
+const managerRouter = require('./component/manager/route');
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const tableRouter = require('./routes/tables');
-const productRouter = require('./routes/product');
-
-const verify = require('./routes/middleware/verify')
+const verify = require('./middleware/verifyUser')
+const addTableMess = require('./middleware/setTableMess');
 const app = express();
 
 // view engine setup
@@ -33,9 +36,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({secret: process.env.SESSION_SECRET, resave:false,saveUninitialized:true})); 
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.use('/users', usersRouter);
+app.use('/', authRouter);
 app.use(verify);
+app.use(addTableMess);
+app.use('/',managerRouter);
 app.use('/', indexRouter);
 app.use('/tables', tableRouter);
 app.use('/product',productRouter);

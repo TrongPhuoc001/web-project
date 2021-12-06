@@ -22,7 +22,7 @@
     <link href="/stylesheets/style.css" rel="stylesheet">
     <link href="/stylesheets/style-responsive.css" rel="stylesheet">
 
-    <script src="/javascripts/chart-master/Chart.js"></script>
+    <script src="/javascripts/chart-master/Chart.js"></script> 
     
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -47,15 +47,15 @@
                     <li id="header_inbox_bar" class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
                             <i class="fa fa-envelope-o"></i>
-                            <span class="badge bg-theme">{{user_messages.length}}</span>
+                            <span class="badge bg-theme">{{chat.length}}</span>
                         </a>
                         <ul class="dropdown-menu extended inbox">
                             <div class="notify-arrow notify-arrow-green"></div>
-                            {{#if user_messages}}
+                            {{#if chat}}
                             <li>
-                            <p class="green">You have {{user_messages.length}} new messages</p>
+                            <p class="green">You have {{chat.length}} new messages</p>
                             </li>
-                            {{#each user_messages}}
+                            {{#each chat}}
                             <li>
                                 <a href="/">
                                     <span class="photo"><img alt="avatar" src="/images/ui-zac.jpg"></span>
@@ -85,7 +85,7 @@
             </div>
             <div class="top-menu">
             	<ul class="nav pull-right top-menu">
-                    <li><a class="logout" href="/users/logout">Logout</a></li>
+                    <li><a class="logout" href="/logout" id="logout">Logout</a></li>
             	</ul>
             </div>
         </header>
@@ -98,28 +98,34 @@
                 <ul class="sidebar-menu" id="nav-accordion">
                 
                     <p class="centered"><a href="/profile"><img src="/images/ui-sam.jpg" class="img-circle" width="60"></a></p>
-                    <h5 class="centered">{{username}}</h5>
+                    <h5 class="centered">{{user.username}}</h5>
                         
                     <li class="mt">
-                        <a class="active" href="/">
+                        <a {{#if dashboard_active}}class="active"{{/if}} href="/">
                             <i class="fa fa-dashboard"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="mt">
-                        <a href="/product?page=1">
+                        <a {{#if product_active}}class="active"{{/if}} href="/product?page=1">
                             <i class="fa fa-th"></i>
                             <span>Product</span>
                         </a>
                     </li>
+                    <li class="mt">
+                        <a {{#if manager_active}}class="active"{{/if}} href="/manager">
+                            <i class="fa fa-user"></i>
+                            <span>Manager</span>
+                        </a>
+                    </li>
                     <li class="sub-menu">
-                        <a href="javascript:;" >
+                        <a {{#if table_active}}class="active"{{/if}} href="javascript:;" >
                             <i class="fa fa-database"></i>
                             <span>Data Tables</span>
                         </a>
                         <ul class="sub">
                             {{#each tables}}
-                            <li><a  href="/tables/{{this.table_name}}">{{this.table_name}}</a></li>
+                            <li><a  href="/tables/{{this}}">{{this}}</a></li>
                             {{/each}}
                         </ul>
                     </li>
@@ -129,6 +135,7 @@
         </aside>
         {{{body}}}
       </section>
+
     
      <!-- javascripts placed at the end of the document so the pages load faster -->
     <script src="/javascripts/jquery.js"></script>
@@ -151,3 +158,4 @@
 	<script src="/javascripts/zabuto_calendar.js"></script>	
 	
   </body>
+</html>
