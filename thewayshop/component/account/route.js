@@ -4,7 +4,8 @@ const accCon = require('./controller');
 
 /* GET home page. */
 router.get('/', accCon.myaccount);
-router.get('/cart', accCon.myaccount);
-router.get('/wishlist', accCon.myaccount);
-router.get('/checkout', accCon.myaccount);
+router.get('/profile',accCon.profile);
+router.get('/cart', accCon.cart);
+router.get('/wishlist', accCon.wishlist);
+router.get('/checkout', accCon.checkout);
 module.exports = router;

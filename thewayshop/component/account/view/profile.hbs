@@ -1,0 +1,61 @@
+<div class="container">
+    <div class="row">
+        <div class="col-3"></div>
+        <form class="needs-validation row" id="update-form" method="post" novalidate></form>
+            <div class="col-4">
+                {{#each user_info}}
+                {{#ifeq @key 'image'}}
+                {{else}}
+                <div class="row">
+                    <label for="{{@key}}">{{@key}} *</label>
+                    <input type="text" class="form-control" id="{{@key}}" placeholder="" value="{{this}}" required
+                    {{#ifeq @key 'email'}}readonly{{/ifeq}}{{#ifeq @key 'balance'}}readonly{{/ifeq}}>
+                </div>
+                {{/ifeq}}
+                {{/each}}
+            </div>
+            <div class="col-md-4 d-flex flex-column justify-content-between">
+                <img id="img" width="200" height="200" alt="Avatar" 
+                {{#if user_info.image}}src="{{user_info.image}}"{{else}}src="/images/default-avatar.png"{{/if}}>
+                <div class="row">
+                    <input type="file" id="inp" accept="image/png, image/jpeg, image/jpg" width="200">                               
+                    <input type="hidden" id="inp-value" name="image" >
+                </div>
+                <div class="row">
+                    <div class="col-3"></div>
+                    <button id="btn-add" class="btn btn-danger" type="submit">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function getUrl(){
+        const FR= new FileReader();                                    
+        const form = new FormData();
+        form.set('key','9304eb5630f3f1e2a368fa2ee7cf100f');
+        form.set('image',document.getElementById("inp-value").value);
+        fetch(`https://api.imgbb.com/1/upload?key=9304eb5630f3f1e2a368fa2ee7cf100f`,{
+            method:'POST',
+            body:form
+        })
+        .then(res => res.json())
+        .then(data=>{
+            document.getElementById("inp-value").value = data.data.image.url;
+            console.log(data.data.image.url);
+            document.getElementById("update-form").submit();
+        });
+    }
+    function readFile() {
+        if (this.files && this.files[0]) {                                 
+            const FR= new FileReader();                                    
+            FR.addEventListener("load", function(e) {
+                document.getElementById("img").src = e.target.result;
+                document.getElementById("inp-value").value = e.target.result.split(',')[1];
+            });                                     
+            FR.readAsDataURL( this.files[0] );
+        }
+    }
+    document.getElementById("inp").addEventListener("change", readFile)
+    document.getElementById("btn-add").addEventListener("click",getUrl)
+</script>
