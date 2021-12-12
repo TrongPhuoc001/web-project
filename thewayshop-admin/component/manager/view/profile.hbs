@@ -11,12 +11,28 @@
                         <div class="col-lg-4">
                             <img {{#if this.image}}src="{{this.image}}"{{else}}src="/images/friends/fr-06.jpg"{{/if}} class="img-circle" width="80">
                         </div>
-                        <div class="col-lg-8">
-                            <h3>Username: {{manager.username}}</h3>
-                            <h3>Birthday: {{manager.birthday}}</h3>
-                            <h3>Salary: {{manager.salary}}$</h3>
-                        </div>
                     </div>
+                    <form class="form-horizontal style-form" method="post">
+                            <div class="form-group">
+                                <label class="col-sm-2 col-sm-2 control-label">UserName: </label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name = "username" value ="{{manager.username}}"  >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 col-sm-2 control-label">Birthday: </label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name = "birthday" value ="{{manager.birthday}}"  >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 col-sm-2 control-label">Salary: </label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name = "salary" value ="{{manager.salary}}"  >
+                                </div>
+                            </div>
+                            <button type="submit" id="btn-save">Save</button>           
+                        </form>
                 </div>
             </div><!-- col-lg-12-->      	
         </div><!-- /row -->

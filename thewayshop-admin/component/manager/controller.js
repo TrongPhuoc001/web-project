@@ -16,6 +16,11 @@ exports.profile = async(req,res)=>{
         manager:manager.rows[0]
     })
 }
+exports.postSave = async(req,res)=>{
+    const {username, birthday, salary} = req.body;
+    await managerService.edit(req.user.id,username, birthday, salary)
+    res.redirect('/profile')
+}
 
 exports.manager = async(req,res)=>{
 
