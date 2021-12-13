@@ -29,6 +29,42 @@
                         </table>
                     </section>
                 </div><!-- /content-panel -->
+                <div class="row">
+                        <nav aria-label="...">
+                            <ul class="pagination">
+                                {{#if previous}}
+                                <li class="page-item ">
+                                <a class="page-link" href="/tables/{{table_name}}?page={{previous}}">Previous</a>
+                                </li>
+                                {{else}}
+                                <li class="page-item disabled">
+                                <span class="page-link">Previous</span>
+                                </li>
+                                {{/if}}
+                                {{#each pages}}
+                                {{#ifeq this ../page}}
+                                <li class="page-item active">
+                                <span class="page-link">
+                                    {{this}}
+                                    <span class="sr-only">(current)</span>
+                                </span>
+                                </li>
+                                {{else}}
+                                <li class="page-item"><a class="page-link" href="/tables/{{table_name}}?page={{this}}">{{this}}</a></li>
+                                {{/ifeq}}
+                                {{/each}}
+                                {{#if next}}
+                                <li class="page-item ">
+                                <a class="page-link" href="/tables/{{table_name}}?page={{next}}">Next</a>
+                                </li>
+                                {{else}}
+                                <li class="page-item disabled">
+                                <span class="page-link">Next</span>
+                                </li>
+                                {{/if}}
+                            </ul>
+                        </nav>
+                    </div>
             </div><!-- /col-lg-12 -->
         </div><!-- /row -->
 

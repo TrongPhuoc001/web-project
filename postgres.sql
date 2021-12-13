@@ -19,6 +19,7 @@ CREATE TABLE users(
     address VARCHAR(255) NOT NULL,
     balance DECIMAL(12,2) DEFAULT 0 ,
     is_delete BOOLEAN DEFAULT false,
+    active BOOLEAN DEFAULT false,
     image VARCHAR(255)
 );
 
@@ -49,18 +50,28 @@ CREATE TABLE product(
     title VARCHAR(255) NOT NULL,
     description VARCHAR(255),
     price DECIMAL(12,2) NOT NULL,
-    image VARCHAR(255),
     brand VARCHAR(255),
     tag_id int,
     available INT ,
     sold INT,
     create_date TIMESTAMP DEFAULT NOW(),
     is_delete BOOLEAN DEFAULT false,
+    image VARCHAR(255),
     
     CONSTRAINT fk_product_tagid
         FOREIGN KEY (tag_id)
             REFERENCES tag(id)
             ON DELETE SET NULL
+);
+
+CREATE TABLE product_image(
+    product_id int NOT NULL,
+    image VARCHAR(255) NOT NULL,
+
+    CONSTRAINT fk_product_image_productid
+        FOREIGN KEY (product_id)
+            REFERENCES product(id)
+            ON DELETE CASCADE
 );
 
 CREATE TABLE rating(
@@ -69,7 +80,7 @@ CREATE TABLE rating(
     star int NOT NULL,
     content VARCHAR(255) NOT NULL,
 
-    CONSTRAINT fk rating_userid
+    CONSTRAINT fk_rating_userid
         FOREIGN KEY (user_id)
             REFERENCES users(id)
             ON DELETE CASCADE,
@@ -78,7 +89,7 @@ CREATE TABLE rating(
         FOREIGN KEY (product_id) 
             REFERENCES product(id)
             ON DELETE CASCADE
-)
+);
 
 CREATE TABLE wishlist(
     user_id int NOT NULL,
@@ -173,7 +184,22 @@ VALUES ('Shirts','kaki, comfortable',9.99,'https://i.ibb.co/LNrBbpZ/shirt-img.jp
 ('Healthy Bag','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',499.99,'https://i.ibb.co/mF1yrX5/instagram-img-08.jpg','Tiffany & Co',4,100,10),
 ('Weding Suit','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',49.99,'https://i.ibb.co/YWMW68J/suit.jpg','Abc',12,100,10),
 ('Modern Sunglass','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',79.99,'https://i.ibb.co/LgBzcw6/sunglass.jpg','DEF',9,100,10),
-('Pretty Sweater','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',9999.99,'https://i.ibb.co/wJKsnGq/sweater.jpg','DEF',6,100,10),
+('Pretty Sweater','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',9999.99,'https://i.ibb.co/wJKsnGq/sweater.jpg','DEF',6,100,10);
+
+INSERT INTO product_image(product_id,image)
+VALUES (  1 , 'https://i.ibb.co/LNrBbpZ/shirt-img.jpg'),
+ (15,'https://i.ibb.co/Q9wJtbL/98f049fdb177.jpg'),
+  (3 , 'https://i.ibb.co/pd0nW3b/shoes-img.jpg'),
+  (5, 'https://i.ibb.co/7JDFRLD/wallet-img.jpg'),
+  (6, 'https://i.ibb.co/J5RyXN7/t-shirts-img.jpg'),
+  (7, 'https://i.ibb.co/09Qb0W8/women-bag-img.jpg'),
+  (9, 'https://i.ibb.co/YWMW68J/suit.jpg'),
+ (10 , 'https://i.ibb.co/LgBzcw6/sunglass.jpg'),
+  (2 , 'https://i.ibb.co/bgccpjM/jean.jpg'),
+  (8 ,'https://i.ibb.co/jyNfLcd/instagram-img-04.jpg'),
+  (4 ,'https://i.ibb.co/mqRQfH3/img-pro-04.jpg'),
+ (12 ,'https://i.ibb.co/XV3DhP5/swimsuit.jpg'),
+ (11 , 'https://i.ibb.co/wJKsnGq/sweater.jpg');
 
 INSERT INTO wishlist(user_id,product_id)
 VALUES (1,1),(2,2),(3,3),(4,4);
