@@ -4,7 +4,7 @@ const view = '../component/users/view/';
 exports.viewTable = async function(req, res) {
 
     const page = parseInt(req.query.page)||1;
-    //const column_name = {userId:'1111'}
+    const column_name = ["User Id", "Email", "Name", "Address", "Balance","Total Orders", "Expended", "is_block"];
     const record = await service.getRecord(page, 'user');
     let max_page = await service.maxPage('user');
     max_page = parseInt(max_page.rows[0].max_page);
@@ -12,9 +12,9 @@ exports.viewTable = async function(req, res) {
     return res.render(view+'usertable',{
       title:"User",
       table_name:"User",
-      //column_name:column_name.rows,
+      column_name:column_name,
       record: record.rows,
-      table_active:true,
+      user_active:true,
       page:page,
       next:page<max_page?page+1 : false,
       pages:Array.from({length: max_page}, (v, k) => k+1),
@@ -22,17 +22,14 @@ exports.viewTable = async function(req, res) {
     })
 };
 
-exports.editTable = async (req,res)=>{
-
+exports.postBlock = async (req,res)=>{
   const {recordId}= req.query;
-  const data = await service.recordData(tb_name,recordId);
+  const {recordBlock}= req.query;
+  try {
+    await service.block(recordId,recordBlock);
+  } catch (error) {
+    console.log(error);
+  }
   
-  delete (await data).rows[0].id;
-  res.render(view+'edituser',{
-    title:`Edit User `,
-    table_name:"User",
-    record_id:recordId,
-    record:data.rows[0],
-    table_active:true
-  })
+  res.redirect('/user')
 }

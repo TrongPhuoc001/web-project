@@ -3,6 +3,6 @@ const router = express.Router();
 const tableCon = require('./controller');
 
 router.get('/user', tableCon.viewTable);
-router.get('/user/edit', tableCon.editTable);
+router.get('/user/block', tableCon.postBlock);
 
 module.exports = router;

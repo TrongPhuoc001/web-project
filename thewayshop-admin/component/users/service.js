@@ -8,8 +8,15 @@ exports.maxPage = ()=> {
 }
 exports.getRecord = (page)=>{
     return pool.query(
-        `SELECT * FROM users
-        ORDER BY id ASC
+        `SELECT users.id, users.email, users.name, users.address,users.balance,count(orders.id),sum(orders.total), users.is_delete
+        FROM users left join orders on users.email = orders.email
+        group by users.id, users.email, orders.fullname, users.address,users.balance, users.is_delete
+        ORDER BY users.id ASC
         LIMIT $1 OFFSET $2;`,[limit,(page-1)*limit]
       )
+}
+exports.block = (id, is_block) => {
+    return pool.query(
+        `UPDATE users SET is_delete = $2 WHERE id = $1;`[id, is_block]
+    )
 }
