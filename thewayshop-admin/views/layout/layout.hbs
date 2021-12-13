@@ -24,6 +24,7 @@
 
     <script src="/javascripts/chart-master/Chart.js"></script> 
     
+    {{{_sections.style}}}
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -118,6 +119,12 @@
                             <span>Manager</span>
                         </a>
                     </li>
+                    <li class="mt">
+                        <a {{#if user_active}}class="active"{{/if}} href="/user">
+                            <i class="fa fa-users"></i>
+                            <span>User</span>
+                        </a>
+                    </li>
                     <li class="sub-menu">
                         <a {{#if table_active}}class="active"{{/if}} href="javascript:;" >
                             <i class="fa fa-database"></i>
@@ -157,5 +164,6 @@
     <script src="/javascripts/sparkline-chart.js"></script>    
 	<script src="/javascripts/zabuto_calendar.js"></script>	
 	
+    {{{_sections.script}}}
   </body>
 </html>

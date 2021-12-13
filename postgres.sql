@@ -217,7 +217,7 @@ INSERT INTO order_product(order_id,product_id,quantity)
 VALUES (1,1,1),(2,1,1),(2,2,1),(3,2,2),(4,4,1);
 
 INSERT INTO chat(user_id,content,mess_type)
-VALUES (1,'Where r my goods','message'),
-(1,'It is on the way','reply'),
-(4,'Do we have sword','message'),
-(4,'Sorry we do not','reply');
+VALUES (6,'Where r my goods','message'),
+(6,'It is on the way','reply'),
+(8,'Do we have sword','message'),
+(8,'Sorry we do not','reply');

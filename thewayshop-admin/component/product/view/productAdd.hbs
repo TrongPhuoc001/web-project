@@ -1,3 +1,16 @@
+{{#section 'style'}}
+<style>
+    input[type="file"] {
+        display: none;
+    }
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+</style>
+{{/section}}
 <section id="main-content">
     <section class="wrapper">
         <!-- BASIC FORM ELELEMNTS -->
@@ -20,12 +33,29 @@
                         <div class="form-group">
                             <label class="col-sm-2 col-sm-2 control-label">{{@key}}</label>
                             {{#ifeq @key 'image'}} 
-                            <div class="col-sm-4">
+                            <div class="col-sm-2">
+                                <label for="inp" class="custom-file-upload">Main image</label>
                                 <input type="file" id="inp" accept="image/png, image/jpeg, image/jpg"  >                               
                                 <input type="hidden" id="inp-value" name="image">
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-1">
                                 <img id="img" width="100">
+                            </div>
+                            <div class="col-sm-2">
+                                <label for="sinp1" class="custom-file-upload">Sub image 1</label>
+                                <input type="file" id="sinp1" accept="image/png, image/jpeg, image/jpg"  >                               
+                                <input type="hidden" id="sinp1-value" name="subimage1">
+                            </div>
+                            <div class="col-sm-1">
+                                <img id="simg1" width="100">
+                            </div>
+                            <div class="col-sm-2">
+                                <label for="sinp2" class="custom-file-upload">Sub image 2</label>
+                                <input type="file" id="sinp2" accept="image/png, image/jpeg, image/jpg"  >                               
+                                <input type="hidden" id="sinp2-value" name="subimage2">
+                            </div>
+                            <div class="col-sm-1">
+                                <img id="simg2" width="100">
                             </div>
                             {{else}}
                             <div class="col-sm-10">
@@ -41,6 +71,7 @@
         </div><!-- /row -->
     </section><! --/wrapper -->
 </section><!-- /MAIN CONTENT -->
+{{#section 'script'}}
 <script>
     function getUrl(){
         const FR= new FileReader();                                    
@@ -68,6 +99,29 @@
             FR.readAsDataURL( this.files[0] );
         }
     }
+    function readFile1() {
+        if (this.files && this.files[0]) {                                 
+            const FR= new FileReader();                                    
+            FR.addEventListener("load", function(e) {
+                document.getElementById("simg1").src = e.target.result;
+                document.getElementById("sinp1-value").value = e.target.result.split(',')[1];
+            });                                     
+            FR.readAsDataURL( this.files[0] );
+        }
+    }
+    function readFile2() {
+        if (this.files && this.files[0]) {                                 
+            const FR= new FileReader();                                    
+            FR.addEventListener("load", function(e) {
+                document.getElementById("simg2").src = e.target.result;
+                document.getElementById("sinp2-value").value = e.target.result.split(',')[1];
+            });                                     
+            FR.readAsDataURL( this.files[0] );
+        }
+    }
     document.getElementById("inp").addEventListener("change", readFile)
+    document.getElementById("sinp1").addEventListener("change", readFile1)
+    document.getElementById("sinp2").addEventListener("change", readFile2)
     document.getElementById("btn-add").addEventListener("click",getUrl)
 </script>
+{{/section}}
