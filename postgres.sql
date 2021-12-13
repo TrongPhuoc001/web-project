@@ -2,7 +2,11 @@
 CREATE TABLE manager(
     id serial PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    fullname VARCHAR(255),
+    birthday VARCHAR(255),
+    salary DECIMAL(12,00),
+    image VARCHAR(255)
 );
 
 CREATE TABLE users(
@@ -14,7 +18,8 @@ CREATE TABLE users(
     birthday DATE NOT NULL,
     address VARCHAR(255) NOT NULL,
     balance DECIMAL(12,2) DEFAULT 0 ,
-    is_delete BOOLEAN DEFAULT false
+    is_delete BOOLEAN DEFAULT false,
+    image VARCHAR(255)
 );
 
 CREATE TABLE tag(
@@ -57,6 +62,23 @@ CREATE TABLE product(
             REFERENCES tag(id)
             ON DELETE SET NULL
 );
+
+CREATE TABLE rating(
+    user_id int NOT NULL,
+    product_id int NOT NULL,
+    star int NOT NULL,
+    content VARCHAR(255) NOT NULL,
+
+    CONSTRAINT fk rating_userid
+        FOREIGN KEY (user_id)
+            REFERENCES users(id)
+            ON DELETE CASCADE,
+        
+    CONSTRAINT fk_rating_productid
+        FOREIGN KEY (product_id) 
+            REFERENCES product(id)
+            ON DELETE CASCADE
+)
 
 CREATE TABLE wishlist(
     user_id int NOT NULL,
@@ -128,15 +150,8 @@ CREATE TABLE chat(
             REFERENCES users(id)
             ON DELETE CASCADE
 );
-
 INSERT INTO manager(username,password)
-VALUES ('phuoc','123123'),('phuong','123123'),('nguyen','123123');
-
-INSERT INTO users(first_name, last_name, email, password, birthday, address, balance)
-VALUES ('Phước', 'Nguyễn','phuoc@gmail.com', '123123','2001-03-19','Gia Lai, Việt Nam',1000.00),
-('Phương', 'Nguyễn','pbuong@gmail.com', '123123','2001-01-01','Tokyo, Japan',0.00),
-('Nguyên', 'Đoàn','nguyen@gmail.com', '123123','2001-01-01','Tokyo, Japan',0.00),
-('Luffy', 'Monkey.D','luffy@gmail.com', '123123','2001-01-01','Gia Lai, Việt Nam',1000.00);
+VALUES ('admin','$2b$10$h5FmpOByBiMj95UM76ODH.BvJ8uRMkUjET1Q9fR92DdYSXrPF2ir2')
 
 INSERT INTO tag(name)
 VALUES ('Shirts'),('Jean'),('Shoes'),('Bag'),('T-Shirts'),('Sweaters'),('Swimware'),('Trousers'),('Sunglasses'),('Walets'),('Watchs'),('Suits');
