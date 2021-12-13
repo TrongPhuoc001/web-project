@@ -15,14 +15,25 @@
                         {{#each product}}
                         <div class="form-group">
                             <label class="col-sm-2 col-sm-2 control-label">{{@key}}</label>
-                            <div class="{{#ifeq @key 'image'}}col-sm-7{{else}}col-sm-10{{/ifeq}}">
-                                <input type="text" class="form-control" name="{{@key}}" value="{{this}}">
-                            </div>
                             {{#ifeq @key 'image'}}
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="{{@key}}" value="{{this}}">
+                                {{#if ../sub_image}}
+                                {{#each ../sub_image}}
+                                <input type="text" class="form-control" name="subimage1" value="{{this.image}}">
+                                {{/each}}
+                                {{else}}
+                                <span>Không có sub image</span>
+                                {{/if}}
+                            </div>
                             <img src="{{this}}" width="80">
-                            {{#each subimage}}
+                            {{#each ../sub_image}}
                             <img src="{{this.image}}" width="80">
                             {{/each}}
+                            {{else}}
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="{{@key}}" value="{{this}}">
+                            </div>
                             {{/ifeq}}
                         </div>
                         {{/each}}

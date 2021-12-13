@@ -25,10 +25,12 @@ exports.getProduct = async (req,res)=>{
     const {product_id} = req.params;
     const product = await productModel.getOne(product_id);
     const subimage = await service.getSubImage(product_id)
+
+    console.log(subimage.rows)
     res.render(view+'productEdit', { 
         title: product.rows[0].title,
         product:product.rows[0],
-        subimage:subimage.rows[0],
+        sub_image:subimage.rows,
         product_active:true
     });
 }
@@ -134,11 +136,6 @@ exports.delete = async(req,res)=>{
     if(!id) throw false;
 
    await productModel.delete(id);
-
-    const page = 1;
-    let max_page = await productModel.maxPage;
-    max_page = max_page.rows[0].max_page;
-    const products = await productModel.getAll(parseInt(page));
 
     res.redirect('/product')
 }

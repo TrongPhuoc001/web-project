@@ -2,6 +2,8 @@ const view = '../component/product/view/'
 
 const productModel = require('../../models/product');
 const categoryModel = require('../../models/category');
+
+const service = require('./service');
 const tagModel = require('../../models/tag');
 
 exports.mainPage = async(req,res)=>{
@@ -26,11 +28,13 @@ exports.proDetail = async (req,res)=>{
 
     const pro_id = req.params.product_id;
     const product = await productModel.getOne(pro_id);
-    const relate = await productModel.getRelate(pro_id,product.rows[0].tag_id,product.rows[0].brand)
+    const relate = await productModel.getRelate(pro_id,product.rows[0].tag_id,product.rows[0].brand);
+    const pro_image = await service.getProImage(pro_id);
     res.render(view+'productDetail',{
         title: product.rows[0].title, 
         product:product.rows[0],
-        products:relate.rows
+        products:relate.rows,
+        pro_image:pro_image.rows
     })
 }
 
