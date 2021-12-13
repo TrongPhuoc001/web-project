@@ -29,7 +29,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/custom.css">
 
-
+    {{{_sections.style}}}
 
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -115,7 +115,7 @@
                                             <div class="content">
                                                 <ul class="menu-col">
                                                     {{#each this.tags}}
-                                                    <li><a href="/product/tag/{{this.id}}">{{this.name}}</a></li>
+                                                    <li><a href="/product/tag/{{this.name}}">{{this.name}}</a></li>
                                                     {{/each}}
                                                 </ul>
                                             </div>
@@ -363,6 +363,7 @@
     <script src="/js/form-validator.min.js"></script>
     <script src="/js/contact-form-script.js"></script>
     <script src="/js/custom.js"></script>
+    {{{_sections.script}}}
 </body>
 
 </html>

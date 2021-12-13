@@ -40,7 +40,17 @@ exports.proDetail = async (req,res)=>{
 
 exports.filterCategory = async (req,res)=>{
    
-    const cate_id = req.params.category_id;
+    const cate_name = req.params.category_name;
+    let cate_id = 0
+    try{
+        cate_id = await service.getCateId(cate_name)
+        cate_id = cate_id.rows[0].id
+    }
+    catch(err){
+        return res.render('error',{
+            error:err
+        })
+    }
     const page = parseInt(req.query.page)||1;
     const products = await productModel.getCatePro(cate_id,page);
     const brands = await productModel.getBrand;
@@ -48,7 +58,7 @@ exports.filterCategory = async (req,res)=>{
     max_page = max_page.rows[0].max_page;
     console.log(cate_id,page,products.rows);
     res.render(view+'productList', { 
-        title: 'All Product', 
+        title: cate_name, 
         products:products.rows,
         brands:brands.rows,
         page:page,
@@ -59,26 +69,25 @@ exports.filterCategory = async (req,res)=>{
 }
 
 exports.filterTag = async (req,res)=>{
-    const categories = await categoryModel.getAll(4);
-    const category_nav = []
-    for await(const cate of categories.rows){
-        const tag = await tagModel.getTagCate(cate.id);
-        category_nav.push({
-            id:cate.id,
-            name:cate.name,
-            tags:tag.rows
+    const tag_name = req.params.tag_name;
+    let tag_id = 0
+    try{
+        console.log(tag_name)
+        tag_id = await service.getTagId(tag_name)
+        tag_id = tag_id.rows[0].id
+    }
+    catch(err){
+        return res.render('error',{
+            error:err
         })
     }
-    const tag_id = req.params.tag_id;
     const page = parseInt(req.query.page)|1;
     const products = await productModel.getTagPro(tag_id,page);
     const brands = await productModel.getBrand;
     let max_page = await productModel.maxPageTag(tag_id);
     max_page = max_page.rows[0].max_page;
     res.render(view+'productList', { 
-        title: 'All Product', 
-        coupons:['Off 10%! Shop Now Man','50% - 80% off on Fashion','20% off Entire Purchase Promo code: offT20','Off 50%! Shop Now','Off 10%! Shop Now Man','50% - 80% off on Fashion','20% off Entire Purchase Promo code: offT20'],
-        categories:category_nav,
+        title: tag_name, 
         products:products.rows,
         brands:brands.rows,
         page:page,

@@ -56,6 +56,7 @@ CREATE TABLE product(
     create_date TIMESTAMP DEFAULT NOW(),
     is_delete BOOLEAN DEFAULT false,
     image VARCHAR(255),
+    state VARCHAR(10) DEFAULT 'new',
     
     CONSTRAINT fk_product_tagid
         FOREIGN KEY (tag_id)
