@@ -9,6 +9,7 @@ const view = '../component/auth/view/';
 exports.login = async (req,res)=>{
     res.render(view+'login', { 
         title: 'Login', 
+        error: req.query.error?"Invalid email or password":""
     })
 }
 
