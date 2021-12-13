@@ -8,7 +8,6 @@ exports.viewTable = async function(req, res) {
   const page = parseInt(req.query.page)||1;
   const column_name = await service.getColumnName(tb_name);
   const record = await service.getRecord(page, tb_name);
-  console.log(page);
   let max_page = await service.maxPage(tb_name);
   max_page = parseInt(max_page.rows[0].max_page);
   return res.render(view+'table',{

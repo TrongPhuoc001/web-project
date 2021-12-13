@@ -14,6 +14,7 @@ const authRouter = require('./component/auth/route')
 const tableRouter = require('./component/table/route');
 const productRouter = require('./component/product/route');
 const managerRouter = require('./component/manager/route');
+const userRouter = require('./component/users/route');
 
 const verify = require('./middleware/verifyUser')
 const addTableMess = require('./middleware/setTableMess');
@@ -45,6 +46,7 @@ app.use(verify);
 app.use(addTableMess);
 app.use('/',managerRouter);
 app.use('/', indexRouter);
+app.use('/',userRouter);
 app.use('/tables', tableRouter);
 app.use('/product',productRouter);
 
