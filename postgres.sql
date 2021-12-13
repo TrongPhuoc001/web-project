@@ -11,8 +11,7 @@ CREATE TABLE manager(
 
 CREATE TABLE users(
     id serial PRIMARY KEY ,
-    first_name VARCHAR(255) NOT NULL ,
-    last_name VARCHAR(255) NOT NULL, 
+    name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     birthday DATE NOT NULL,
@@ -186,20 +185,6 @@ VALUES ('Shirts','kaki, comfortable',9.99,'https://i.ibb.co/LNrBbpZ/shirt-img.jp
 ('Modern Sunglass','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',79.99,'https://i.ibb.co/LgBzcw6/sunglass.jpg','DEF',9,100,10),
 ('Pretty Sweater','Nam sagittis a augue eget scelerisque. Nullam lacinia consectetur sagittis. Nam sed neque id eros fermentum dignissim quis at tortor.',9999.99,'https://i.ibb.co/wJKsnGq/sweater.jpg','DEF',6,100,10);
 
-INSERT INTO product_image(product_id,image)
-VALUES (  1 , 'https://i.ibb.co/LNrBbpZ/shirt-img.jpg'),
- (15,'https://i.ibb.co/Q9wJtbL/98f049fdb177.jpg'),
-  (3 , 'https://i.ibb.co/pd0nW3b/shoes-img.jpg'),
-  (5, 'https://i.ibb.co/7JDFRLD/wallet-img.jpg'),
-  (6, 'https://i.ibb.co/J5RyXN7/t-shirts-img.jpg'),
-  (7, 'https://i.ibb.co/09Qb0W8/women-bag-img.jpg'),
-  (9, 'https://i.ibb.co/YWMW68J/suit.jpg'),
- (10 , 'https://i.ibb.co/LgBzcw6/sunglass.jpg'),
-  (2 , 'https://i.ibb.co/bgccpjM/jean.jpg'),
-  (8 ,'https://i.ibb.co/jyNfLcd/instagram-img-04.jpg'),
-  (4 ,'https://i.ibb.co/mqRQfH3/img-pro-04.jpg'),
- (12 ,'https://i.ibb.co/XV3DhP5/swimsuit.jpg'),
- (11 , 'https://i.ibb.co/wJKsnGq/sweater.jpg');
 
 INSERT INTO wishlist(user_id,product_id)
 VALUES (1,1),(2,2),(3,3),(4,4);

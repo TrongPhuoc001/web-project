@@ -20,6 +20,9 @@
                             </div>
                             {{#ifeq @key 'image'}}
                             <img src="{{this}}" width="80">
+                            {{#each subimage}}
+                            <img src="{{this.image}}" width="80">
+                            {{/each}}
                             {{/ifeq}}
                         </div>
                         {{/each}}

@@ -73,21 +73,32 @@
 </section><!-- /MAIN CONTENT -->
 {{#section 'script'}}
 <script>
-    function getUrl(){
+    async function getUrl(){
         const FR= new FileReader();                                    
         const form = new FormData();
         form.set('key','9304eb5630f3f1e2a368fa2ee7cf100f');
         form.set('image',document.getElementById("inp-value").value);
-        fetch(`https://api.imgbb.com/1/upload?key=9304eb5630f3f1e2a368fa2ee7cf100f`,{
+        const datamain = await fetch(`https://api.imgbb.com/1/upload?key=9304eb5630f3f1e2a368fa2ee7cf100f`,{
             method:'POST',
             body:form
         })
-        .then(res => res.json())
-        .then(data=>{
-            document.getElementById("inp-value").value = data.data.image.url;
-            console.log(data.data.image.url);
-            document.getElementById("add-form").submit();
-        });
+        .then(res => res.json());
+        form.set('image',document.getElementById("sinp1-value").value);
+        const datasub1 = await fetch(`https://api.imgbb.com/1/upload?key=9304eb5630f3f1e2a368fa2ee7cf100f`,{
+            method:'POST',
+            body:form
+        })
+        .then(res => res.json());
+        form.set('image',document.getElementById("sinp2-value").value);
+        const datasub2 = await fetch(`https://api.imgbb.com/1/upload?key=9304eb5630f3f1e2a368fa2ee7cf100f`,{
+            method:'POST',
+            body:form
+        })
+        .then(res => res.json());
+        document.getElementById("inp-value").value = datamain.data.image.url;
+        document.getElementById("sinp1-value").value = datasub1.data.image.url;
+        document.getElementById("sinp2-value").value = datasub2.data.image.url;
+        document.getElementById("add-form").submit();
     }
     function readFile() {
         if (this.files && this.files[0]) {                                 

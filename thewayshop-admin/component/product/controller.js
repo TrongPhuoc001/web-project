@@ -1,5 +1,6 @@
 const productModel = require('../../models/product');
 
+const service = require('./service')
 const view = '../component/product/view/';
 
 exports.get = async (req,res)=>{
@@ -23,9 +24,11 @@ exports.getProduct = async (req,res)=>{
 
     const {product_id} = req.params;
     const product = await productModel.getOne(product_id);
+    const subimage = await service.getSubImage(product_id)
     res.render(view+'productEdit', { 
         title: product.rows[0].title,
         product:product.rows[0],
+        subimage:subimage.rows[0],
         product_active:true
     });
 }
@@ -79,8 +82,11 @@ exports.postAddProduct = async(req,res)=>{
         sold:'Have sold'
     }
     try{
-        const newProId = await productModel.addPro(req.body)
-        console.log(newProId.rows[0].id)
+        const {title,description,price,image,subimage1,subimage2,brand,tag_id,available,sold} = req.body
+        const newProId = await service.addPro(title,description,price,image,brand,tag_id,available,sold)
+        if(!subimage1)subimage1='';
+        if(!subimage2)subimage2='';
+        await service.addSubImage(newProId.rows[0].id,subimage1,subimage2)
         res.render(view+'productAdd', { 
             title: 'New product',
             product:product,
