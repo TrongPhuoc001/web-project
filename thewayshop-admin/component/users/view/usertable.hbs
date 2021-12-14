@@ -25,9 +25,9 @@
                                     {{/each}}
                                     {{#if this.id}}
                                         {{#if this.is_delete}} 
-                                        <td><button class="btn btn-primary btn-inline-block btn-unblock" style="background-color:#13222b;" data-id="{{this.id}}">UnBlock</button></td>
+                                        <td><a href="/user/info?recordId={{this.id}}"><button>View Info</button> </a><button class="btn btn-primary btn-inline-block btn-unblock" style="background-color:#13222b;" data-id="{{this.id}}">UnBlock</button></td>
                                         {{else}}
-                                        <td><button class="btn btn-primary btn-inline-block btn-ablock"  data-id="{{this.id}}">Block</button></td>
+                                        <td><a href="/user/info?recordId={{this.id}}"><button>View Info</button> </a><button class="btn btn-primary btn-inline-block btn-ablock"  data-id="{{this.id}}">Block</button></td>
                                         {{/if}}
                                     {{/if}}
                                     </tr>

@@ -25,11 +25,25 @@ exports.viewTable = async function(req, res) {
 exports.postBlock = async (req,res)=>{
   const {recordId}= req.query;
   const {recordBlock}= req.query;
-  try {
-    await service.block(recordId,recordBlock);
-  } catch (error) {
-    console.log(error);
-  }
+  // try {
+  //   await service.block(recordId,recordBlock);
+  // } catch (error) {
+  //   console.log(error);
+  // }
   
+  res.redirect('/user')
+}
+
+exports.getUserInfo = async(req, res) => {
+  const {recordId}= req.query;
+
+  const data = await service.recordData(recordId);
+
+  return res.render(view+'infouser',{
+    title:"User",
+    record: data.rows[0]
+  })
+}
+exports.returnUser = async(req, res) => {
   res.redirect('/user')
 }

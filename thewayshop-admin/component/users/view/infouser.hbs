@@ -6,10 +6,15 @@
         <div class="row mt">
             <div class="col-lg-12">
                 <div class="form-panel">
-                    <h4 class="mb"><i class="fa fa-angle-right"></i> {{table_name}}<i class="fa fa-angle-right"></i> {{record_id}}</h4>
-                    <form class="form-horizontal style-form" method="get">
-                        {{#each record}}
-                        <div class="form-group">
+                    <h4 class="mb"><i class="fa fa-angle-right"></i> {{manager.fullname}}</h4>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <img {{#if this.image}}src="{{this.image}}"{{else}}src="/images/friends/fr-06.jpg"{{/if}} class="img-circle" width="80">
+                        </div>
+                    </div>
+                    <form class="form-horizontal style-form" method="post">
+                            {{#each record}}
+                             <div class="form-group">
                             <label class="col-sm-2 col-sm-2 control-label">{{@key}}</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="{{@key}}" value="{{this}}">
@@ -19,13 +24,17 @@
                             {{/ifeq}}
                         </div>
                         {{/each}}
-                        <button type="submit">Submit</button>
+                           <button type = "button" onclick="back()">Ok</button>           
                     </form>
                 </div>
             </div><!-- col-lg-12-->      	
         </div><!-- /row -->
     </section><! --/wrapper -->
 </section><!-- /MAIN CONTENT -->
-
+ <script>
+      function back(){
+          history.back();
+      }
+  </script>
 <!--main content end-->
       
