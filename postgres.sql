@@ -130,7 +130,8 @@ CREATE TABLE orders(
     detail_address VARCHAR(255) NOT NULL,
     payment VARCHAR(255) NOT NULL,
     total DECIMAL(12,2) NOT NULL,
-    create_date TIMESTAMP DEFAULT NOW()
+    create_date TIMESTAMP DEFAULT NOW(),
+    delivered BOOLEAN DEFAULT false
 );
 
 CREATE TABLE order_product(
