@@ -5,6 +5,7 @@ const transporter = require('../../config/transporter')
 const passport = require('../../config/passport');
 const service = require('./service');
 const {registerValid} = require('../../config/joiValidation');
+const sendEmail = require('../../config/sendEmail');
 
 const view = '../component/auth/view/';
 
@@ -55,18 +56,8 @@ exports.register = async(req,res)=>{
     const hashedpassword = await bcrypt.hash(password,10);
     try{
         const user_id =  await service.register(email,hashedpassword,name,birthday,address);
-        jwt.sign({
-            id:user_id.rows[0].id,
-        },process.env.JWT_SECRET,{
-            expiresIn: '1d',
-        },(err,emailToken)=>{
-            const url = req.protocol + '://' + req.get('host') + '/confirmation/' + emailToken;
-            transporter.sendMail({
-                to:email,
-                subject: 'Thewayshop Confirm Email',
-                html:`Please click this link to confirm your email: <a href="${url}">${url}</a>`
-            })
-        })
+        const baseurl =  req.protocol + '://' + req.get('host') + '/confirmation/';
+        sendEmail(user_id.rows[0].id,email,baseurl)
         return res.render(view+'login', { 
             title: 'Login', 
             message: 'Sign up success, please verify your email.'

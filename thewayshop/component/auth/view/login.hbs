@@ -74,7 +74,7 @@
 				</div>
 				<div class="group">
 					<label for="pass" class="label">Repeat Password</label>
-					<input id="pass" type="repassword" class="input" data-type="password" name="repassword">
+					<input type="repassword" class="input" data-type="password" name="repassword">
 				</div>
 				
 				<div class="group">
@@ -88,3 +88,20 @@
 		</div>
 	</div>
 </div>
+{{#section 'script'}}
+<script>
+	document.querySelector('#btn-resend').addEventListener('click',(e)=>{
+		e.preventDefault();
+		const email = e.target.dataset.email;
+		$.post('/api/account/resend',{
+			email: email
+		},(data,status)=>{
+			e.target.disabled = true;
+			setTimeout(function(){  
+				const element = document.querySelector("#btn-resend");
+				element.disabled = false;
+			}, 30000);
+		})
+	})
+</script>
+{{/section}}

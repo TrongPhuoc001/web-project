@@ -14,6 +14,7 @@ const myaccountRouter = require('./component/account/route');
 const authRouter = require('./component/auth/route');
 const productRouter = require('./component/product/route');
 const shopRouter = require('./component/shop/route');
+const apiRouter = require('./api/route');
 
 const layout = require('./config/layout');
 const verify = require('./config/verifyUser');
@@ -44,6 +45,7 @@ app.use(layout);
 app.use(verify);
 app.use('/', homeRouter);
 app.use('/', authRouter);
+app.use('/api',apiRouter);
 app.use('/shop', shopRouter);
 app.use('/myaccount', myaccountRouter);
 app.use('/product', productRouter);
