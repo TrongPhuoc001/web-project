@@ -28,8 +28,8 @@ exports.add = (username,password,fullname,birthday,image,salary)=>{
         VALUES ($1,$2,$3,$4,$5,$6)`,[username,password,fullname,birthday,image,salary]
     )
 }
-exports.edit = (manager_id,username,birthday,salary)=>{
+exports.edit = (manager_id,fullname,birthday,salary)=>{
     return pool.query(
-        `UPDATE manager SET username = $1, birthday = cast($2 as date), salary = $3 WHERE id= $4;`,[username,birthday,salary,manager_id]
+        `UPDATE manager SET fullname = $1, birthday = cast($2 as date), salary = $3 WHERE id= $4;`,[fullname,birthday,salary,manager_id]
     )
 }

@@ -17,8 +17,8 @@ exports.profile = async(req,res)=>{
     })
 }
 exports.postSave = async(req,res)=>{
-    const {username, birthday, salary} = req.body;
-    await managerService.edit(req.user.id,username, birthday, salary)
+    const {fullname, birthday, salary} = req.body;
+    await managerService.edit(req.user.id,fullname, birthday, salary)
     res.redirect('/profile')
 }
 
