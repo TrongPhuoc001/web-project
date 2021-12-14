@@ -22,9 +22,9 @@
                                     {{/each}}
                                     {{#if this.id}}
                                         {{#if this.is_delete}} 
-                                        <td><a href="/user/block?recordId={{this.id}}&recordBlock=false"><button>Mở khóa</button></a></td>
+                                        <td><a href="/user/info?recordId={{this.id}}"><button>View Info</button> <a href="/user/block?recordId={{this.id}}&recordBlock=false"><button>Unlock</button></a></td>
                                         {{else}}
-                                        <td><a href="/user/block?recordId={{this.id}}&recordBlock=true"><button>Khóa</button></a></td>
+                                        <td><a href="/user/info?recordId={{this.id}}"><button>View Info</button> <a href="/user/block?recordId={{this.id}}&recordBlock=true"><button>Block</button></a></td>
                                         {{/if}}
                                     {{/if}}
                                     </tr>
