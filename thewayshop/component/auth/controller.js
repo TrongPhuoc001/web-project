@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
+const transporter = require('../../config/transporter')
 const passport = require('../../config/passport');
 const service = require('./service');
 const {registerValid} = require('../../config/joiValidation');
@@ -18,6 +20,29 @@ exports.auth = passport.authenticate('local', {
     failureRedirect: '/login?error=true'
 });
 
+exports.verify = async (req,res,next)=>{
+    const {email} = req.body;
+    const user = await service.findOne(email);
+    if(user.rows.length > 0){
+        if(user.rows[0].verified){
+            next();
+        }
+        else{
+            res.render(view+'login',{
+                title:'Login',
+                verify:'Please verify your email',
+                email:email
+            })
+        }
+    }
+    else{
+        res.render(view+'login',{
+            title:'Login',
+            error:'Invalid email or password'
+        })
+    }
+}
+
 exports.register = async(req,res)=>{
     const {error} = registerValid(req.body);
     if(error){ 
@@ -29,10 +54,22 @@ exports.register = async(req,res)=>{
     const {email,password,name,birthday,address}= req.body;
     const hashedpassword = await bcrypt.hash(password,10);
     try{
-        await service.register(email,hashedpassword,name,birthday,address);
+        const user_id =  await service.register(email,hashedpassword,name,birthday,address);
+        jwt.sign({
+            id:user_id.rows[0].id,
+        },process.env.JWT_SECRET,{
+            expiresIn: '1d',
+        },(err,emailToken)=>{
+            const url = req.protocol + '://' + req.get('host') + '/confirmation/' + emailToken;
+            transporter.sendMail({
+                to:email,
+                subject: 'Thewayshop Confirm Email',
+                html:`Please click this link to confirm your email: <a href="${url}">${url}</a>`
+            })
+        })
         return res.render(view+'login', { 
             title: 'Login', 
-            message: 'Sign up success, you can sign in now.'
+            message: 'Sign up success, please verify your email.'
         })
     }
     catch(err){
@@ -46,4 +83,16 @@ exports.register = async(req,res)=>{
 exports.logout = (req,res)=>{
     req.logout();
     res.redirect('/');
+}
+
+exports.confirm = async (req,res)=>{
+    try{
+        const {id} = jwt.verify(req.params.token,process.env.JWT_SECRET);
+        await service.confirm(id);
+        res.redirect('/login')
+    }   
+    catch(e){
+        res.send('error');
+    }
+
 }

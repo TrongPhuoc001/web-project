@@ -11,7 +11,7 @@ const passport = require('./config/passport');
 
 const homeRouter = require('./component/home/route');
 const myaccountRouter = require('./component/account/route');
-const loginRouter = require('./component/auth/route');
+const authRouter = require('./component/auth/route');
 const productRouter = require('./component/product/route');
 const shopRouter = require('./component/shop/route');
 
@@ -43,9 +43,9 @@ app.use(passport.session());
 app.use(layout);
 app.use(verify);
 app.use('/', homeRouter);
+app.use('/', authRouter);
 app.use('/shop', shopRouter);
 app.use('/myaccount', myaccountRouter);
-app.use('/login', loginRouter);
 app.use('/product', productRouter);
 
 

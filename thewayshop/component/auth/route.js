@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const controller = require('./controller');
 /* GET home page. */
-router.get('/', controller.login);
+router.get('/login', controller.login);
 router.get('/logout',controller.logout);
-router.post('/login',controller.auth);
+router.post('/login',controller.verify,controller.auth);
 router.post('/register', controller.register);
+router.get('/confirmation/:token', controller.confirm)
 module.exports = router;

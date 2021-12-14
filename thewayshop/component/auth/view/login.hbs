@@ -10,7 +10,7 @@
 		<input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
 		<div class="login-form">
 			<div  class="sign-in-htm">
-				<form action="/login/login" method="post">
+				<form action="/login" method="post">
 					<div class="group">
 						<label for="user" class="label">Email</label>
 						<input id="user" type="text" class="input" name="email">
@@ -26,6 +26,16 @@
 					<div class="group">
 						<input type="submit" class="button" value="Sign In">
 					</div>
+					{{#if verify}}
+					<div class="group row">
+						<div class="col-sm-6">
+							<h4 style="color: rgb(46, 226, 211);">{{verify}}</h4>	
+						</div>
+						<div class="col-sm-6">
+							<button id="btn-resend" data-email="{{email}}" class="button">RESEND</button>
+						</div>
+					</div>
+					{{/if}}
 					<div class="hr"></div>
 				</form>
 				<div class="foot-lnk">
@@ -41,7 +51,7 @@
 					</div>
 				</form>
 			</div>
-			<form action="/login/register" method="post" class="sign-up-htm">
+			<form action="/register" method="post" class="sign-up-htm">
 				<div class="group">
 					<label for="user" class="label">Email</label>
 					<input id="user" type="text" class="input" name="email">
