@@ -8,8 +8,12 @@
                 {{else}}
                 <div class="row">
                     <label for="{{@key}}">{{@key}} *</label>
+                    {{#ifeq @key 'birthday'}}
+                    <input type="date" class="form-control" id="{{@key}}" value="{{this}}">
+                    {{else}}
                     <input type="text" class="form-control" id="{{@key}}" placeholder="" value="{{this}}" required
                     {{#ifeq @key 'email'}}readonly{{/ifeq}}{{#ifeq @key 'balance'}}readonly{{/ifeq}}>
+                    {{/ifeq}}
                 </div>
                 {{/ifeq}}
                 {{/each}}

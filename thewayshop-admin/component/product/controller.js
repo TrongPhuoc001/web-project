@@ -25,8 +25,18 @@ exports.getProduct = async (req,res)=>{
     const {product_id} = req.params;
     const product = await productModel.getOne(product_id);
     const subimage = await service.getSubImage(product_id)
+    if(subimage.rows.length === 0){
+        const temp = [
+            {
+                'image':''
+            },
+            {
+                'image':''
+            }
+        ];
+        subimage.rows = temp;
+    }
 
-    console.log(subimage.rows)
     res.render(view+'productEdit', { 
         title: product.rows[0].title,
         product:product.rows[0],

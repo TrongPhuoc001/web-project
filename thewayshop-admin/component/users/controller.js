@@ -4,7 +4,7 @@ const view = '../component/users/view/';
 exports.viewTable = async function(req, res) {
 
     const page = parseInt(req.query.page)||1;
-    const column_name = ["User Id", "Email", "Name", "Address", "Balance","Total Orders", "Expended", "is_block"];
+    const column_name = ["User Id", "Email", "Name", "Address", "Balance","Total Orders", "Total Expend"];
     const record = await service.getRecord(page, 'user');
     let max_page = await service.maxPage('user');
     max_page = parseInt(max_page.rows[0].max_page);

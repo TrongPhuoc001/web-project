@@ -18,18 +18,12 @@
                             {{#ifeq @key 'image'}}
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="{{@key}}" value="{{this}}">
-                                {{#if ../sub_image}}
-                                {{#each ../sub_image}}
-                                <input type="text" class="form-control" name="subimage1" value="{{this.image}}">
-                                {{/each}}
-                                {{else}}
-                                <span>Không có sub image</span>
-                                {{/if}}
+                                <input type="text" class="form-control" name="subimage1" value="{{../subimage.[0].image}}">
+                                <input type="text" class="form-control" name="subimage2" value="{{../subimage.[1].image}}">
                             </div>
                             <img src="{{this}}" width="80">
-                            {{#each ../sub_image}}
-                            <img src="{{this.image}}" width="80">
-                            {{/each}}
+                            <img src="{{../subimage.[0].image}}" width="80">
+                            <img src="{{../subimage.[1].image}}" width="80">
                             {{else}}
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="{{@key}}" value="{{this}}">

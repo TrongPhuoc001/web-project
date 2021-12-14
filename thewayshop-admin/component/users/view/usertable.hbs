@@ -16,15 +16,18 @@
                             </thead>
                             <tbody>
                                 {{#each record}}
-                                    <tr>
+                                    <tr id="tr-{{this.id}}"}>
                                     {{#each this}}
+                                        {{#ifeq @key 'is_delete'}}
+                                        {{else}}
                                         <td data-title="{{@key}}">{{this}}</td>
+                                        {{/ifeq}}
                                     {{/each}}
                                     {{#if this.id}}
                                         {{#if this.is_delete}} 
-                                        <td><a href="/user/block?recordId={{this.id}}&recordBlock=false"><button>Mở khóa</button></a></td>
+                                        <td><button class="btn btn-primary btn-inline-block btn-unblock" style="background-color:#13222b;" data-id="{{this.id}}">UnBlock</button></td>
                                         {{else}}
-                                        <td><a href="/user/block?recordId={{this.id}}&recordBlock=true"><button>Khóa</button></a></td>
+                                        <td><button class="btn btn-primary btn-inline-block btn-ablock"  data-id="{{this.id}}">Block</button></td>
                                         {{/if}}
                                     {{/if}}
                                     </tr>
@@ -74,3 +77,51 @@
 
     </section><! --/wrapper -->
 </section><!-- /MAIN CONTENT -->
+{{#section 'script'}}
+<script>
+    function blockEvent(e){
+        const user_id = e.target.dataset.id;
+        $.post("/api/user/block",{
+            user_id:user_id,
+            action:'block'
+        },(data,status)=>{
+            if(status==="success"){
+                e.target.textContent="UnBlock";
+                e.target.classList.remove('btn-ablock');
+                e.target.classList.add('btn-unblock')
+                e.target.style.backgroundColor = "#13222b"
+                e.target.removeEventListener('click',blockEvent);
+                e.target.addEventListener('click',unblockEvent);
+            }
+            else{
+                console.log(data)
+            }
+        })
+    }
+    function unblockEvent(e){
+        const user_id = e.target.dataset.id;
+            $.post("/api/user/block",{
+                user_id:user_id,
+                action:'unblock'
+            },(data,status)=>{
+                if(status==="success"){
+                    e.target.textContent="Block"
+                    e.target.classList.remove('btn-unblock');
+                    e.target.classList.add('btn-ablock');
+                    e.target.removeAttribute('style');
+                    e.target.removeEventListener('click',unblockEvent);
+                    e.target.addEventListener('click',blockEvent);
+                }
+                else{
+                    console.log(data)
+                }
+            })
+    }
+    document.querySelectorAll('.btn-ablock').forEach(btn=>{
+        btn.addEventListener('click',blockEvent );
+    });
+    document.querySelectorAll('.btn-unblock').forEach(btn=>{
+        btn.addEventListener('click',unblockEvent);
+    })
+</script>
+{{/section}}

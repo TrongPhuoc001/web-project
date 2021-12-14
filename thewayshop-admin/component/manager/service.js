@@ -13,12 +13,12 @@ exports.maxPage = pool.query(
 
 exports.findOne = (id)=>{
     return pool.query(
-        `SELECT * FROM manager WHERE id=$1`,[id]
+        `SELECT id,fullname,username,TO_CHAR(birthday, 'yyyy-MM-DD') as birthday,salary,image FROM manager WHERE id=$1`,[id]
     )
 }
 exports.findOneUsername = (username)=>{
     return pool.query(
-        `SELECT * FROM manager WHERE username=$1`,[username]
+        `SELECT id,fullname,username,TO_CHAR(birthday, 'yyyy-MM-DD') as birthday,salary,image FROM manager WHERE username=$1`,[username]
     )
 }
 
