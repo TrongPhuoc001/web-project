@@ -5,6 +5,7 @@ const accCon = require('./controller');
 /* GET home page. */
 router.get('/', accCon.myaccount);
 router.get('/profile',accCon.profile);
+router.post('/profile',accCon.editProfile);
 router.get('/cart', accCon.cart);
 router.get('/wishlist', accCon.wishlist);
 router.get('/checkout', accCon.checkout);

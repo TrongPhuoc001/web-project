@@ -1,7 +1,7 @@
 const productModel = require('../../models/product');
-const categoryModel = require('../../models/category');
-const tagModel = require('../../models/tag');
 
+
+const service = require('./service')
 
 const view = '../component/home/view/'
 
