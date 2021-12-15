@@ -34,6 +34,48 @@ exports.proDetail = async (req,res)=>{
         title: product.rows[0].title, 
         product:product.rows[0],
         products:relate.rows,
+        rating:[
+            {
+                name:'Phước',
+                star:5,
+                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
+            },
+            {
+                name:'Phước',
+                star:5,
+                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
+            },
+            {
+                name:'Phước',
+                star:5,
+                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
+            },
+            {
+                name:'Phước',
+                star:5,
+                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
+            },
+            {
+                name:'Phước',
+                star:5,
+                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
+            },
+            {
+                name:'Phước',
+                star:5,
+                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
+            },
+            {
+                name:'Phước',
+                star:5,
+                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
+            },
+            {
+                name:'Phước',
+                star:5,
+                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
+            },
+        ],
         pro_image:pro_image.rows
     })
 }

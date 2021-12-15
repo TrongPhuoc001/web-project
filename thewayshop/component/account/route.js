@@ -6,6 +6,8 @@ const accCon = require('./controller');
 router.get('/', accCon.myaccount);
 router.get('/profile',accCon.profile);
 router.post('/profile',accCon.editProfile);
+router.get('/changepass', accCon.changepass);
+router.post('/changepass', accCon.postchangepass);
 router.get('/cart', accCon.cart);
 router.get('/wishlist', accCon.wishlist);
 router.get('/checkout', accCon.checkout);

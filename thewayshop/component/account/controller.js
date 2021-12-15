@@ -1,5 +1,7 @@
+const bcrypt = require('bcrypt')
 const service = require('./service');
 
+const {profileValid,changepassValid} = require('../../config/joiValidation')
 const view = "../component/account/view/";
 
 exports.myaccount = (req,res)=>{
@@ -43,6 +45,13 @@ exports.editProfile = async(req,res)=>{
     if(!req.user){
         return res.redirect('/login');
     }
+    const {error} = profileValid(req.body);
+    if(error){ 
+        return res.render(view+'profile', { 
+            title: 'Profile', 
+            error:'Invalid infomation:'+ error.details[0].message
+        })
+    }
     const user_id = req.user.id;
     const {name,birthday,address,image} = req.body;
     try{
@@ -57,5 +66,46 @@ exports.editProfile = async(req,res)=>{
         console.log(e);
         res.send('error');
     }
+}
 
+exports.changepass = async(req,res)=>{
+    if(!req.user){
+        return res.redirect('/login');
+    }
+    res.render(view+'changepass');
+}
+
+exports.postchangepass = async(req,res)=>{
+    if(!req.user){
+        return res.redirect('/login');
+    }
+    const {error} = changepassValid(req.body);
+    if(error){ 
+        return res.render(view+'changepass', { 
+            title: 'Profile', 
+            error:'Invalid infomation:'+ error.details[0].message
+        })
+    }
+    const {oldpassword,newpassword} = req.body;
+    const user_id = req.user.id;
+    const password = await service.getpass(user_id);
+    const match = await bcrypt.compare(oldpassword,password.rows[0].password)
+    if(!match){
+        return res.render(view+'changepass', { 
+            title: 'Profile', 
+            error:"Invalid infomation: Old password isn't correct."
+        })
+    }
+    const hashedPassword = await bcrypt.hash(newpassword,10);
+    try{
+        await service.changepass(hashedPassword,user_id);
+        return res.render(view+'changepass', { 
+            title: 'Profile', 
+            message:"Password change successfully."
+        })
+    }
+    catch(e){
+        res.send('error')
+    }
+    
 }

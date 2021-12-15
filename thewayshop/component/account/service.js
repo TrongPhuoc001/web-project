@@ -15,3 +15,14 @@ exports.editProfile = (name,birthday,address,image,user_id)=>{
         RETURNING name,email,TO_CHAR(birthday, 'yyyy-MM-DD') as birthday,address,balance,image;`,[name,birthday,address,image,user_id]
     )
 }
+exports.getpass = (user_id)=>{
+    return pool.query(
+        `SELECT password FROM users
+        WHERE id =$1;`,[user_id]
+    )
+}
+exports.changepass = (newpass,user_id)=>{
+    return pool.query(
+        `UPDATE users SET password=$1 WHERE id=$2`,[newpass,user_id]
+    )
+}

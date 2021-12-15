@@ -40,6 +40,9 @@
                     <input type="file" id="inp" accept="image/png, image/jpeg, image/jpg" width="200">                               
                     <input type="hidden" id="inp-value" name="image" >
                 </div>
+                {{#if error}}
+                <h4 style="color: rgb(141, 0, 0);">{{error}}</h4>
+                {{/if}}
                 <div class="row">
                     <div class="col-5"></div>
                     <button id="btn-save" class="btn btn-danger">Save</button>
