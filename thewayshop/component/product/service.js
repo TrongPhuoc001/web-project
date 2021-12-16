@@ -89,3 +89,8 @@ exports.getRelate = (pro_id,tag_id,brand)=>{
     )
 }
 
+exports.numberRating = (product_id)=>{
+    return pool.query(
+        `SELECT COUNT(*) as max_rating FROM rating WHERE product_id=$1;`,[product_id]
+    )
+}

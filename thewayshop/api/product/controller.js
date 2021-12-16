@@ -21,8 +21,7 @@ exports.postRating = async(req,res)=>{
     const {product_id,star,content} = req.body;
     try{
         const rating = await service.addRating(user_id,product_id,star,content);
-        const userInfo = await service.userInfo(user_id);
-        res.status(200).json({rating:rating.rows[0],userInfo:userInfo.rows[0]})
+        res.status(200).json(rating.rows[0])
     }
     catch(e){
         res.status(400).json(e);

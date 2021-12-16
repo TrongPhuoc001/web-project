@@ -2,21 +2,20 @@
 <style>
     .star-container label {
         cursor: pointer;
-        position: relative;
+        display: grid;
     }
 
     .star-container i {
         width: 3rem;
         height: 3rem;
         padding: 0.15rem;
+        grid-column: 1;
+        grid-row: 1;
         
     }
     .star-container .substar{
         color: #d33b33; 
-        pointer-events: none; 
-        position: absolute;
-        top: 0.25rem;
-
+        z-index: -1;
     } 
 
     /* hide radio buttons */
@@ -35,9 +34,6 @@
     }
 
     .star {
-        width: 3rem;
-        height: 3rem;
-        padding: 0.25rem;
         color: transparent;
         transition: color 0.2s ease-in-out;
     }
@@ -63,6 +59,19 @@
         animation: scaleup 1s;
     }
 
+    #rating{
+        display: flex;
+        align-items: center;
+    }
+
+    #rating .paging-icon{
+        cursor: pointer;
+        color: #d33b33;
+        z-index: 10;
+    }
+    #rating .paging-icon:hover{
+        color: :#691712;
+    }
     @keyframes scaleup {
         from {
             transform: scale(1.2);
@@ -180,7 +189,7 @@
                 </div>
             </div>
         </div>
-        <div class="row my-5">
+        <div class="row my-5 d-flex justify-content-center">
             <div class="col-lg-12 " id="related-product">
                 <div class="featured-products-box owl-carousel owl-theme">
                     {{#each products}}
@@ -208,8 +217,9 @@
                     {{/each}}
                 </div>
             </div>
-            <div class="col-lg-12 " id="rating" style="display: none;">
-                <div class="row" id="rating-container">
+            <div class="row" id="rating" style="display: none;">
+                <i class="fas fa-arrow-circle-left paging-icon" id="previous"></i>
+                <div class="col-lg-12 row" id="rating-container">
                     {{#each rating}}
                     <div class="col-4">
                         <div class="row">
@@ -233,8 +243,9 @@
                     </div>
                     {{/each}}
                 </div>
+                <i class="fas fa-arrow-circle-right paging-icon" id="next"></i>
                 {{#if user}}
-                <form class="row">
+                <form class="col-lg-12 row">
                     <div class="star-container col-4" >
                         <input type="radio" name="star" value="5" id="five">
                         <label for="five">
@@ -290,19 +301,87 @@
 <!-- End Cart -->
 {{#section 'script'}}
 <script>
+    let numberRating = {{{number_rating}}}
+    let maxPageRating = Math.ceil(numberRating/9);
+    const product_id = {{{product.id}}};
+    let ratingCache =[];
+    let currentPage=1;
     $('document').ready(()=>{
-        const product_id = {{{product.id}}}; 
+        if(maxPageRating===0){
+            console.log('No rating')
+            return;
+        }
         $.get(`/api/product/rating?proid=${product_id}`,(data,status)=>{
             if(status==="success"){
                 data.slice().reverse().forEach(rating=>{
                     addRating(rating);
                 })
+                ratingCache[1]=data;
             }
             else{
                 console.log('error',data);
             }
         })
     })
+    document.querySelector('#previous').addEventListener('click',()=>{
+        if(maxPageRating===0){
+            return;
+        }
+        if(currentPage===1){
+            return;
+        }
+        if(ratingCache[currentPage-1]){
+            document.querySelector('#rating-container').innerHTML ='';
+            const data = ratingCache[currentPage-1];
+            data.slice().reverse().forEach(rating=>{
+                addRating(rating);
+            })
+            currentPage--;
+        }
+        else{
+            $.get(`/api/product/rating?proid=${product_id}&page=${currentPage-1}`,(data,status)=>{
+                if(status==='success'){
+                    currentPage--;
+                    document.querySelector('#rating-container').innerHTML ='';
+                    data.slice().reverse().forEach(rating=>{
+                        addRating(rating);
+                    })
+                    ratingCache[currentPage]=data;
+                }
+            })
+        }
+    })
+    document.querySelector('#next').addEventListener('click',()=>{
+        if(maxPageRating===0){
+            return;
+        }
+        if(currentPage===maxPageRating){
+            return;
+        }
+        if(ratingCache[currentPage+1]){
+            document.querySelector('#rating-container').innerHTML ='';
+            const data = ratingCache[currentPage+1];
+            data.slice().reverse().forEach(rating=>{
+                addRating(rating);
+            })
+            currentPage++;
+        }
+        else{
+            $.get(`/api/product/rating?proid=${product_id}&page=${currentPage+1}`,(data,status)=>{
+                if(status==='success'){
+                    currentPage++;
+                    document.querySelector('#rating-container').innerHTML ='';
+                    data.slice().reverse().forEach(rating=>{
+                        addRating(rating);
+                    })
+                    ratingCache[currentPage]=data;
+                }
+            })
+        }
+    })
+
+
+
     const btn_related = document.querySelector('#btn-related');
     const btn_rating = document.querySelector('#btn-rating');
     btn_related.addEventListener('click',()=>{
@@ -332,18 +411,23 @@
         }
         let star = 0;
         if(one.checked){
+            one.checked = false;
             star = 1;
         }
         else if(two.checked){
+            two.checked = false;
             star = 2;
         }
         else if(three.checked){
+            three.checked = false;
             star = 3;
         }
         else if(four.checked){
+            four.checked = false;
             star = 4;
         }
         else if(five.checked){
+            five.checked = false;
             star = 5;
         }
         if(star === 0){
@@ -360,15 +444,12 @@
             content:content
         },(data,status)=>{
             if(status==='success'){
-                const rating = data.rating;
-                const userInfo = data.userInfo;
-                const addRatingInfo ={
-                    name:userInfo.name,
-                    image:userInfo.image,
-                    star:rating.star,
-                    content:rating.content
-                }
-                addRating(addRatingInfo);
+                document.querySelector('#inp-rating-content').value =''
+                ratingCache =[];
+                currentPage = 2;
+                numberRating++;
+                maxPageRating = Math.ceil(numberRating/9);
+                document.querySelector('#previous').click();
             }
             else{
                 console.log('error',data);

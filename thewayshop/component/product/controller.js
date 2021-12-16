@@ -30,10 +30,12 @@ exports.proDetail = async (req,res)=>{
     const product = await productModel.getOne(pro_id);
     const relate = await productModel.getRelate(pro_id,product.rows[0].tag_id,product.rows[0].brand);
     const pro_image = await service.getProImage(pro_id);
+    const numberRating = await service.numberRating(pro_id);
     res.render(view+'productDetail',{
         title: product.rows[0].title, 
         product:product.rows[0],
         products:relate.rows,
+        number_rating:numberRating.rows[0].max_rating,
         pro_image:pro_image.rows
     })
 }
