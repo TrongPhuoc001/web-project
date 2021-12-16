@@ -1,22 +1,43 @@
+const LRU = require("lru-cache")
+  , options = { max: 500
+              , length: function (n, key) { return n * 2 + key.length }
+              , dispose: function (key, n) { n='' }
+              , maxAge: 1000 * 60 * 60 }
+  , product_cache = new LRU(options)
+  , filter_cache = new LRU(options);
 const view = '../component/product/view/'
 
-const productModel = require('../../models/product');
-const categoryModel = require('../../models/category');
 
+const productModel = require('../../models/product');
 const service = require('./service');
-const tagModel = require('../../models/tag');
+
 
 exports.mainPage = async(req,res)=>{
     
     const page = Math.max(parseInt(req.query.page)||1,1);
-    const products = await productModel.getAll(page);
-    let max_page = await productModel.maxPage;
-    max_page = parseInt(max_page.rows[0].max_page);
-    const brands = await productModel.getBrand;
+    let product_page = product_cache.get(`product_page${page}`);
+    if(!product_page){
+        const products = await productModel.getAll(page);
+        product_page = products.rows;
+        product_cache.set(`product_page${page}`,product_page)
+    }
+    let max_page = product_cache.get('max_product_page');
+    if(!max_page){
+        let max_page = await productModel.maxPage;
+        max_page = parseInt(max_page.rows[0].max_page);
+        product_cache.set('max_product_page',max_page);
+    }
+    let brands = product_cache.get('brands');
+    if(!brands){
+        const data_brands = await productModel.getBrand;
+        brands = data_brands.rows;
+        product_cache.set('brands',brands);
+    }
+    
     res.render(view+'productList', { 
         title: 'All Product', 
-        products:products.rows,
-        brands:brands.rows,
+        products:product_page,
+        brands:brands,
         page:page,
         next:page<max_page?page+1 : false,
         pages:Array.from({length: max_page}, (v, k) => k+1),
@@ -74,7 +95,6 @@ exports.filterTag = async (req,res)=>{
     const tag_name = req.params.tag_name;
     let tag_id = 0
     try{
-        console.log(tag_name)
         tag_id = await service.getTagId(tag_name)
         tag_id = tag_id.rows[0].id
     }
