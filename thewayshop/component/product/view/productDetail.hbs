@@ -1,4 +1,89 @@
+{{#section 'style'}}
+<style>
+    .star-container label {
+        cursor: pointer;
+        position: relative;
+    }
 
+    .star-container i {
+        width: 3rem;
+        height: 3rem;
+        padding: 0.15rem;
+        
+    }
+    .star-container .substar{
+        color: #d33b33; 
+        pointer-events: none; 
+        position: absolute;
+        top: 0.25rem;
+
+    } 
+
+    /* hide radio buttons */
+
+    input[name="star"] {
+        display: inline-block;
+        width: 0;
+        opacity: 0;
+        margin-left: -2px;
+    }
+
+    .star-source {
+        width: 0;
+        height: 0;
+        opacity: 0.3;
+    }
+
+    .star {
+        width: 3rem;
+        height: 3rem;
+        padding: 0.25rem;
+        color: transparent;
+        transition: color 0.2s ease-in-out;
+    }
+
+    .star-container {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+    }
+
+    label:hover ~ label .star,
+    i.star:hover,
+    input[name="star"]:focus ~ label .star,
+    input[name="star"]:checked ~ label .star {
+        color: #d33b33;
+    }
+
+    input[name="star"]:checked + label .star {
+        animation: starred 0.5s;
+    }
+
+    input[name="star"]:checked + label {
+        animation: scaleup 1s;
+    }
+
+    @keyframes scaleup {
+        from {
+            transform: scale(1.2);
+        }
+        to {
+            transform: scale(1);
+        }
+        }
+
+        @keyframes starred {
+        from {
+            color: #691712;
+        }
+        to {
+            color: #d33b33;
+        }
+    }
+
+
+</style>
+{{/section}}
 <!-- Start Shop Detail  -->
 <div class="shop-detail-box-main">
     <div class="container">
@@ -124,7 +209,7 @@
                 </div>
             </div>
             <div class="col-lg-12 " id="rating" style="display: none;">
-                <div class="row">
+                <div class="row" id="rating-container">
                     {{#each rating}}
                     <div class="col-4">
                         <div class="row">
@@ -133,19 +218,71 @@
                             </div>
                             <div class="col-10">
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-7">
                                         <span><b>{{this.name}}</b></span>
                                     </div>
-                                    <div class="col-6">
-                                        <span>{{this.star}}</span>
+                                    <div class="col-5">
+                                        {{#times this.star}}
+                                        <i class="fa fa-star fa-xs" style="color: #d33b33;"></i>
+                                        {{/times}}
                                     </div>
                                 </div>
-                                <p>{{this.contain}}</p>
+                                <p>{{this.content}}</p>
                             </div>
                         </div>
                     </div>
                     {{/each}}
                 </div>
+                {{#if user}}
+                <form class="row">
+                    <div class="star-container col-4" >
+                        <input type="radio" name="star" value="5" id="five">
+                        <label for="five">
+                            <i class="far fa-star substar" >
+                            </i>
+                            <i class="fa fa-star star">
+                            <a xlink:href="#star"></a>
+                            </i>
+                        </label>
+                        <input type="radio" name="star" value="4" id="four">
+                        <label for="four">
+                            <i class="far fa-star substar" ></i>
+                            <i class="fa fa-star star">
+                            <a xlink:href="#star"></a>
+                            </i>
+                        </label>
+                        <input type="radio" name="star" value="3" id="three">
+                        <label for="three">
+                            <i class="far fa-star substar" ></i>
+                            <i class="fa fa-star star">
+                            <a xlink:href="#star"></a>
+                            </i>
+                        </label>
+                        <input type="radio" name="star" value="2"id="two">
+                        <label for="two">
+                            <i class="far fa-star substar" ></i>
+                            <i class="fa fa-star star">
+                            <a xlink:href="#star"></a>
+                            </i>
+                        </label>
+                        <input type="radio" name="star" value="1" id="one">
+                        <label for="one">
+                            <i class="far fa-star substar" ></i>
+                            <i class="fa fa-star star">
+                            <a xlink:href="#star"></a>
+                            </i>
+                        </label>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" id="inp-rating-content" class="form-control" placeholder="Write what you think about this product">
+                    </div>
+                    <div class="col-2">
+                        <button id="btn-add-rating" class="btn btn-danger" data-user_id="{{user.id}}" data-pro_id="{{product.id}}">Add</button>
+                    </div>
+                </form>
+                {{else}}
+                <span><a href="/login">Login</a> to leave a rating.</span>
+                {{/if}}
             </div>
         </div>
     </div>
@@ -153,6 +290,19 @@
 <!-- End Cart -->
 {{#section 'script'}}
 <script>
+    $('document').ready(()=>{
+        const product_id = {{{product.id}}}; 
+        $.get(`/api/product/rating?proid=${product_id}`,(data,status)=>{
+            if(status==="success"){
+                data.slice().reverse().forEach(rating=>{
+                    addRating(rating);
+                })
+            }
+            else{
+                console.log('error',data);
+            }
+        })
+    })
     const btn_related = document.querySelector('#btn-related');
     const btn_rating = document.querySelector('#btn-rating');
     btn_related.addEventListener('click',()=>{
@@ -167,5 +317,93 @@
             $('#rating').fadeIn(700);
         }
     })
+    
+    const btn_add_rating = document.querySelector('#btn-add-rating');
+    const one = document.querySelector('#one');
+    const two = document.querySelector('#two');
+    const three = document.querySelector('#three');
+    const four = document.querySelector('#four');
+    const five = document.querySelector('#five');
+    btn_add_rating.addEventListener('click',(e)=>{
+        e.preventDefault();
+        if(!document.querySelector('#inp-rating-content').value){
+            document.querySelector('#inp-rating-content').focus();
+            return;
+        }
+        let star = 0;
+        if(one.checked){
+            star = 1;
+        }
+        else if(two.checked){
+            star = 2;
+        }
+        else if(three.checked){
+            star = 3;
+        }
+        else if(four.checked){
+            star = 4;
+        }
+        else if(five.checked){
+            star = 5;
+        }
+        if(star === 0){
+            document.querySelector('.star-container').focus();
+            return;
+        }
+        const content = document.querySelector('#inp-rating-content').value;
+        const user_id = btn_add_rating.dataset.user_id;
+        const product_id = btn_add_rating.dataset.pro_id;
+        $.post('/api/product/rating',{
+            user_id:user_id,
+            product_id:product_id,
+            star:star,
+            content:content
+        },(data,status)=>{
+            if(status==='success'){
+                const rating = data.rating;
+                const userInfo = data.userInfo;
+                const addRatingInfo ={
+                    name:userInfo.name,
+                    image:userInfo.image,
+                    star:rating.star,
+                    content:rating.content
+                }
+                addRating(addRatingInfo);
+            }
+            else{
+                console.log('error',data);
+            }
+        })
+    })
+
+    function addRating(rating){
+        const rating_container = document.querySelector('#rating-container');
+        if(rating_container.childElementCount >= 9){
+            rating_container.removeChild(rating_container.lastElementChild);
+        }
+        let star ='';
+        for(let i =0;i<rating.star;i++){
+            star+= '<i class="fa fa-star fa-xs" style="color: #d33b33;"></i>';
+        }
+        let div =`<div class="col-4">
+                        <div class="row">
+                            <div class="col-2">
+                                <img src="${rating.image?rating.image:'/images/default-avatar.png'}"alt="avt" width="50" height="50">
+                            </div>
+                            <div class="col-10">
+                                <div class="row">
+                                    <div class="col-7">
+                                        <span><b>${rating.name}</b></span>
+                                    </div>
+                                    <div class="col-5">
+                                        ${star}
+                                    </div>
+                                </div>
+                                <p>${rating.content}</p>
+                            </div>
+                        </div>
+                    </div>`;
+        rating_container.innerHTML = div + rating_container.innerHTML;
+    }
 </script>
 {{/section}}

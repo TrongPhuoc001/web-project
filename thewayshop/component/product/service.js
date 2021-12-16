@@ -88,3 +88,4 @@ exports.getRelate = (pro_id,tag_id,brand)=>{
         LIMIT 8;`,[tag_id,brand,pro_id]
     )
 }
+

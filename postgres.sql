@@ -79,6 +79,7 @@ CREATE TABLE rating(
     product_id int NOT NULL,
     star int NOT NULL,
     content VARCHAR(255) NOT NULL,
+    create_at TIMESTAMP DEFAULT NOW(),
 
     CONSTRAINT fk_rating_userid
         FOREIGN KEY (user_id)
@@ -208,3 +209,15 @@ VALUES (6,'Where r my goods','message'),
 (6,'It is on the way','reply'),
 (8,'Do we have sword','message'),
 (8,'Sorry we do not','reply');
+
+INSERT INTO rating(user_id,product_id,star,content)
+VALUES (10,16,4,'cool cool'),
+(10,16,4,'hot hot hot'),
+(11,16,4,'good good '),
+(11,16,4,'Its a bit to tight'),
+(8,16,4,'x10 handsomeness'),
+(8,16,4,'But my handsomeness is 0'),
+(7,16,4,'Its so cheap'),
+(7,16,4,'Its the best'),
+(6,16,4,'Make live easier'),
+(6,16,4,'Its a bit short for some guy over 7 feet high like me'),

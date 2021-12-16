@@ -16,7 +16,7 @@ const profileValid = data=>{
         name: Joi.string().min(6).required(),
         birthday: Joi.date(),
         address: Joi.string().max(255)
-    });
+    }).options({ allowUnknown: true });
     return schema.validate(data);
 }
 const changepassValid = data=>{

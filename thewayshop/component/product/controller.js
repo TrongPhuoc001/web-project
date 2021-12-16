@@ -8,7 +8,7 @@ const tagModel = require('../../models/tag');
 
 exports.mainPage = async(req,res)=>{
     
-    const page = parseInt(req.query.page)||1;
+    const page = Math.max(parseInt(req.query.page)||1,1);
     const products = await productModel.getAll(page);
     let max_page = await productModel.maxPage;
     max_page = parseInt(max_page.rows[0].max_page);
@@ -34,48 +34,6 @@ exports.proDetail = async (req,res)=>{
         title: product.rows[0].title, 
         product:product.rows[0],
         products:relate.rows,
-        rating:[
-            {
-                name:'Phước',
-                star:5,
-                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
-            },
-            {
-                name:'Phước',
-                star:5,
-                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
-            },
-            {
-                name:'Phước',
-                star:5,
-                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
-            },
-            {
-                name:'Phước',
-                star:5,
-                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
-            },
-            {
-                name:'Phước',
-                star:5,
-                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
-            },
-            {
-                name:'Phước',
-                star:5,
-                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
-            },
-            {
-                name:'Phước',
-                star:5,
-                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
-            },
-            {
-                name:'Phước',
-                star:5,
-                contain:'asjdahsbf  sadjnfjsdang ajskdgn asdgbansdhgab gasdhgb ashd g'
-            },
-        ],
         pro_image:pro_image.rows
     })
 }
@@ -93,7 +51,7 @@ exports.filterCategory = async (req,res)=>{
             error:err
         })
     }
-    const page = parseInt(req.query.page)||1;
+    const page = Math.max(parseInt(req.query.page)||1,1);
     const products = await productModel.getCatePro(cate_id,page);
     const brands = await productModel.getBrand;
     let max_page = await productModel.maxPageCate(cate_id);
@@ -123,7 +81,7 @@ exports.filterTag = async (req,res)=>{
             error:err
         })
     }
-    const page = parseInt(req.query.page)|1;
+    const page = Math.max(parseInt(req.query.page)||1,1);
     const products = await productModel.getTagPro(tag_id,page);
     const brands = await productModel.getBrand;
     let max_page = await productModel.maxPageTag(tag_id);
