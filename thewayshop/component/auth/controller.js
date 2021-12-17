@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const transporter = require('../../config/transporter')
 const passport = require('../../config/passport');
 const service = require('./service');
 const {registerValid} = require('../../config/joiValidation');
@@ -84,6 +83,46 @@ exports.confirm = async (req,res)=>{
     }   
     catch(e){
         res.send('error');
+    }
+
+}
+exports.changepass = async (req,res)=>{
+    try{
+        const {id} = jwt.verify(req.params.token,process.env.JWT_SECRET);
+        
+        res.render(view+'changepass',{
+            title:'Forgot password'
+        })
+    }   
+    catch(e){
+        res.send('error');
+    }
+
+}
+exports.postChangepass = async (req,res)=>{
+    try{
+        const {id} = jwt.verify(req.params.token,process.env.JWT_SECRET);
+        const {password,repassword} = req.body;
+        if(password != repassword){
+            return res.render(view+'changepass',{
+                title:'Forgot password'
+            });
+        }
+        const hashedpassword = await bcrypt.hash(password,10);
+        console.log(hashedpassword);
+        try{
+            await service.changepass(id,hashedpassword);
+            return res.redirect('/login');
+        }
+        catch(e){
+            console.log(e);
+            return res.render(view+'changepass',{
+                title:'Forgot password'
+            })
+        }
+    }   
+    catch(e){
+        res.send('Token had expired');
     }
 
 }

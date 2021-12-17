@@ -6,5 +6,7 @@ router.get('/login', controller.login);
 router.get('/logout',controller.logout);
 router.post('/login',controller.verify,controller.auth);
 router.post('/register', controller.register);
-router.get('/confirmation/:token', controller.confirm)
+router.get('/confirmation/:token', controller.confirm);
+router.get('/changepass/:token', controller.changepass);
+router.post('/changepass/:token', controller.postChangepass);
 module.exports = router;

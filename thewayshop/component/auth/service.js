@@ -19,3 +19,9 @@ exports.confirm = (user_id)=>{
         `UPDATE users SET verified='t' WHERE id=$1`,[user_id]
     )
 }
+
+exports.changepass = (user_id,hashedpass)=>{
+    return pool.query(
+        `UPDATE users SET password = $1 WHERE id = $2`,[hashedpass,user_id]
+    )
+}

@@ -1,3 +1,23 @@
+{{#section 'style'}}
+<style>
+	.forgot{
+		display: none;
+	}
+	#forgot-link:checked ~ .forgot{
+		display: block;
+	}
+	#togglePassword,#toggleRPassword{
+        margin-left: -30px;
+        margin-top: 10px; 
+        cursor: pointer;
+        position: absolute;
+        right: 5%;
+        top: 50%;
+        color: rgb(46, 226, 211);
+    }
+</style>
+{{/section}}
+
 <div class="login-wrap">
 	<div class="login-html">
 		{{#if error}}
@@ -17,7 +37,7 @@
 					</div>
 					<div class="group">
 						<label for="pass" class="label">Password</label>
-						<input id="pass" type="password" class="input" data-type="password" name="password">
+						<input id="login-pass" type="password" class="input" data-type="password" name="password">
 					</div>
 					<div class="group">
 						<input id="check" type="checkbox" class="check" checked>
@@ -38,18 +58,16 @@
 					{{/if}}
 					<div class="hr"></div>
 				</form>
-				<div class="foot-lnk">
-					<a href="#forgot">Forgot Password?</a>
-				</div>
-				<form >
-					<div class="group">
+				<div class="foot-lnk ">
+					<input type="radio" id="forgot-link" class="button" style="display: none;"><label for="forgot-link" style="cursor: pointer;">Forgot password?</label>
+					<div class="group forgot">
 						<label for="user" class="label">Email</label>
-						<input id="user" type="text" class="input" name="email">
+						<input id="forgot-email" type="text" class="input" name="email">
 					</div>
-					<div class="group">
-						<input type="submit" class="button" value="Send Link">
+					<div class="group forgot">
+						<button id="btn-forgot" class="button" style="text-align: center;">Send Link</button>
 					</div>
-				</form>
+				</div>
 			</div>
 			<form action="/register" method="post" class="sign-up-htm">
 				<div class="group">
@@ -68,13 +86,13 @@
 					<label for="address" class="label">Address</label>
 					<input id="address" type="text" class="input" name="address">
 				</div>
-				<div class="group">
+				<div class="group" style="position: relative;">
 					<label for="pass" class="label">Password</label>
-					<input id="pass" type="password" class="input" data-type="password" name="password">
+					<input id="pass" type="password" class="input"  name="password"><i class="far fa-eye" id="togglePassword" ></i>
 				</div>
-				<div class="group">
+				<div class="group" style="position: relative;">
 					<label for="pass" class="label">Repeat Password</label>
-					<input type="repassword" class="input" data-type="password" name="repassword">
+					<input id="repass" type="repassword" class="input"  name="repassword"><i class="far fa-eye" id="toggleRPassword" ></i>
 				</div>
 				
 				<div class="group">
@@ -90,18 +108,60 @@
 </div>
 {{#section 'script'}}
 <script>
-	document.querySelector('#btn-resend').addEventListener('click',(e)=>{
+	const btn_resend = document.querySelector('#btn-resend');
+	const btn_forgot = document.querySelector('#btn-forgot');
+	if(btn_resend){
+		btn_resend.addEventListener('click',(e)=>{
+			e.preventDefault();
+			const email = e.target.dataset.email;
+			$.post('/api/account/resend',{
+				email: email
+			},(data,status)=>{
+				e.target.disabled = true;
+				setTimeout(function(){  
+					const element = document.querySelector("#btn-resend");
+					element.disabled = false;
+				}, 30000);
+			})
+		});
+	}
+
+	btn_forgot.addEventListener('click',(e)=>{
+		console.log('e');
 		e.preventDefault();
-		const email = e.target.dataset.email;
-		$.post('/api/account/resend',{
+		const email = document.querySelector('#forgot-email').value;
+		console.log(email);
+		if(!email){
+			return;
+		}
+		document.querySelector('#forgot-email').value = ''
+		$.post('/api/account/forgot',{
 			email: email
 		},(data,status)=>{
 			e.target.disabled = true;
 			setTimeout(function(){  
-				const element = document.querySelector("#btn-resend");
+				const element = document.querySelector("#btn-forgot");
 				element.disabled = false;
 			}, 30000);
 		})
 	})
+
+	const toggleOPassword = document.querySelector('#togglePassword');
+    const toggleNPassword = document.querySelector('#toggleRPassword');
+
+    togglePassword.addEventListener('click', function (e) {
+        // toggle the type attribute
+        const type = pass.getAttribute('type') === 'password' ? 'text' : 'password';
+        pass.setAttribute('type', type);
+        // toggle the eye slash icon
+        this.classList.toggle('fa-eye-slash');
+    });
+    toggleRPassword.addEventListener('click', function (e) {
+        // toggle the type attribute
+        const type = repass.getAttribute('type') === 'password' ? 'text' : 'password';
+        repass.setAttribute('type', type);
+        // toggle the eye slash icon
+        this.classList.toggle('fa-eye-slash');
+    });
 </script>
 {{/section}}
