@@ -166,6 +166,8 @@ CREATE TABLE chat(
 INSERT INTO manager(username,password)
 VALUES ('admin','$2b$10$h5FmpOByBiMj95UM76ODH.BvJ8uRMkUjET1Q9fR92DdYSXrPF2ir2')
 
+INSERT INTO users()
+
 INSERT INTO tag(name)
 VALUES ('Shirts'),('Jean'),('Shoes'),('Bag'),('T-Shirts'),('Sweaters'),('Swimware'),('Trousers'),('Sunglasses'),('Walets'),('Watchs'),('Suits');
 
