@@ -4,7 +4,7 @@ exports.getAll = (page)=>{
     return pool.query(
         `SELECT id,title,description,price,image,state FROM product
         WHERE is_delete = 'f'
-        ORDER BY id DESC
+        ORDER BY create_date DESC
         LIMIT $1 OFFSET $2;`,[limit,(page-1)*limit]
     )
 }
@@ -13,7 +13,7 @@ exports.getTagPro = (tag_id, page)=>{
         `SELECT id,title,description,price,image,state FROM product
         WHERE is_delete = 'f'
         AND tag_id = $1
-        ORDER BY id DESC
+        ORDER BY create_date DESC
         LIMIT $2 OFFSET $3;`,[tag_id, limit,(page-1)*limit]
     )
 }
@@ -23,14 +23,14 @@ exports.getCatePro = (cate_id,page)=>{
         WHERE product.is_delete = 'f'
         AND tag_category.category_id = $1
         AND tag_category.tag_id=product.tag_id
-        ORDER BY id DESC
+        ORDER BY create_date DESC
         LIMIT $2 OFFSET $3;`,[cate_id, limit,(page-1)*limit]
     )
 }
 
 exports.getRecent = pool.query(
     `SELECT id,title,price,image,state FROM product
-    ORDER BY id DESC
+    ORDER BY create_date DESC
     LIMIT 4;`
 )
 exports.getOne = (product_id)=>{

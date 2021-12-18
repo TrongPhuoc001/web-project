@@ -4,14 +4,14 @@ exports.getAll = (page)=>{
     return pool.query(
         `SELECT id,title,price,image FROM product
         WHERE is_delete = 'f'
-        ORDER BY id DESC
+        ORDER BY create_date DESC
         LIMIT $1 OFFSET $2;`,[limit,(page-1)*limit]
     )
 }
 exports.getRecent = pool.query(
     `SELECT id,title,price,image FROM product
     WHERE is_delete = 'f'
-    ORDER BY id DESC
+    ORDER BY create_date DESC
     LIMIT 4;`
 )
 exports.getOne = (product_id)=>{

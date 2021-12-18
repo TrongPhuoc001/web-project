@@ -36,11 +36,10 @@ exports.getProduct = async (req,res)=>{
         ];
         subimage.rows = temp;
     }
-
     res.render(view+'productEdit', { 
         title: product.rows[0].title,
         product:product.rows[0],
-        sub_image:subimage.rows,
+        subimage:subimage.rows,
         product_active:true
     });
 }

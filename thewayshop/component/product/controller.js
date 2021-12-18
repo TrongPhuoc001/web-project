@@ -23,8 +23,8 @@ exports.mainPage = async(req,res)=>{
     }
     let max_page = product_cache.get('max_product_page');
     if(!max_page){
-        let max_page = await productModel.maxPage;
-        max_page = parseInt(max_page.rows[0].max_page);
+        let max_page_data = await productModel.maxPage;
+        max_page = parseInt(max_page_data.rows[0].max_page);
         product_cache.set('max_product_page',max_page);
     }
     let brands = product_cache.get('brands');
