@@ -10,12 +10,12 @@ const service = require('./service')
 exports.getRating = async(req,res)=>{
     const page = Math.max(parseInt(req.query.page)||1,1);
     const product_id = req.query.proid;
-    let rating_page = rating_cache.get(`rating${product_id}_page${page}`);
+    let rating_page = rating_cache.get(`${product_id}_page${page}`);
     if(!rating_page){
         try{
             const rating = await service.getRating(product_id,page);
             rating_page = rating.rows;
-            rating_cache.set(`rating${product_id}_page${page}`,rating_page);
+            rating_cache.set(`${product_id}_page${page}`,rating_page);
         }
         catch(e){
             return res.status(400).json(e)

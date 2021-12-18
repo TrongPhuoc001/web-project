@@ -79,7 +79,6 @@ exports.filterCategory = async (req,res)=>{
     const brands = await productModel.getBrand;
     let max_page = await productModel.maxPageCate(cate_id);
     max_page = max_page.rows[0].max_page;
-    console.log(cate_id,page,products.rows);
     res.render(view+'productList', { 
         title: cate_name, 
         products:products.rows,

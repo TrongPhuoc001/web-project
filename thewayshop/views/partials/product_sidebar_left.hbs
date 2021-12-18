@@ -49,8 +49,8 @@
                     {{#each brands}}
                     <li>
                         <div class="radio radio-danger">
-                            <input name="survey" id="Radios1" value="Yes" type="radio">
-                            <label for="Radios1"> {{this.brand}} </label>
+                            <input name="survey" id="Radios{{this.brand}}" value="Yes" type="radio">
+                            <label for="Radios{{this.brand}}"> {{this.brand}} </label>
                         </div>
                     </li>
                     {{/each}}
