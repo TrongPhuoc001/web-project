@@ -40,3 +40,54 @@ exports.postRating = async(req,res)=>{
     }
 
 }
+
+exports.getProduct = async(req,res)=>{
+    const page = Math.max(parseInt(req.query.page)||1,1);
+    let product_page = product_cache.get(`product_page${page}`);
+    if(!product_page){
+        try{
+            const products = await service.getAll(page);
+            product_page = products.rows;
+            product_cache.set(`product_page${page}`,product_page)
+        }
+        catch(e){
+            return res.status(500).json(e)
+        }
+    }
+    res.status(200).json(product_page);
+}
+
+exports.filterTag = async(req,res)=>{
+    const tag_name = req.params.tag_name;
+    const page = Math.max(parseInt(req.query.page)||1,1);
+
+    let product_page = filter_cache.get(`${tag_name}_page${page}`);
+    if(!product_page){
+        try{
+            const products = await service.getTagPro(tag_name,page);
+            product_page = products.rows;
+            filter_cache.set(`${tag_name}_page${page}`,product_page)
+        }
+        catch(e){
+            return res.status(500).json(e)
+        }
+    }
+    res.status(200).json(product_page);
+}
+exports.filterCategory = async(req,res)=>{
+    const cate_name = req.params.category_name;
+    const page = Math.max(parseInt(req.query.page)||1,1);
+
+    let product_page = filter_cache.get(`${cate_name}_page${page}`);
+    if(!product_page){
+        try{
+            const products = await service.getCatePro(cate_name,page);
+            product_page = products.rows;
+            filter_cache.set(`${cate_name}_page${page}`,product_page)
+        }
+        catch(e){
+            return res.status(500).json(e)
+        }
+    }
+    res.status(200).json(product_page);
+}

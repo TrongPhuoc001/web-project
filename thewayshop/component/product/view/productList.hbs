@@ -13,36 +13,18 @@
                     <div class="row">
                         <nav aria-label="...">
                             <ul class="pagination">
-                                {{#if previous}}
+                                
                                 <li class="page-item ">
-                                <a class="page-link" href="?page={{previous}}">Previous</a>
-                                </li>
-                                {{else}}
-                                <li class="page-item disabled">
-                                <span class="page-link">Previous</span>
-                                </li>
-                                {{/if}}
+                                <a  class="page-link"  id="page-previous"{{#if previous}} href="?page={{previous}}"{{/if}}>Previous</a>
+                                </li>  
                                 {{#each pages}}
-                                {{#ifeq this ../page}}
-                                <li class="page-item active">
-                                <span class="page-link">
-                                    {{this}}
-                                    <span class="sr-only">(current)</span>
-                                </span>
+                                <li class="page-item">
+                                    <a class="page-link" id="page-{{this}}" {{#ifeq this ../page}}{{else}}  href="?page={{this}}"{{/ifeq}}>{{this}}</a>
                                 </li>
-                                {{else}}
-                                <li class="page-item"><a class="page-link" href="?page={{this}}">{{this}}</a></li>
-                                {{/ifeq}}
                                 {{/each}}
-                                {{#if next}}
                                 <li class="page-item ">
-                                <a class="page-link" href="?page={{next}}">Next</a>
+                                <a class="page-link" id="page-next" {{#if next}} href="?page={{next}}" {{/if}}>Next</a>
                                 </li>
-                                {{else}}
-                                <li class="page-item disabled">
-                                <span class="page-link">Next</span>
-                                </li>
-                                {{/if}}
                             </ul>
                         </nav>
                     </div>
@@ -52,3 +34,92 @@
     </div>
 </div>
 <!-- End Shop Page -->
+{{#section 'script'}}
+<script>
+    const page_cache=[];
+    let curr_page = {{{page}}};
+    const product_container = document.querySelector('#product-container');
+    const page_link = document.querySelectorAll('.page-link');
+    page_link.forEach(link=>{
+        link.addEventListener('click',(e)=>{
+            e.preventDefault();
+            const ref = link.href||'';
+            if(ref===''){
+                return;
+            }
+            const path = ref.replace(/^.*\/\/[^\/]+/, '');
+            const getPage = parseInt(path[path.length-1]);
+            product_container.innerHTML=''
+            if(!page_cache[getPage]){
+                $.get('/api'+path,(data,status)=>{
+                    if(status==='success'){
+                        updateView(data);
+                        changePage(getPage,path);
+                        page_cache[curr_page] = data;
+                    }
+                    else{
+                        console.log('error',data);
+                    }
+                })
+            }
+            else{
+                updateView(page_cache[getPage])
+                changePage(getPage,path);
+            }
+            
+        })
+
+    })
+
+    function changePage(getPage,path){
+        history.pushState('','',path);
+        document.querySelector(`#page-${curr_page}`).setAttribute('href',`?page=${curr_page}`);
+        curr_page = getPage;
+        if(curr_page===1){
+            document.querySelector('#page-previous').removeAttribute('href');
+        }
+        else{
+            document.querySelector('#page-previous').setAttribute('href', `?page=${curr_page-1}`);
+        }
+        document.querySelector(`#page-${curr_page}`).removeAttribute('href')
+        if(!document.querySelector(`#page-${curr_page+1}`)){
+            document.querySelector('#page-next').removeAttribute('href');
+        }
+        else{
+            document.querySelector('#page-next').setAttribute('href',`?page=${curr_page+1}`);
+        }
+    }
+
+    function updateView(data){
+         $("HTML, BODY").animate({ scrollTop: $("#product-container").offset().top-100 }, 1000);
+        $('#product-container').fadeOut(500);
+        data.forEach((pro)=>{
+            const div = `<div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                <div class="products-single fix">
+                    <div class="box-img-hover">
+                        <div class="type-lb">
+                            <p class="${pro.state}">${pro.state}</p>
+                        </div>
+                        <img src="${pro.image}" class="img-fluid" alt="Image" style="object-fit: scale-down;" height="330">
+                        <div class="mask-icon">
+                            <ul>
+                                <li><a href="/product/${pro.id}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
+                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                            </ul>
+                            <a class="cart" href="./myaccount/cart">Add to Cart</a>
+                        </div>
+                    </div>
+                    <div class="why-text">
+                        <h4>${pro.title}</h4>
+                        <h5> $${pro.price}</h5>
+                    </div>
+                </div>
+            </div>`;
+            product_container.innerHTML+=div;
+        });
+        $('#product-container').fadeIn(500);
+        
+    }
+</script>
+{{/section}}

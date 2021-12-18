@@ -25,3 +25,34 @@ exports.getRating = (product_id,page)=>{
         LIMIT $2 OFFSET $3;`,[product_id,limit,(page-1)*limit]
     )
 }
+
+exports.getAll = (page)=>{
+    return pool.query(
+        `SELECT id,title,description,price,image,state FROM product
+        WHERE is_delete = 'f'
+        ORDER BY create_date DESC
+        LIMIT $1 OFFSET $2;`,[limit,(page-1)*limit]
+    )
+}
+exports.getTagPro = (tag_name, page)=>{
+    return pool.query(
+        `SELECT product.id,title,description,price,image,state FROM product,tag
+        WHERE tag.name = $1
+        AND product.is_delete = 'f'
+        AND product.tag_id = tag.id
+        ORDER BY product.create_date DESC
+        LIMIT $2 OFFSET $3;`,[tag_name, limit,(page-1)*limit]
+    )
+}
+
+exports.getCatePro = (cate_name,page)=>{
+    return pool.query(
+        `SELECT product.id,title,description,price,image,state FROM product,tag_category,category
+        WHERE category.name = $1
+        AND product.is_delete = 'f'
+        AND tag_category.category_id = category.id
+        AND tag_category.tag_id=product.tag_id
+        ORDER BY create_date DESC
+        LIMIT $2 OFFSET $3;`,[cate_name, limit,(page-1)*limit]
+    )
+}

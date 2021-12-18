@@ -46,18 +46,7 @@ exports.getBrand = pool.query(
 exports.maxPage = pool.query(
     `SELECT ceil(COUNT(*)/$1::numeric) as max_page FROM product;`,[limit]
 )
-exports.maxPageTag = (tag_id)=>{
-    return pool.query(
-        `SELECT ceil(COUNT(*)/$1::numeric) as max_page FROM product WHERE tag_id=$2;`,[limit,tag_id]
-    )
-}
-exports.maxPageCate = (cate_id)=>{
-    return pool.query(
-        `SELECT ceil(COUNT(*)/$1::numeric) as max_page FROM product,tag_category 
-        WHERE tag_category.category_id=$2
-        AND tag_category.tag_id = product.tag_id;`,[limit,cate_id]
-    )
-}
+
 exports.getRelate = (pro_id,tag_id,brand)=>{
     return pool.query(
         `SELECT id,title,description,price,image,state FROM product

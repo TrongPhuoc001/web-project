@@ -33,6 +33,7 @@ exports.mainPage = async(req,res)=>{
         products:product_page,
         brands:brands,
         page:page,
+        max_page:max_page,
         next:page<max_page?page+1 : false,
         pages:Array.from({length: max_page}, (v, k) => k+1),
         previous:page>1?page-1:false
@@ -58,25 +59,37 @@ exports.proDetail = async (req,res)=>{
 exports.filterCategory = async (req,res)=>{
    
     const cate_name = req.params.category_name;
-    let cate_id = 0
-    try{
-        cate_id = await service.getCateId(cate_name)
-        cate_id = cate_id.rows[0].id
-    }
-    catch(err){
-        return res.render('error',{
-            error:err
-        })
-    }
     const page = Math.max(parseInt(req.query.page)||1,1);
-    const products = await productModel.getCatePro(cate_id,page);
-    const brands = await productModel.getBrand;
-    let max_page = await productModel.maxPageCate(cate_id);
-    max_page = max_page.rows[0].max_page;
+
+    let product_page = filter_cache.get(`${cate_name}_page${page}`);
+    if(!product_page){
+        try{
+            const products = await service.getCatePro(cate_name,page);
+            product_page = products.rows;
+            filter_cache.set(`${cate_name}_page${page}`,product_page)
+        }
+        catch(e){
+            return res.status(500).json(e)
+        }
+    }
+
+    let brands = product_cache.get('brands');
+    if(!brands){
+        const data_brands = await service.getBrand;
+        brands = data_brands.rows;
+        product_cache.set('brands',brands);
+    }
+    let max_page = filter_cache.get(`${cate_name}_max_page`);
+    if(!max_page){
+        let max_page_data = await service.maxPageCate(cate_name);
+        max_page = max_page_data.rows[0].max_page;
+        filter_cache.set(`${cate_name}_max_page`,max_page);
+    }
+    
     res.render(view+'productList', { 
         title: cate_name, 
-        products:products.rows,
-        brands:brands.rows,
+        products:product_page,
+        brands:brands,
         page:page,
         next:page<max_page?page+1 : false,
         pages:Array.from({length: max_page}, (v, k) => k+1),
@@ -86,25 +99,37 @@ exports.filterCategory = async (req,res)=>{
 
 exports.filterTag = async (req,res)=>{
     const tag_name = req.params.tag_name;
-    let tag_id = 0
-    try{
-        tag_id = await service.getTagId(tag_name)
-        tag_id = tag_id.rows[0].id
-    }
-    catch(err){
-        return res.render('error',{
-            error:err
-        })
-    }
     const page = Math.max(parseInt(req.query.page)||1,1);
-    const products = await productModel.getTagPro(tag_id,page);
-    const brands = await productModel.getBrand;
-    let max_page = await productModel.maxPageTag(tag_id);
-    max_page = max_page.rows[0].max_page;
+
+    let product_page = filter_cache.get(`${tag_name}_page${page}`);
+    if(!product_page){
+        try{
+            const products = await service.getTagPro(tag_name,page);
+            product_page = products.rows;
+            filter_cache.set(`${tag_name}_page${page}`,product_page)
+        }
+        catch(e){
+            return res.status(500).json(e)
+        }
+    }
+
+    let brands = product_cache.get('brands');
+    if(!brands){
+        const data_brands = await service.getBrand;
+        brands = data_brands.rows;
+        product_cache.set('brands',brands);
+    }
+    let max_page = filter_cache.get(`${tag_name}_max_page`);
+    if(!max_page){
+        let max_page_data = await service.maxPageTag(tag_name);
+        max_page = max_page_data.rows[0].max_page;
+        filter_cache.set(`${tag_name}_max_page`,max_page);
+    }
+
     res.render(view+'productList', { 
         title: tag_name, 
-        products:products.rows,
-        brands:brands.rows,
+        products:product_page,
+        brands:brands,
         page:page,
         next:page<max_page?page+1 : false,
         pages:Array.from({length: max_page}, (v, k) => k+1),

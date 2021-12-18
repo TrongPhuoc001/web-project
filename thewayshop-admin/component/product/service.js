@@ -14,9 +14,9 @@ exports.getSubImage = (product_id)=>{
     )
 }
 
-exports.addPro = (title,description,price,image,brand,tag_id,available,sold)=>{
+exports.addPro = (title,description,price,image,brand,tag_id,available)=>{
     return pool.query(
-        `INSERT INTO product(title,description,price,image,brand,tag_id,available,sold)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,[title,description,price,image,brand,tag_id,available,sold]
+        `INSERT INTO product(title,description,price,image,brand,tag_id,available)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,[title,description,price,image,brand,tag_id,available]
     )
 }
