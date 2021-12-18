@@ -1,6 +1,23 @@
 
 const service = require('./service')
-const sendEmail = require('../../config/sendEmail')
+const sendEmail = require('../../helper/sendEmail')
+
+exports.accExist = async(req,res)=>{
+    const {email} = req.body;
+    try{
+        const user_id = await service.findOne(email);
+        if(user_id.rows.length>0){
+            res.status(200).json('existed');
+        }
+        else{
+            res.status(200).json('available');
+        }
+    }
+    catch(e){
+        console.log(e);
+        res.status(500).json(e);
+    }
+}
 
 
 exports.resend = async(req,res)=>{

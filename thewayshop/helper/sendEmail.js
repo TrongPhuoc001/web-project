@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-const transporter = require('./transporter')
+const transporter = require('../config/transporter')
 
 module.exports = (user_id,email,baseurl)=>{
     return jwt.sign({

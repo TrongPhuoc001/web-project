@@ -21,13 +21,13 @@
 <div class="login-wrap">
 	<div class="login-html">
 		{{#if error}}
-		<h4 style="color: rgb(141, 0, 0);">{{error}}</h4>
+		<h4 style="color: rgb(255 99 99);">{{error}}</h4>
 		{{/if}}
 		{{#if message}}
 		<h4 style="color: rgb(46, 226, 211);">{{message}}</h4>
 		{{/if}}
-		<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
-		<input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+		<input id="tab-1" type="radio" name="tab" class="sign-in" {{#if register}}{{else}}checked{{/if}}><label for="tab-1" class="tab">Sign In</label>
+		<input id="tab-2" type="radio" name="tab" class="sign-up" {{#if register}}checked{{/if}}><label for="tab-2" class="tab">Sign Up</label>
 		<div class="login-form">
 			<div  class="sign-in-htm">
 				<form action="/login" method="post">
@@ -69,10 +69,11 @@
 					</div>
 				</div>
 			</div>
-			<form action="/register" method="post" class="sign-up-htm">
+			<form action="/register" method="post" class="sign-up-htm" id="register-form">
 				<div class="group">
 					<label for="user" class="label">Email</label>
 					<input id="user" type="text" class="input" name="email">
+					<span id="reg-email-noti"></span>
 				</div>
 				<div class="group">
 					<label for="fullname" class="label">Full name</label>
@@ -108,6 +109,8 @@
 </div>
 {{#section 'script'}}
 <script>
+
+	// send email
 	const btn_resend = document.querySelector('#btn-resend');
 	const btn_forgot = document.querySelector('#btn-forgot');
 	if(btn_resend){
@@ -146,6 +149,56 @@
 		})
 	})
 
+	//register valid
+	const re =
+  /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+	const reg_email_noti = document.querySelector('#reg-email-noti')
+	const reg_email = document.querySelector('#register-form #user');
+	reg_email.addEventListener('focusout',()=>{
+		const value = reg_email.value;
+		if(!value){
+			reg_email.style.border = 'none';
+			reg_email_noti.textContent ='';
+			return;
+		}
+		if(String(value).toLocaleLowerCase().match(re)){
+			$.post('/api/account/exist',{
+				email:value
+			},(data,status)=>{
+				if(status==='success'){
+					if(data==='existed'){
+						reg_email.style.border = '1px solid red';
+						reg_email_noti.style.color ='rgb(255 99 99)';
+						reg_email_noti.textContent='This email is already exist, try another one.';
+						return;
+					}
+					else if(data==='available'){
+						reg_email.style.border = 'none';
+						reg_email_noti.style.color = 'rgb(46, 226, 211)';
+						reg_email_noti.textContent = 'This email is valid';
+					}
+					else{
+						reg_email.style.border = '1px solid red';
+						reg_email_noti.style.color ='rgb(255 99 99)';
+						reg_email_noti.textContent='Small error on us, please try again';
+					}
+				}
+				else{
+					reg_email.style.border = '1px solid red';
+					reg_email_noti.style.color ='rgb(255 99 99)';
+					reg_email_noti.textContent='Small error on us, please try again';
+				}
+			})
+		}
+		else{
+			reg_email.style.border = '1px solid red';
+			reg_email_noti.style.color ='rgb(255 99 99)';
+			reg_email_noti.textContent='This email is not valid, must match "*@*.*" .';
+		}
+	})
+
+
+	//password eye
 	const toggleOPassword = document.querySelector('#togglePassword');
     const toggleNPassword = document.querySelector('#toggleRPassword');
 

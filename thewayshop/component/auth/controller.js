@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken');
 
 const passport = require('../../config/passport');
 const service = require('./service');
-const {registerValid} = require('../../config/joiValidation');
-const sendEmail = require('../../config/sendEmail');
+const {registerValid} = require('../../helper/joiValidation');
+const sendEmail = require('../../helper/sendEmail');
 
 const view = '../component/auth/view/';
 
@@ -19,6 +19,14 @@ exports.auth = passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login?error=true'
 });
+
+exports.getRegister = (req,res)=>{
+    res.render(view+'login', { 
+        title: 'Register', 
+        register:true,
+        error: req.query.error?"Invalid email or password":""
+    })
+}
 
 exports.verify = async (req,res,next)=>{
     const {email} = req.body;
@@ -47,7 +55,8 @@ exports.register = async(req,res)=>{
     const {error} = registerValid(req.body);
     if(error){ 
         return res.render(view+'login', { 
-            title: 'Login', 
+            title: 'Register', 
+            register:true,
             error:'Sign up not success :'+ error.details[0].message
         })
     }
@@ -64,7 +73,8 @@ exports.register = async(req,res)=>{
     }
     catch(err){
         return res.render(view+'login', { 
-            title: 'Login', 
+            title: 'Register', 
+            register:true,
             error:err
         })
     }

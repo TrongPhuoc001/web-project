@@ -1,10 +1,4 @@
-const LRU = require("lru-cache")
-  , options = { max: 500
-              , length: function (n, key) { return n * 2 + key.length }
-              , dispose: function (key, n) { n='' }
-              , maxAge: 1000 * 60 * 60 }
-  , product_cache = new LRU(options)
-  , filter_cache = new LRU(options);
+const {product_cache,filter_cache} = require('../../helper/lruCache'); 
 const view = '../component/product/view/'
 
 

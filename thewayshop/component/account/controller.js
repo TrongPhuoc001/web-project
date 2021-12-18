@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const service = require('./service');
 
-const {profileValid,changepassValid} = require('../../config/joiValidation')
+const {profileValid,changepassValid} = require('../../helper/joiValidation')
 const view = "../component/account/view/";
 
 exports.myaccount = (req,res)=>{

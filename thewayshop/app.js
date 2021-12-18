@@ -16,8 +16,8 @@ const productRouter = require('./component/product/route');
 const shopRouter = require('./component/shop/route');
 const apiRouter = require('./api/route');
 
-const layout = require('./config/layout');
-const verify = require('./config/verifyUser');
+const layout = require('./middleware/layout');
+const verify = require('./middleware/verifyUser');
 
 const app = express();
 
@@ -27,7 +27,7 @@ app.engine('hbs',engine({
   extname: '.hbs',
   layoutsDir: path.join(__dirname, 'views/layout'),
   partialsDir : path.join(__dirname, 'views/partials'),
-  helpers: require('./config/hbsHelper')
+  helpers: require('./helper/hbsHelper')
 }));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');

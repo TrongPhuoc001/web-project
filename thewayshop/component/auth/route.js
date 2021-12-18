@@ -5,6 +5,7 @@ const controller = require('./controller');
 router.get('/login', controller.login);
 router.get('/logout',controller.logout);
 router.post('/login',controller.verify,controller.auth);
+router.get('/register', controller.getRegister);
 router.post('/register', controller.register);
 router.get('/confirmation/:token', controller.confirm);
 router.get('/changepass/:token', controller.changepass);
