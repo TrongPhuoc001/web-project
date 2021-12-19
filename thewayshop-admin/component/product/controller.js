@@ -1,19 +1,31 @@
 const productModel = require('../../models/product');
-
+const {productCache} = require('../../config/lruCache');
 const service = require('./service')
 const view = '../component/product/view/';
 
 exports.get = async (req,res)=>{
     const page = Math.max(parseInt(req.query.page)||1,1);
-    let max_page = await productModel.maxPage;
-    max_page = max_page.rows[0].max_page;
-    const products = await productModel.getAll(parseInt(page));
+
+    let max_page = productCache.get(`product_maxpage`);
+    if(!max_page){
+        const getMaxPage = await productModel.maxPage;
+        max_page = getMaxPage.rows[0].max_page;
+        productCache.set(`product_maxpage`,max_page);
+    }
+    let product_page = productCache.get(`product_page${page}`);
+    if(!product_page){
+        const products = await productModel.getAll(parseInt(page));
+        product_page = products.rows;
+        productCache.set(`product_page${page}`,product_page);
+    }
+    
 
     res.render(view+'productpage', { 
         title: 'TheWayShop Product',
         head:'All Product',
-        products:products.rows,
+        products:product_page,
         page:page,
+        max_page:max_page,
         next:page<max_page?page+1 : false,
         pages:Array.from({length: max_page}, (v, k) => k+1),
         previous:page>1?page-1:false,
@@ -117,8 +129,6 @@ exports.postAddProduct = async(req,res)=>{
 }
 
 exports.searchProduct = async (req,res)=>{
-
-
 
     let {q,page} = req.query;
     page = Math.max(parseInt(page)||1,1);

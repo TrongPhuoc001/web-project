@@ -2,7 +2,7 @@ const pool = require('./config/dbconnect')
 const limit = 8;
 exports.getAll = (page)=>{
     return pool.query(
-        `SELECT id,title,price,image FROM product
+        `SELECT id,title,price,image,available,sold FROM product
         WHERE is_delete = 'f'
         ORDER BY create_date DESC
         LIMIT $1 OFFSET $2;`,[limit,(page-1)*limit]
@@ -78,12 +78,12 @@ exports.delete = (id)=>{
 }
 
 exports.getTopSellingProduct = pool.query(
-        `select product.id, product.id,product.title,product.price,product.image, sum(order_product.quantity) as Max
+        `select product.id, product.id,product.title,product.price,product.image,product.available,product.sold, sum(order_product.quantity) as Max
         from product, order_product
         where product.is_delete = false and product.id = order_product.product_id
         group by product.id, product.id,product.title,product.price,product.image
         order by Max DESC 
-        LIMIT 10`
+        LIMIT 8`
     )
 exports.getTopSellingProductByTag = (id) => {
     return pool.query(
@@ -92,7 +92,7 @@ exports.getTopSellingProductByTag = (id) => {
         where product.is_delete = false and product.id = order_product.product_id and product.tag_id = $1
         group by product.id,product.title,product.price,product.image
         order by Max DESC 
-        LIMIT 10`,[id]
+        LIMIT 8`,[id]
         // `select *
         // from product
         // where tag_id = $1`,[id]

@@ -13,6 +13,10 @@ passport.use(new LocalStrategy({
             if (user.rows.length<1) {
                 return done(null, false, { message: 'Incorrect username.' });
             }
+            console.log(user.rows[0].is_delete)
+            if(user.rows[0].is_delete){
+                return done(null, false, { message: 'Account is blocked.' });
+            }
             const match = await validPassword(user.rows[0],password);
             if (!match) {
                 return done(null, false, { message: 'Incorrect password.' });

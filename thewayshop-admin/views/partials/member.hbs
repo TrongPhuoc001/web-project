@@ -6,7 +6,7 @@
         {{#each team_members}}
         <div class="desc">
             <div class="thumb">
-                <img class="img-circle" src="/images/ui-sherman.jpg" width="35px" height="35px" align="">
+                <img class="img-circle" {{#if this.image}}src="{{this.image}}"{{else}}src="/images/ui-sherman.jpg"{{/if}} width="35px" height="35px" align="">
             </div>
             <div class="details">
                 <p><a href="#">{{this.name}}</a><br/>

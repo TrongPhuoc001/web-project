@@ -17,25 +17,114 @@
             </div>
             
         </div>
-        <div class="row">
+        <div class="row" id="product-container">
             {{>products}}
         </div>
         <nav class="row"  aria-label="Page navigation" style="left:0;">
-            <div class="col-md-6"></div>
-            <ul class="pagination justify-content-center col-md-3" style="margin: 0;">
-                {{#if previous}}
-                <li class="page-item"><a class="page-link" href="?{{#if q}}q={{q}}&{{/if}}page={{previous}}">Previous</a></li>
-                {{/if}}
-                {{#each pages}}
-                <li class="page-item"><a class="page-link" href="?{{#if q}}q={{q}}&{{/if}}page={{this}}">{{this}}</a></li>
-                {{/each}}
-                {{#if next}}
-                <li class="page-item"><a class="page-link" href="?{{#if q}}q={{q}}&{{/if}}page={{next}}">Next</a></li>
-                {{/if}}
-            </ul>
-            <div class="col-md-3">
-                
+            <div class="col-md-12 " style="display: flex; justify-content:center;">
+                <ul class="pagination justify-content-center col-md-3" style="margin: 0;">
+                    
+                    <li class="page-item"><a class="page-link" id="page-previous" {{#if previous}} href="?{{#if q}}q={{q}}&{{/if}}page={{previous}}" {{/if}}>Previous</a></li>
+                    
+                    {{#each pages}}
+                    <li class="page-item"><a class="page-link" id="page-{{this}}" {{#ifeq ../page this}}{{else}} href="?{{#if q}}q={{q}}&{{/if}}page={{this}}" {{/ifeq}}>{{this}}</a></li>
+                    {{/each}}
+                    
+                    <li class="page-item"><a class="page-link" id="page-next" {{#if next}} href="?{{#if q}}q={{q}}&{{/if}}page={{next}}" {{/if}}>Next</a></li>
+                </ul>
             </div>
         </nav>
     </section>
 </section>
+{{#section 'script'}}
+<script>
+    const page_cache=[];
+    let curr_page = {{{page}}};
+    const product_container = document.querySelector('#product-container');
+    const a_pages = document.querySelectorAll('.page-link');
+    a_pages.forEach(link=>{
+        link.addEventListener('click',(e)=>{
+            e.preventDefault();
+            const ref = link.href||'';
+            if(ref===''){
+                return;
+            }
+            const path = ref.replace(/^.*\/\/[^\/]+/, '');
+            const getPage = parseInt(path[path.length-1]);
+            $('#product-container').fadeOut(500);
+            setTimeout(function() {
+                if(!page_cache[getPage]){
+                    $.get('/api'+path,(data,status)=>{
+                        if(status==='success'){
+                            updateView(data);
+                            changePage(getPage,path);
+                            page_cache[curr_page] = data;
+                        }
+                        else{
+                            console.log('error',data);
+                        }
+                    })
+                }
+                else{
+                    updateView(page_cache[getPage])
+                    changePage(getPage,path);
+                }
+            }, 450);
+            
+            
+        })
+
+    })
+
+    function changePage(getPage,path){
+        history.pushState('','',path);
+        document.querySelector(`#page-${curr_page}`).setAttribute('href',`?page=${curr_page}`);
+        curr_page = getPage;
+        if(curr_page===1){
+            document.querySelector('#page-previous').removeAttribute('href');
+        }
+        else{
+            document.querySelector('#page-previous').setAttribute('href', `?page=${curr_page-1}`);
+        }
+        document.querySelector(`#page-${curr_page}`).removeAttribute('href')
+        if(!document.querySelector(`#page-${curr_page+1}`)){
+            document.querySelector('#page-next').removeAttribute('href');
+        }
+        else{
+            document.querySelector('#page-next').setAttribute('href',`?page=${curr_page+1}`);
+        }
+    }
+
+    function updateView(data){
+        product_container.innerHTML=''
+        data.forEach((pro)=>{
+            const div = `<a href="/product/${pro.id}">
+                <div class="col-md-3 col-sm-3 mb">
+                    <div class="white-panel pn">
+                        <div class="white-header">
+                            <h5>${pro.title}</h5>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-4">
+                                <p>$ ${pro.price}</p>
+                            </div>
+                            <div class="col-sm-4 col-xs-4">
+                                <p>${pro.available} avai</p>
+                            </div>
+                            <div class="col-sm-4 col-xs-4">
+                                <p>${pro.sold} sold</p>
+                            </div>
+                        </div>
+                        <div class="centered">
+                                <img src="${pro.image}" height="120">
+                        </div>
+                    </div>
+                </div><!-- /col-md-4 -->
+            </a>`;
+            product_container.innerHTML+=div;
+        });
+        $('#product-container').fadeIn(500);
+        
+    }
+</script>
+{{/section}}

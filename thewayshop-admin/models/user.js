@@ -5,7 +5,7 @@ exports.login = (username,password)=>{
     )
 }
 exports.getMember = pool.query(
-        `SELECT username as name
+        `SELECT fullname as name
         FROM manager;`
 )
 

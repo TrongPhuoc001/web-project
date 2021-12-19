@@ -1,88 +1,86 @@
 {{#section 'style'}}
 <style>
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
 
 
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
+  .dropdown-content {
+    display: none;
+
+    position: absolute;
+    background-color: #FFFFFF;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    height: auto;
+    z-index: 1;
+  }
 
 
-.dropdown-content { 
-  display: none;
-
-  position: absolute;
-  background-color: #FFFFFF;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  height: auto;
-  z-index: 1;
-}
+  .dropdown-content a {
+    color: black;
+    padding: 5px 16px;
+    text-decoration: none;
+    display: block;
+  }
 
 
-.dropdown-content a {
-  color: black;
-  padding: 5px 16px;
-  text-decoration: none;
-  display: block;
-}
+  .dropdown-content a:hover {
+    background-color: #428bca;
+    color: white;
+  }
 
 
-.dropdown-content a:hover {
-  background-color: #428bca;
-  color: white;
-}
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
 
 
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-
-.dropdown:hover .dropbtn {
-  background-color: #428bca;
-}
+  .dropdown:hover .dropbtn {
+    background-color: #428bca;
+  }
 </style>
 {{/section}}
 <section id="main-content">
-    <section class="wrapper">
-        <div class="row">
-            {{>stat}}
+  <section class="wrapper">
+    <div class="row">
+      {{>stat}}
 
-        </div><!-- /col-lg-9 END SECTION MIDDLE --> 
-<!--RIGHT SIDEBAR CONTENT -->      
-        {{>member}}
-        <h3> TOP PRODUCT</h3>
-        <div class="dropdown">
-                        <a class="dropdown" >
-                        <i class="fa fa-database"></i>
-                            <span> {{tagNow}}</span>
-                        </a>
+    </div><!-- /col-lg-9 END SECTION MIDDLE -->
+    <!--RIGHT SIDEBAR CONTENT -->
+    {{>member}}
+    <h3> TOP PRODUCT</h3>
+    <div class="dropdown">
+      <a class="dropdown">
+        <i class="fa fa-database"></i>
+        <span> {{tagNow}}</span>
+      </a>
 
-                        <div class="dropdown-content">
-                            <li><button><a href="/">all</a></button></li> 
-                            {{#each tag}}
-                                <li> <button><a href="/topsellingproduct?id={{this.id}}">{{this.name}}</a></button></li> 
-                            {{/each}}
-                        </div>
+      <div class="dropdown-content">
+        <li><button><a href="/">all</a></button></li>
+        {{#each tag}}
+        <li> <button><a href="/topsellingproduct?id={{this.id}}">{{this.name}}</a></button></li>
+        {{/each}}
+      </div>
 
-        </div>
-        
-    </section>
-    <section class="wrapper">
-        <div class="row">
-            {{>products}}
-        </div>
-    </section>
+    </div>
+
+  </section>
+  <section class="wrapper">
+    <div class="row">
+      {{>products}}
+    </div>
+  </section>
 </section>
 
 <!--main content end-->
 <!--footer start-->
 <footer class="site-footer">
-    <div class="text-center">
-        2021-WeBu
-        <a href="index.html#" class="go-top">
-            <i class="fa fa-angle-up"></i>
-        </a>
-    </div>
+  <div class="text-center">
+    2021-WeBu
+    <a href="#" class="go-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+  </div>
 </footer>
