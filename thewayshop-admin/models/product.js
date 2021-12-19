@@ -25,22 +25,7 @@ exports.maxPage = pool.query(
     `SELECT ceil(COUNT(*)/$1::numeric) as max_page FROM product WHERE is_delete = 'f';`,[limit]
 )
 
-exports.updatePro = (pro_id,data)=>{
-    const {title,description,price,image,brand,tag_id,available,sold,is_delete} = data;
-    return pool.query(
-        `UPDATE product
-        SET title=$1,
-        description=$2,
-        price=$3,
-        image=$4,
-        brand=$5,
-        tag_id=$6,
-        available=$7,
-        sold=$8,
-        is_delete=$9
-        WHERE id=$10`,[title,description,price,image,brand,tag_id,available,sold,is_delete,pro_id]
-    )
-}
+
 
 exports.addPro = (data)=>{
     const {title,description,price,image,brand,tag_id,available,sold} = data;

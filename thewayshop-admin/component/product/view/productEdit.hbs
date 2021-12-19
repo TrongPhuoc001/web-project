@@ -25,9 +25,30 @@
                             <img src="{{../subimage.[0].image}}" width="80">
                             <img src="{{../subimage.[1].image}}" width="80">
                             {{else}}
+                            {{#ifeq @key 'tag_id'}}
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="{{@key}}" value="{{this}}">
+                                <select name="tag_id" class="form-control" style="width: 30%;">
+                                    {{#each ../tagList}}
+                                    <option value="{{this.id}}" {{#ifeq this.id ../this}}selected{{/ifeq}}>{{this.name}}</option>
+                                    {{/each}}
+                                </select>
                             </div>
+                            {{else}}
+                            {{#ifeq @key 'state'}}
+                            <div class="col-sm-10">
+                                <select name="state" class="form-control" style="width: 30%;">
+                                    <option value="new" {{#ifeq this 'new'}}selected{{/ifeq}}>NEW</option>
+                                    <option value="sale" {{#ifeq this 'sale'}}selected{{/ifeq}}>SALE</option>
+                                    <option value="top" {{#ifeq this 'top'}}selected{{/ifeq}}>TOP</option>
+                                    <option value="out" {{#ifeq this 'out'}}selected{{/ifeq}}>OUT</option>
+                                </select>
+                            </div>
+                            {{else}}
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="{{@key}}" value="{{this}}" {{#ifeq @key 'sold'}} readonly {{/ifeq}} {{#ifeq @key 'create_date'}}readonly{{/ifeq}}>
+                            </div>
+                            {{/ifeq}}
+                            {{/ifeq}}
                             {{/ifeq}}
                         </div>
                         {{/each}}

@@ -49,23 +49,28 @@
             }
             const path = ref.replace(/^.*\/\/[^\/]+/, '');
             const getPage = parseInt(path[path.length-1]);
-            product_container.innerHTML=''
-            if(!page_cache[getPage]){
-                $.get('/api'+path,(data,status)=>{
-                    if(status==='success'){
-                        updateView(data);
-                        changePage(getPage,path);
-                        page_cache[curr_page] = data;
-                    }
-                    else{
-                        console.log('error',data);
-                    }
-                })
-            }
-            else{
-                updateView(page_cache[getPage])
-                changePage(getPage,path);
-            }
+            $("HTML, BODY").animate({ scrollTop: $("#product-container").offset().top-100 }, 1000);
+            $('#product-container').fadeOut(500);
+            setTimeout(()=>{
+                product_container.innerHTML=''
+                if(!page_cache[getPage]){
+                    $.get('/api'+path,(data,status)=>{
+                        if(status==='success'){
+                            updateView(data);
+                            changePage(getPage,path);
+                            page_cache[curr_page] = data;
+                        }
+                        else{
+                            console.log('error',data);
+                        }
+                    })
+                }
+                else{
+                    updateView(page_cache[getPage])
+                    changePage(getPage,path);
+                }
+            },500)
+            
             
         })
 
@@ -91,8 +96,6 @@
     }
 
     function updateView(data){
-         $("HTML, BODY").animate({ scrollTop: $("#product-container").offset().top-100 }, 1000);
-        $('#product-container').fadeOut(500);
         data.forEach((pro)=>{
             const div = `<div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
                 <div class="products-single fix">

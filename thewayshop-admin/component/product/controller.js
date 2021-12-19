@@ -36,7 +36,8 @@ exports.getProduct = async (req,res)=>{
 
     const {product_id} = req.params;
     const product = await productModel.getOne(product_id);
-    const subimage = await service.getSubImage(product_id)
+    const taglist = await service.getTag;
+    const subimage = await service.getSubImage(product_id);
     if(subimage.rows.length === 0){
         const temp = [
             {
@@ -51,15 +52,16 @@ exports.getProduct = async (req,res)=>{
     res.render(view+'productEdit', { 
         title: product.rows[0].title,
         product:product.rows[0],
+        tagList:taglist.rows,
         subimage:subimage.rows,
         product_active:true
     });
 }
 
 exports.postProduct = async (req,res)=>{
-
+    const {title,description,price,image,brand,tag_id,available} = req.body;
     try{
-        await productModel.updatePro(req.params.product_id,req.body);
+        await service.updatePro(req.params.product_id,title,description,price,image,brand,tag_id,available);
         res.redirect(`/product/${req.params.product_id}`)
     }
     catch(err){
