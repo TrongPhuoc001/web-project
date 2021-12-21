@@ -1,4 +1,4 @@
-const {product_cache,filter_cache,rating_cache} = require('../../helper/lruCache');
+const {product_cache,filter_cache,rating_cache,comment_cache} = require('../../helper/lruCache');
 
 const service = require('./service')
 
@@ -29,8 +29,8 @@ exports.postRating = async(req,res)=>{
     try{
         const rating = await service.addRating(user_id,product_id,star,content);
         let page = 1;
-        while(rating_cache.get(`rating${product_id}_page${page}`)){
-            rating_cache.set(`rating${product_id}_page${page}`,undefined)
+        while(rating_cache.get(`${product_id}_page${page}`)){
+            rating_cache.set(`${product_id}_page${page}`,undefined)
             page++;
         }
         res.status(200).json(rating.rows[0])
@@ -90,4 +90,38 @@ exports.filterCategory = async(req,res)=>{
         }
     }
     res.status(200).json(product_page);
+}
+
+exports.getComment = async(req,res)=>{
+    const page = Math.max(parseInt(req.query.page)||1,1);
+    const product_id = req.query.proid;
+    let comment_page = comment_cache.get(`${product_id}_page${page}`);
+    if(!comment_page){
+        try{
+            const comment = await service.getComment(product_id,page);
+            comment_page = comment.rows;
+            comment_cache.set(`${product_id}_page${page}`,comment_page);
+        }
+        catch(e){
+            return res.status(400).json(e)
+        }
+    }
+    res.status(200).json(comment_page)
+}
+
+exports.postComment = async(req,res)=>{
+    const {product_id,user_name,content} = req.body;
+    try{
+        const comment = await service.addComment(user_name,product_id,content);
+        let page = 1;
+        while(comment_cache.get(`${product_id}_page${page}`)){
+            comment_cache.set(`${product_id}_page${page}`,undefined)
+            page++;
+        }
+        res.status(200).json(comment.rows[0])
+    }
+    catch(e){
+        console.log(e);
+        res.status(400).json(e);
+    }
 }

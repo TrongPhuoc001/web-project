@@ -187,6 +187,17 @@ CREATE TABLE chat(
             ON DELETE CASCADE
 );
 
+CREATE TABLE comment(
+    product_id TEXT NOT NULL,
+    user_name TEXT NOT NULL,
+    content VARCHAR(255),
+    create_date TIMESTAMP DEFAULT transaction_timestamp(),
+
+    CONSTRAINT fk_comment_proid
+        FOREIGN KEY (product_id) 
+            REFERENCES product(id)
+            ON DELETE CASCADE
+);
 CREATE OR REPLACE FUNCTION function_update_sold_order() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -513,3 +524,62 @@ VALUES
 INSERT INTO rating(user_id,product_id,star,content)
 VALUES 
 ((SELECT id FROM users WHERE name='Phuoc Nguyen'),(SELECT id FROM product WHERE title='Korean Style Pant'),4,'Its a bit short for some guy over 7 feet high like me');
+
+
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Nguyễn Trọng Phước','Make the decision, make another. Remake one past, you cannot.');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Nguyễn Phước','Be honest in your feelings, for they are the surest conduit to knowledge... ');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Jared Kerr','Reading without reflecting is like eating without digesting');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Lina Schroeder','We must dare to think unthinkable thoughts');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Kaleb Munoz','Remember to focus on goals that are within your control');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Yusuf Espinoza','In any project, the important factor is your belief. Without belief there can be no successful outcome');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Jaelynn Terrell','Life itself is the proper binge');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Madelyn Cabrera','Appreciate those early influences and what they''ve done for you.');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Tommy Lynch','No one would have crossed the ocean if he could have gotten off the ship in the storm');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Bridget Carey','Children really brighten up a household. They never turn the lights off.');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Kale Deleon','I can give you a six-word formula for success: Think things through, then follow through');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Micheal Burns','You can be rich and famous and still end up being unhappy');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Dennis Davila','One must live the way one thinks or end up thinking the way one has lived');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Landyn West','Synergy is the very essence of the family. Every family member contributes a different flavor to the mix');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Shiloh Dorsey','Its a love ly pant');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Izabelle Li','Is it available');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Joy Palmer','Can ship to vietnam?');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Brylee Rasmussen','A man should have the aim and the determination to be honest and upright and sincere in all that he undertakes.');
+INSERT INTO comment(product_id,user_name,content)
+VALUES 
+((SELECT id FROM product WHERE title='Korean Style Pant'),'Kayleigh Acevedo','I have always believed that each man makes his own happiness and is responsible for his own problems. It is a simple philosophy');

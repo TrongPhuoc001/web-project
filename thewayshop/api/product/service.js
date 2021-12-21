@@ -56,3 +56,19 @@ exports.getCatePro = (cate_name,page)=>{
         LIMIT $2 OFFSET $3;`,[cate_name, limit,(page-1)*limit]
     )
 }
+
+exports.getComment = (product_id,page)=>{
+    return pool.query(
+        `SELECT user_name,content FROM comment
+        WHERE product_id=$1
+        ORDER BY create_date DESC
+        LIMIT $2 OFFSET $3;`,[product_id,limit,(page-1)*limit]
+    )
+}
+
+exports.addComment = (user_name,product_id,content)=>{
+    return pool.query(
+        `INSERT INTO comment(user_name,product_id,content)
+        VALUES ($1,$2,$3) RETURNING *;`,[user_name,product_id,content]
+    )
+}

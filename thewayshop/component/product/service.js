@@ -73,8 +73,12 @@ exports.getRecent = pool.query(
 )
 exports.getOne = (product_id)=>{
     return pool.query(
-        `SELECT * FROM product
-        WHERE id=$1`,[product_id]
+        `SELECT product.*,tag.name as tag_name, category.name as cate_name 
+        FROM product,tag,tag_category,category
+        WHERE product.id =$1 
+        AND product.tag_id=tag.id 
+        AND tag.id=tag_category.tag_id 
+        AND tag_category.category_id= category.id;`,[product_id]
     )
 }
 
@@ -85,19 +89,25 @@ exports.maxPage = pool.query(
     `SELECT ceil(COUNT(*)/$1::numeric) as max_page FROM product;`,[limit]
 )
 
-exports.getRelate = (pro_id,tag_id,brand)=>{
+exports.getRelate = (pro_id)=>{
     return pool.query(
-        `SELECT id,title,description,price,image,state FROM product
-        WHERE (tag_id=$1
-        OR brand=$2)
-        AND id <> $3
-        AND is_delete = 'f'
-        LIMIT 8;`,[tag_id,brand,pro_id]
+        `SELECT id,title,description,price,image,state FROM product 
+        WHERE id IN (SELECT product_id FROM order_product 
+                    WHERE order_id IN (SELECT order_id FROM order_product 
+                                        WHERE product_id=$1) 
+                    EXCEPT SELECT product_id FROM order_product 
+                    WHERE product_id=$1);`,[pro_id]
     )
 }
 
 exports.numberRating = (product_id)=>{
     return pool.query(
         `SELECT COUNT(*) as max_rating FROM rating WHERE product_id=$1;`,[product_id]
+    )
+}
+
+exports.numerComment = (product_id)=>{
+    return pool.query(
+        `SELECT COUNT(*) as max_comment FROM comment WHERE product_id=$1;`,[product_id]
     )
 }

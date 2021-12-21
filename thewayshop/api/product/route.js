@@ -8,6 +8,8 @@ router.get('/tag/:tag_name',controller.filterTag);
 router.get('/category/:category_name',controller.filterCategory);
 router.get('/rating', controller.getRating);
 router.post('/rating', controller.postRating);
+router.get('/comment', controller.getComment);
+router.post('/comment', controller.postComment);
 
 
 module.exports = router;
