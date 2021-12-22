@@ -61,25 +61,29 @@ exports.delete = (id)=>{
         WHERE id = $1`,[id]
     )
 }
-
 exports.getTopSellingProduct = pool.query(
-        `select product.id, product.id,product.title,product.price,product.image,product.available,product.sold, sum(order_product.quantity) as Max
-        from product, order_product
-        where product.is_delete = false and product.id = order_product.product_id
-        group by product.id, product.id,product.title,product.price,product.image
-        order by Max DESC 
-        LIMIT 8`
-    )
+    `select product.id,product.title,product.price,product.image, sum(order_product.quantity) as Max
+    from product, order_product
+    where product.is_delete = false and product.id = order_product.product_id
+    group by product.id,product.title,product.price,product.image
+    order by Max DESC 
+    LIMIT 10`
+)
 exports.getTopSellingProductByTag = (id) => {
-    return pool.query(
-        `select product.id,product.title,product.price,product.image, sum(order_product.quantity) as Max
-        from product, order_product
-        where product.is_delete = false and product.id = order_product.product_id and product.tag_id = $1
-        group by product.id,product.title,product.price,product.image
-        order by Max DESC 
-        LIMIT 8`,[id]
-        // `select *
-        // from product
-        // where tag_id = $1`,[id]
-    )
+if(id == -1) 
+return pool.query(
+    `select product.id,product.title,tag.name,product.price,product.image, sum(order_product.quantity) as Max
+    from product, order_product, tag
+    where product.is_delete = false and product.id = order_product.product_id and product.tag_id = tag.id
+    group by product.id,product.title,tag.name,product.price,product.image
+    order by Max DESC 
+    LIMIT 10`)
+return pool.query(
+    `select product.id,product.title,tag.name,product.price,product.image, sum(order_product.quantity) as Max
+    from product, order_product, tag
+    where product.is_delete = false and product.id = order_product.product_id and product.tag_id = $1 and product.tag_id = tag.id
+    group by product.id,product.title,tag.name,product.price,product.image
+    order by Max DESC 
+    LIMIT 10`,[id]
+)
 }
