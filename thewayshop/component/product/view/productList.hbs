@@ -10,23 +10,8 @@
                     <div class="row product-categorie-box">
                         {{>product_items}}
                     </div>
-                    <div class="row">
-                        <nav aria-label="...">
-                            <ul class="pagination">
-                                
-                                <li class="page-item ">
-                                <a  class="page-link"  id="page-previous"{{#if previous}} href="?page={{previous}}"{{/if}}>Previous</a>
-                                </li>  
-                                {{#each pages}}
-                                <li class="page-item">
-                                    <a class="page-link" id="page-{{this}}" {{#ifeq this ../page}}{{else}}  href="?page={{this}}"{{/ifeq}}>{{this}}</a>
-                                </li>
-                                {{/each}}
-                                <li class="page-item ">
-                                <a class="page-link" id="page-next" {{#if next}} href="?page={{next}}" {{/if}}>Next</a>
-                                </li>
-                            </ul>
-                        </nav>
+                    <div class="row justify-content-center">
+                        <ul id="pagination-demo" class="pagination-sm"></ul>
                     </div>
                 </div>
             </div>
@@ -36,65 +21,10 @@
 <!-- End Shop Page -->
 {{#section 'script'}}
 <script>
+    const maxPage = {{{max_page}}}
     const page_cache=[];
-    let curr_page = {{{page}}};
+    let curr_page = {{{page}}}||1;
     const product_container = document.querySelector('#product-container');
-    const page_link = document.querySelectorAll('.page-link');
-    page_link.forEach(link=>{
-        link.addEventListener('click',(e)=>{
-            e.preventDefault();
-            const ref = link.href||'';
-            if(ref===''){
-                return;
-            }
-            const path = ref.replace(/^.*\/\/[^\/]+/, '');
-            const getPage = parseInt(path[path.length-1]);
-            $("HTML, BODY").animate({ scrollTop: $("#product-container").offset().top-100 }, 1000);
-            $('#product-container').fadeOut(500);
-            setTimeout(()=>{
-                product_container.innerHTML=''
-                if(!page_cache[getPage]){
-                    $.get('/api'+path,(data,status)=>{
-                        if(status==='success'){
-                            updateView(data);
-                            changePage(getPage,path);
-                            page_cache[curr_page] = data;
-                        }
-                        else{
-                            console.log('error',data);
-                        }
-                    })
-                }
-                else{
-                    updateView(page_cache[getPage])
-                    changePage(getPage,path);
-                }
-            },500)
-            
-            
-        })
-
-    })
-
-    function changePage(getPage,path){
-        history.pushState('','',path);
-        document.querySelector(`#page-${curr_page}`).setAttribute('href',`?page=${curr_page}`);
-        curr_page = getPage;
-        if(curr_page===1){
-            document.querySelector('#page-previous').removeAttribute('href');
-        }
-        else{
-            document.querySelector('#page-previous').setAttribute('href', `?page=${curr_page-1}`);
-        }
-        document.querySelector(`#page-${curr_page}`).removeAttribute('href')
-        if(!document.querySelector(`#page-${curr_page+1}`)){
-            document.querySelector('#page-next').removeAttribute('href');
-        }
-        else{
-            document.querySelector('#page-next').setAttribute('href',`?page=${curr_page+1}`);
-        }
-    }
-
     function updateView(data){
         data.forEach((pro)=>{
             const div = `<div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
@@ -124,5 +54,36 @@
         $('#product-container').fadeIn(500);
         
     }
+
+
+    $('#pagination-demo').twbsPagination({
+        totalPages: maxPage,
+        visiblePages: 2,
+        startPage:curr_page,
+        onPageClick: function (event, page) {
+            const path  = window.location.pathname;
+            $("HTML, BODY").animate({ scrollTop: $("#product-container").offset().top-100 }, 1000);
+            $('#product-container').fadeOut(500);
+            setTimeout(()=>{
+                product_container.innerHTML=''
+                if(!page_cache[page]){
+                    $.get('/api'+path+`?page=${page}`,(data,status)=>{
+                        if(status==='success'){
+                            updateView(data);
+                            history.pushState('','',path+`?page=${page}`);
+                            page_cache[page] = data;
+                        }
+                        else{
+                            console.log('error',data);
+                        }
+                    })
+                }
+                else{
+                    updateView(page_cache[page])
+                    history.pushState('','',path+`?page=${page}`);
+                }
+            },500)
+        }
+    })
 </script>
 {{/section}}

@@ -20,25 +20,15 @@
         <div class="row" id="product-container">
             {{>products}}
         </div>
-        <nav class="row"  aria-label="Page navigation" style="left:0;">
-            <div class="col-md-12 " style="display: flex; justify-content:center;">
-                <ul class="pagination justify-content-center col-md-3" style="margin: 0;">
-                    
-                    <li class="page-item"><a class="page-link" id="page-previous" {{#if previous}} href="?{{#if q}}q={{q}}&{{/if}}page={{previous}}" {{/if}}>Previous</a></li>
-                    
-                    {{#each pages}}
-                    <li class="page-item"><a class="page-link" id="page-{{this}}" {{#ifeq ../page this}}{{else}} href="?{{#if q}}q={{q}}&{{/if}}page={{this}}" {{/ifeq}}>{{this}}</a></li>
-                    {{/each}}
-                    
-                    <li class="page-item"><a class="page-link" id="page-next" {{#if next}} href="?{{#if q}}q={{q}}&{{/if}}page={{next}}" {{/if}}>Next</a></li>
-                </ul>
-            </div>
-        </nav>
+        <div class="row" style="display: flex; justify-content:center;">
+            <ul id="pagination-demo" class="pagination-sm"></ul>
+        </div>
     </section>
 </section>
 {{#section 'script'}}
 <script>
     const page_cache=[];
+    const max_page ={{{max_page}}}
     let curr_page = {{{page}}};
     const product_container = document.querySelector('#product-container');
     const a_pages = document.querySelectorAll('.page-link');
@@ -126,5 +116,35 @@
         $('#product-container').fadeIn(500);
         
     }
+
+    $('#pagination-demo').twbsPagination({
+        totalPages: max_page,
+        visiblePages: 2,
+        startPage:curr_page,
+        onPageClick: function (event, page) {
+            const path  = window.location.pathname;
+            $("HTML, BODY").animate({ scrollTop: $("#product-container").offset().top-100 }, 1000);
+            $('#product-container').fadeOut(500);
+            setTimeout(()=>{
+                product_container.innerHTML=''
+                if(!page_cache[page]){
+                    $.get('/api'+path+`?page=${page}`,(data,status)=>{
+                        if(status==='success'){
+                            updateView(data);
+                            history.pushState('','',path+`?page=${page}`);
+                            page_cache[page] = data;
+                        }
+                        else{
+                            console.log('error',data);
+                        }
+                    })
+                }
+                else{
+                    updateView(page_cache[page])
+                    history.pushState('','',path+`?page=${page}`);
+                }
+            },500)
+        }
+    })
 </script>
 {{/section}}

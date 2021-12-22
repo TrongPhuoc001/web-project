@@ -23,12 +23,14 @@ Quản lý sản phẩm trên gian hàng
 *Cho phép đăng tải các hình đại diện của sản phẩm
 *AJAX
 *Sử dụng memory cache để tăng tốc độ website
+*Hiển thị danh sách bình luận sản phẩm
+*Thêm bình luận
+*Phân trang bình luận
 chat
 Sử dụng Google Analytics
 Vẽ biểu đồ
 paypal sandbox
 
-@edit page của admin (tag, bỏ sold, is_delete,	
 
 Phương:
 Tìm kiếm - trang chủ
@@ -37,9 +39,6 @@ Phân trang tìm kiếm - trang chủ
 Xem danh sách các sản phẩm theo từng nhà sản xuất/phân loại
 Chọn sản phẩm vào giỏ hàng
 Quản lý giỏ hàng
-Hiển thị danh sách bình luận sản phẩm
-Thêm bình luận
-Phân trang bình luận
 *Đăng ký tài khoản - trang chủ
 *Kiểm tra các ràng buộc về tên đăng nhập, mật khẩu nhập lại, ...- trang chủ
 *Đăng nhập hệ thống- trang chủ

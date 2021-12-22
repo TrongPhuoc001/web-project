@@ -555,19 +555,56 @@
 
     $('#comment-container').scroll(()=>{
         if($('#comment-container').scrollTop() + $('#comment-container').height()==$('#comment-container')[0].scrollHeight) {
+            if(currPageComment >= maxPageComment){
+                return;
+            }
             currPageComment++;
-            $.get(`/api/product/comment?proid=${product_id}&page=${currPageComment}`,(data,status)=>{
-                if(status==="success"){
-                    data.forEach(comment=>{
-                        addComment(comment);
-                    })
-                }
-                else{
-                    console.log('error',data);
-                }
-            })
+            getComment()
         }
     })
+    btn_add_comment.addEventListener('click',(e)=>{
+        e.preventDefault();
+        if(!document.querySelector('#inp-comment-content').value){
+            document.querySelector('#inp-comment-content').focus();
+            return;
+        }
+        if(!document.querySelector('#inp-comment-name').value){
+            document.querySelector('#inp-comment-name').focus();
+            return;
+        }
+        const content = document.querySelector('#inp-comment-content').value;
+        const username = document.querySelector('#inp-comment-name').value;
+        $.post('/api/product/comment',{
+            user_name:username,
+            product_id:product_id,
+            content:content
+        },(data,status)=>{
+            if(status==='success'){
+                document.querySelector('#inp-comment-content').value ='';
+                currPageComment = 1;
+                numberComment++;
+                maxPageComment = Math.ceil(numberComment/9);
+                document.querySelector('#comment-container').innerHTML='';
+                getComment()
+            }
+            else{
+                console.log('error',data);
+            }
+        })
+    })
+    
+    function getComment(){
+        $.get(`/api/product/comment?proid=${product_id}&page=${currPageComment}`,(data,status)=>{
+            if(status==="success"){
+                data.forEach(comment=>{
+                    addComment(comment);
+                })
+            }
+            else{
+                console.log('error',data);
+            }
+        })
+    }
 
     function addComment(comment){
         let div =`<div class="col-lg-12 row">

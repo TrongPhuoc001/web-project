@@ -93,6 +93,7 @@ exports.filterCategory = async (req,res)=>{
         products:product_page,
         brands:brands,
         page:page,
+        max_page:max_page,
         next:page<max_page?page+1 : false,
         pages:Array.from({length: max_page}, (v, k) => k+1),
         previous:page>1?page-1:false
@@ -133,6 +134,7 @@ exports.filterTag = async (req,res)=>{
         products:product_page,
         brands:brands,
         page:page,
+        max_page:max_page,
         next:page<max_page?page+1 : false,
         pages:Array.from({length: max_page}, (v, k) => k+1),
         previous:page>1?page-1:false
