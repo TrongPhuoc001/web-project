@@ -198,6 +198,14 @@ CREATE TABLE comment(
             REFERENCES product(id)
             ON DELETE CASCADE
 );
+
+CREATE TABLE visit(
+    _month INT NOT NULL,
+    _year INT NOT NULL,
+    _count INT NOT NULL
+);
+
+
 CREATE OR REPLACE FUNCTION function_update_sold_order() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -583,3 +591,14 @@ VALUES
 INSERT INTO comment(product_id,user_name,content)
 VALUES 
 ((SELECT id FROM product WHERE title='Korean Style Pant'),'Kayleigh Acevedo','I have always believed that each man makes his own happiness and is responsible for his own problems. It is a simple philosophy');
+
+
+INSERT INTO visit(_month,_year,_count)
+VALUES (5,2021,500),
+(6,2021,723),
+(7,2021,1295),
+(8,2021,1567),
+(9,2021,2456),
+(10,2021,2067),
+(11,2021,1850),
+(12,2021,1423);

@@ -67,7 +67,7 @@ exports.getTopSellingProduct = pool.query(
     where product.is_delete = false and product.id = order_product.product_id
     group by product.id,product.title,product.price,product.image
     order by Max DESC 
-    LIMIT 10`
+    LIMIT 8`
 )
 exports.getTopSellingProductByTag = (id) => {
 if(id == -1) 
@@ -77,13 +77,13 @@ return pool.query(
     where product.is_delete = false and product.id = order_product.product_id and product.tag_id = tag.id
     group by product.id,product.title,tag.name,product.price,product.image
     order by Max DESC 
-    LIMIT 10`)
+    LIMIT 8`)
 return pool.query(
     `select product.id,product.title,tag.name,product.price,product.image, sum(order_product.quantity) as Max
     from product, order_product, tag
     where product.is_delete = false and product.id = order_product.product_id and product.tag_id = $1 and product.tag_id = tag.id
     group by product.id,product.title,tag.name,product.price,product.image
     order by Max DESC 
-    LIMIT 10`,[id]
+    LIMIT 8`,[id]
 )
 }

@@ -5,7 +5,6 @@ const view = '../component/product/view/'
 const productModel = require('../../models/product');
 const service = require('./service');
 
-
 exports.mainPage = async(req,res)=>{
     
     const page = Math.max(parseInt(req.query.page)||1,1);
@@ -23,7 +22,7 @@ exports.mainPage = async(req,res)=>{
     }
     let brands = product_cache.get('brands');
     if(!brands){
-        const data_brands = await productModel.getBrand;
+        const data_brands = await service.getBrand;
         brands = data_brands.rows;
         product_cache.set('brands',brands);
     }

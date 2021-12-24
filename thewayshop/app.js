@@ -9,6 +9,7 @@ dotenv.config();
 const session = require('express-session');
 const passport = require('./config/passport');
 
+//route
 const homeRouter = require('./component/home/route');
 const myaccountRouter = require('./component/account/route');
 const authRouter = require('./component/auth/route');
@@ -16,9 +17,10 @@ const productRouter = require('./component/product/route');
 const shopRouter = require('./component/shop/route');
 const apiRouter = require('./api/route');
 
+//middleware
 const layout = require('./middleware/layout');
 const verify = require('./middleware/verifyUser');
-
+const visit = require('./middleware/increaseVisit');
 const app = express();
 
 // view engine setup
@@ -41,6 +43,7 @@ app.use(session({secret: process.env.SESSION_SECRET, resave:false,saveUninitiali
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(visit);
 app.use(layout);
 app.use(verify);
 app.use('/', homeRouter);

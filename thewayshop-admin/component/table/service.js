@@ -27,7 +27,6 @@ exports.maxPage = (tb_name)=> {
 exports.getRecord = (page, tb_name)=>{
     return pool.query(
         `SELECT * FROM ${tb_name}
-        ORDER BY id ASC
         LIMIT $1 OFFSET $2;`,[limit,(page-1)*limit]
       )
 }
