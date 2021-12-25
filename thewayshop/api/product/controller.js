@@ -125,3 +125,11 @@ exports.postComment = async(req,res)=>{
         res.status(400).json(e);
     }
 }
+
+exports.searchProduct = async (req,res) => {
+    const q = req.query.q;
+    const page = Math.max(parseInt(req.query.page)||1,1);
+    const result = await service.searchProduct(q,page);
+
+    res.json(result.rows);
+}

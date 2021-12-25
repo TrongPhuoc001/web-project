@@ -33,7 +33,7 @@ paypal sandbox
 
 
 Phương:
-Tìm kiếm - trang chủ
+*Tìm kiếm - trang chủ
 Tìm kiếm nâng cao - trang chủ
 Phân trang tìm kiếm - trang chủ
 Xem danh sách các sản phẩm theo từng nhà sản xuất/phân loại

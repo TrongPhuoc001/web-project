@@ -25,6 +25,7 @@
     const page_cache=[];
     let curr_page = {{{page}}}||1;
     const product_container = document.querySelector('#product-container');
+
     function updateView(data){
         data.forEach((pro)=>{
             const div = `<div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
@@ -70,7 +71,7 @@
                     $.get('/api'+path+`?page=${page}`,(data,status)=>{
                         if(status==='success'){
                             updateView(data);
-                            history.pushState('','',path+`?page=${page}`);
+                            history.pushState('','',path + `?page=${page}`);
                             page_cache[page] = data;
                         }
                         else{
@@ -85,5 +86,24 @@
             },500)
         }
     })
+
+    // Handle search
+
+    const inp_search = document.getElementById('inp-search');
+    const btn_search = document.getElementById('btn-search');
+    btn_search.addEventListener('click', (e) => {
+        e.preventDefault();
+        const value = inp_search.value;
+        if(value==='') return;
+        const path  = window.location.pathname;
+
+        $.get(`/api/product/search?q=${value}`, (data,status) =>{
+            product_container.innerHTML = ''
+            history.pushState('','',path + `?q=${value}&page=${1}`);
+            updateView(data);
+            
+        })
+    })
+
 </script>
 {{/section}}

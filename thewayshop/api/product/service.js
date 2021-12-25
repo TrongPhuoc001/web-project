@@ -72,3 +72,10 @@ exports.addComment = (user_name,product_id,content)=>{
         VALUES ($1,$2,$3) RETURNING *;`,[user_name,product_id,content]
     )
 }
+
+exports.searchProduct = (q,page) => {
+    return pool.query(
+        `sELECT * FROM product WHERE title ~ $1 LIMIT 9 OFFsET $2`, [q,(page-1)*9]
+    )
+
+}

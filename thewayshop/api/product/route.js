@@ -10,6 +10,7 @@ router.get('/rating', controller.getRating);
 router.post('/rating', controller.postRating);
 router.get('/comment', controller.getComment);
 router.post('/comment', controller.postComment);
+router.get('/search', controller.searchProduct);
 
 
 module.exports = router;
