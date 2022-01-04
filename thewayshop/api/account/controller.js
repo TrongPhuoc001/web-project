@@ -44,3 +44,25 @@ exports.forgot = async(req,res)=>{
         res.status(400).json({error:"email not found"})
     }
 }
+
+exports.getWishList = async(req,res)=>{
+    const user_id = req.params.user_id;
+    const page = Math.max(parseInt(req.query.page)||1,1);
+    try{
+        const data = await service.getWishlist(user_id,page);
+        res.status(200).json(data.rows);
+    }
+    catch(e){
+        res.status(400).json(e);
+    }
+}
+exports.postWishList = async(req,res)=>{
+    const {user_id,pro_id} = req.body;
+    try{
+        await service.addWishList(user_id,pro_id);
+        res.status(200).json('success');
+    }
+    catch(e){
+        res.status(400).json(e);
+    }
+}

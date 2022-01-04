@@ -40,7 +40,7 @@
                             <ul>
                                 <li><a href="/product/${pro.id}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
                                 <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
-                                <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                                <li><a class="add-wishlist" data-id="${pro.id}" data-image="${pro.image}"  data-title="${pro.title}" data-price="${pro.price}" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart" style="point-events:none;"></i></a></li>
                             </ul>
                             <a class="cart" href="./myaccount/cart">Add to Cart</a>
                         </div>
@@ -64,7 +64,7 @@
                                 <ul>
                                     <li><a href="/product/${pro.id}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
                                     <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
-                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                                    <li><a class="add-wishlist" data-id="${pro.id}" data-image="${pro.image}"  data-title="${pro.title}" data-price="${pro.price}" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart" style="point-events:none;"></i></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -84,6 +84,7 @@
             document.querySelector('#list-view').innerHTML+=div2;
         });
         $('#product-container').fadeIn(500);
+        add_wishlist_event();
     }
 
 

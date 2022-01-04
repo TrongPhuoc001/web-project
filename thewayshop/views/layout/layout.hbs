@@ -51,7 +51,11 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+    <style>
+        .add-wishlist{
+            color: white!important;
+        }
+    </style>
 </head>
 
 <body>
@@ -174,6 +178,7 @@
                 <a href="#" class="close-side"><i class="fa fa-times"></i></a>
                 <li class="cart-box">
                     <ul class="cart-list">
+
                         <li>
                             <a href="./product" class="photo"><img src="/images/img-pro-01.jpg" class="cart-thumb" alt="" /></a>
                             <h6><a href="shopdetail">Delica omtantur </a></h6>
@@ -191,7 +196,7 @@
                         </li>
                         <li class="total">
                             <a href="./myaccount/cart" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
-                            <span class="float-right"><strong>Total</strong>: $180.00</span>
+                            <span class="float-right"><strong>Total</strong>: $<i id="cart-total">180.00</i></span>
                         </li>
                     </ul>
                 </li>
@@ -380,6 +385,54 @@
     <script src="/js/contact-form-script.js"></script>
     <script src="/js/custom.js"></script>
     <script src="/js/jquery.twbsPagination.js"></script>
+    <script>
+        const user_id = '{{{user.id}}}'
+        function wishlistHandler(e){
+            if(user_id){
+                $.post('/api/account/wishlist',{
+                    user_id :user_id,
+                    pro_id:e.target.dataset.id
+                },(data,status)=>{
+                    if(status === 'success'){
+                        console.log('success');
+                    }
+                    else{
+                        console.log(data);
+                    }
+                })
+            }
+            else{
+                const obj = {
+                    id:e.target.dataset.id,
+                    image:e.target.dataset.image,
+                    title:e.target.dataset.title,
+                    price:e.target.dataset.price
+                }
+                let wishlist = window.localStorage.getItem('wishList');
+                if(wishlist){
+                    wishlist = JSON.parse(wishlist);
+                    if(wishlist.some(e=>e.id===obj.id)){
+                        wishlist = wishlist.filter(e=>e.id!=obj.id);
+                    }
+                    else{
+                        wishlist.push(obj)
+                    }
+                }
+                else{
+                    wishlist =[obj];
+                }
+                window.localStorage.setItem('wishList',JSON.stringify(wishlist));
+            }
+        }
+        function add_wishlist_event(){
+            document.querySelectorAll('.add-wishlist').forEach(a=>{
+                a.addEventListener('click',wishlistHandler);
+            })
+        }
+        if(user_id){
+
+        }
+    </script>
     {{{_sections.script}}}
 </body>
 

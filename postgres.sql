@@ -204,8 +204,8 @@ CREATE TABLE visit(
     _year INT NOT NULL,
     _count INT NOT NULL
 );
-
-
+ALTER TABLE wishlist ADD CONSTRAINT wishlist_unique UNIQUE (user_id,product_id);
+ALTER TABLE cart ADD CONSTRAINT cart_unique UNIQUE (user_id,product_id);
 CREATE OR REPLACE FUNCTION function_update_sold_order() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -228,6 +228,7 @@ CREATE TRIGGER trig_copy
      AFTER INSERT ON order_product
      FOR EACH ROW
      EXECUTE PROCEDURE function_update_sold_order();
+
 
 INSERT INTO manager(username,password,fullname,birthday,salary,image)
 VALUES ('phuoc','$2b$10$h5FmpOByBiMj95UM76ODH.BvJ8uRMkUjET1Q9fR92DdYSXrPF2ir2','Phuoc Nguyen','2001-03-19',1000.00,'https://i.ibb.co/LZ0zJpx/384e4065ba2a.jpg'),
