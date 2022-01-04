@@ -68,12 +68,23 @@
                             <a class="btn hvr-hover" href="#">Add to Cart</a>
                         </td>
                         <td class="remove-pr">
-                            <a href="#">
-                        <i class="fas fa-times"></i>
-                    </a>
+                        <i class="fas fa-times remove-wishlist" style="cursor:pointer;" data-id=${pro.id}></i>
                         </td>
                     </tr>`;
             wishList_container.innerHTML+=tr;
+        })
+        add_remove_event();
+    }
+    function removeWishlistHandler(e){
+        const id = e.target.dataset.id
+        let wishList = JSON.parse(window.localStorage.getItem('wishList'));
+        wishList = wishList.filter(e=>e.id != id);
+        window.localStorage.setItem('wishList',JSON.stringify(wishList));
+        updateView(wishList);
+    }
+    function add_remove_event(){
+        document.querySelectorAll('.remove-wishlist').forEach(a=>{
+            a.addEventListener('click',removeWishlistHandler);
         })
     }
 </script>

@@ -402,12 +402,14 @@
                 })
             }
             else{
+                console.log(e.target);
                 const obj = {
                     id:e.target.dataset.id,
                     image:e.target.dataset.image,
                     title:e.target.dataset.title,
                     price:e.target.dataset.price
                 }
+                console.log(obj);
                 let wishlist = window.localStorage.getItem('wishList');
                 if(wishlist){
                     wishlist = JSON.parse(wishlist);
