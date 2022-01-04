@@ -111,3 +111,21 @@ exports.numerComment = (product_id)=>{
         `SELECT COUNT(*) as max_comment FROM comment WHERE product_id=$1;`,[product_id]
     )
 }
+
+exports.countProduct = pool.query(
+    `SELECT COUNT(*) FROM product;`
+)
+exports.countProductTag = (tag_name)=>{
+    return pool.query(
+        `SELECT COUNT(*) FROM tag,product WHERE tag.id = product.tag_id AND tag.name=$1;`,[tag_name]
+    )
+}
+
+exports.countProductCate = (cate_name)=>{
+    return pool.query(
+        `SELECT COUNT(*) FROM category, tag_category, product 
+        WHERE category.id=tag_category.category_id
+        AND tag_category.tag_id = product.tag_id
+        AND category.name=$1;`,[cate_name]
+    )
+}

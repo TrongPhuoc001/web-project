@@ -27,6 +27,7 @@
     const product_container = document.querySelector('#product-container');
 
     function updateView(data){
+        document.querySelector('#list-view').innerHTML='';
         data.forEach((pro)=>{
             const div = `<div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
                 <div class="products-single fix">
@@ -50,10 +51,39 @@
                     </div>
                 </div>
             </div>`;
+            const div2 = `<div class="list-view-box">
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                    <div class="products-single fix">
+                        <div class="box-img-hover">
+                            <div class="type-lb">
+                                <p class="${pro.state}">${pro.state}</p>
+                            </div>
+                            <img src="${pro.image}" class="img-fluid" alt="Image">
+                            <div class="mask-icon">
+                                <ul>
+                                    <li><a href="/product/${pro.id}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-8 col-xl-8">
+                    <div class="why-text full-width">
+                        <h4>${pro.title}</h4>
+                        <h5>$${pro.price}</h5>
+                        <p>${pro.description}</p>
+                        <a class="btn hvr-hover" href="#">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+        </div>`;
             product_container.innerHTML+=div;
+            document.querySelector('#list-view').innerHTML+=div2;
         });
         $('#product-container').fadeIn(500);
-        
     }
 
 
@@ -62,16 +92,28 @@
         visiblePages: 2,
         startPage:curr_page,
         onPageClick: function (event, page) {
-            const path  = window.location.pathname;
+            const href = window.location.href;
+            const path  = href.replace(window.location.host,window.location.host+'/api');
+            let url = '';
+            if(!path.includes('?')){
+                url = path+`?page=${page}`;
+            }
+            else if(!path.includes('page')){
+                url = path+`&page=${page}`;
+            }
+            else{
+                url=path.replace(/page=[0-9]+/,`page=${page}`);
+            }
             $("HTML, BODY").animate({ scrollTop: $("#product-container").offset().top-100 }, 1000);
             $('#product-container').fadeOut(500);
             setTimeout(()=>{
                 product_container.innerHTML=''
                 if(!page_cache[page]){
-                    $.get('/api'+path+`?page=${page}`,(data,status)=>{
+                    console.log(url);
+                    $.get(url,(data,status)=>{
                         if(status==='success'){
                             updateView(data);
-                            history.pushState('','',path + `?page=${page}`);
+                            history.pushState('','',url.replace('api/',''));
                             page_cache[page] = data;
                         }
                         else{
@@ -81,7 +123,7 @@
                 }
                 else{
                     updateView(page_cache[page])
-                    history.pushState('','',path+`?page=${page}`);
+                    history.pushState('','',url.replace('api/',''));
                 }
             },500)
         }

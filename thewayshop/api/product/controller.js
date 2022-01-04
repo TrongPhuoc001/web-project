@@ -72,7 +72,7 @@ exports.filterTag = async(req,res)=>{
             return res.status(500).json(e)
         }
     }
-    res.status(200).json(product_page);
+    return res.status(200).json(product_page);
 }
 exports.filterCategory = async(req,res)=>{
     const cate_name = req.params.category_name;
@@ -89,7 +89,7 @@ exports.filterCategory = async(req,res)=>{
             return res.status(500).json(e)
         }
     }
-    res.status(200).json(product_page);
+    return res.status(200).json(product_page);  
 }
 
 exports.getComment = async(req,res)=>{
