@@ -59,7 +59,14 @@ exports.getWishList = async(req,res)=>{
 exports.postWishList = async(req,res)=>{
     const {user_id,pro_id} = req.body;
     try{
-        await service.addWishList(user_id,pro_id);
+        const checkExist = await service.checkWishlistExist(user_id,pro_id);
+        if(checkExist.rows.length>0){
+            await service.removeWishlist(user_id,pro_id);
+        }
+        else{
+            await service.addWishList(user_id,pro_id);
+        }
+        
         res.status(200).json('success');
     }
     catch(e){

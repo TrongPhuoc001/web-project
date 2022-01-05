@@ -22,3 +22,17 @@ exports.getWishlist = (user_id,page)=>{
         LIMIT $2 OFFSET $3;`,[user_id,6,(page-1)*6]
     )
 }
+
+exports.checkWishlistExist = (user_id,pro_id)=>{
+    return pool.query(
+        `SELECT * FROM wishlist
+        WHERE user_id=$1
+        AND product_id = $2;`,[user_id,pro_id]
+    )
+}
+exports.removeWishlist = (user_id,pro_id)=>{
+    return pool.query(
+        `DELETE FROM wishlist 
+        WHERE user_id= $1 AND product_id =$2;`,[user_id,pro_id]
+    )
+}

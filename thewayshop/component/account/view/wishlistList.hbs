@@ -1,5 +1,7 @@
-
-
+{{#section 'style'}}
+<style>
+</style>
+{{/section}}
 <!-- Start Wishlist  -->
 <div class="wishlist-box-main">
     <div class="container">
@@ -17,8 +19,18 @@
                                 <th>Remove</th>
                             </tr>
                         </thead>
-                        <tbody id="wishlist-body">
-                            
+                        <tbody id="wishlist-body">    
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <div id="loader" style="">
+                                         <div class="clock-loader"></div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>           
                         </tbody>
                     </table>
                 </div>
@@ -34,6 +46,7 @@
         $.get(`/api/account/${user_id}/wishlist`,(data,status)=>{
             if(status==='success'){
                 updateView(data);
+                window.localStorage.setItem('user_wishlist',JSON.stringify(data));  
             }
             else{
                 console.log(data);
@@ -77,10 +90,35 @@
     }
     function removeWishlistHandler(e){
         const id = e.target.dataset.id
-        let wishList = JSON.parse(window.localStorage.getItem('wishList'));
-        wishList = wishList.filter(e=>e.id != id);
-        window.localStorage.setItem('wishList',JSON.stringify(wishList));
-        updateView(wishList);
+        if(!user_id){
+            let wishList = JSON.parse(window.localStorage.getItem('wishList'));
+            wishList = wishList.filter(e=>e.id != id);
+            window.localStorage.setItem('wishList',JSON.stringify(wishList));
+            updateView(wishList);
+        }
+        else{
+            const tr_container = e.target.parentElement.parentElement;
+            tr_container.innerHTML=`<tr>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <div id="loader" style="">
+                                         <div class="clock-loader"></div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>      `;
+            $.post('/api/account/wishlist',{
+                user_id:user_id,
+                pro_id:id
+            },(data,status)=>{
+                if(status === 'success'){
+                    tr_container.remove();
+                }
+            })
+        }
+        
     }
     function add_remove_event(){
         document.querySelectorAll('.remove-wishlist').forEach(a=>{

@@ -189,7 +189,10 @@
 
                     <div class="add-to-btn">
                         <div class="add-comp">
-                            <a class="btn hvr-hover" href="#"><i class="fas fa-heart"></i> Add to wishlist</a>
+                            <a class="btn hvr-hover add-wishlist"  data-id="{{product.id}}" data-image="{{product.image}}"  data-title="{{product.title}}" data-price="{{product.price}}">
+                                <i class="far fa-heart" style="pointer-events: none;"></i>
+                                 Add to wishlist
+                            </a>
                             <a class="btn hvr-hover" href="#"><i class="fas fa-sync-alt"></i> Add to Compare</a>
                         </div>
                         <div class="share-bar">
@@ -226,7 +229,8 @@
                                     <ul>
                                         <li><a href="/product/{{this.id}}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
                                         <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
-                                        <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                                        <li><a class="add-wishlist" data-id="{{this.id}}" data-image="{{this.image}}"  data-title="{{this.title}}" data-price="{{this.price}}" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i
+                                            class="far fa-heart" style="pointer-events: none;"></i></a></li>
                                     </ul>
                                     <a class="cart" href="./myaccount/cart">Add to Cart</a>
                                 </div>
@@ -321,6 +325,7 @@
 <!-- End Cart -->
 {{#section 'script'}}
 <script>
+    add_wishlist_event();
     let numberRating = {{{number_rating}}};
     let numberComment = {{{number_comment}}}||0;
     let maxPageRating = Math.ceil(numberRating/9);

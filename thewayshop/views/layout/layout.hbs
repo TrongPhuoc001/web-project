@@ -55,6 +55,55 @@
         .add-wishlist{
             color: white!important;
         }
+        #loader{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 100%;
+            margin: 0;
+            background: rgb(255, 255, 255);
+        }
+        .clock-loader {
+            --clock-color: #466ef3;
+            --clock-width: 4rem;
+            --clock-radius: calc(var(--clock-width) / 2);
+            --clock-minute-length: calc(var(--clock-width) * 0.4);
+            --clock-hour-length: calc(var(--clock-width) * 0.2);
+            --clock-thickness: 0.2rem;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: var(--clock-width);
+            height: var(--clock-width);
+            border: 3px solid var(--clock-color);
+            border-radius: 50%;
+        }
+        .clock-loader::before, .clock-loader::after {
+            position: absolute;
+            content: "";
+            top: calc(var(--clock-radius) * 0.25);
+            width: var(--clock-thickness);
+            background: var(--clock-color);
+            border-radius: 10px;
+            transform-origin: center calc(100% - calc(var(--clock-thickness) / 2));
+            animation: spin infinite linear;
+        }
+        .clock-loader::before {
+            height: var(--clock-minute-length);
+            animation-duration: 2s;
+        }
+        .clock-loader::after {
+            top: calc(var(--clock-radius) * 0.25 + var(--clock-hour-length));
+            height: var(--clock-hour-length);
+            animation-duration: 15s;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(1turn);
+            }
+        }
     </style>
 </head>
 
@@ -388,6 +437,12 @@
     <script>
         const user_id = '{{{user.id}}}'
         function wishlistHandler(e){
+            const obj = {
+                    id:e.target.dataset.id,
+                    image:e.target.dataset.image,
+                    title:e.target.dataset.title,
+                    price:e.target.dataset.price
+                }
             if(user_id){
                 $.post('/api/account/wishlist',{
                     user_id :user_id,
@@ -395,6 +450,20 @@
                 },(data,status)=>{
                     if(status === 'success'){
                         console.log('success');
+                        let wishlist = window.localStorage.getItem('user_wishlist');
+                        if(wishlist){
+                            wishlist = JSON.parse(wishlist);
+                            if(wishlist.some(e=>e.id===obj.id)){
+                                wishlist = wishlist.filter(e=>e.id!=obj.id);
+                            }
+                            else{
+                                wishlist.push(obj)
+                            }
+                        }
+                        else{
+                            wishlist =[obj];
+                        }
+                        window.localStorage.setItem('user_wishlist',JSON.stringify(wishlist));
                     }
                     else{
                         console.log(data);
@@ -402,14 +471,7 @@
                 })
             }
             else{
-                console.log(e.target);
-                const obj = {
-                    id:e.target.dataset.id,
-                    image:e.target.dataset.image,
-                    title:e.target.dataset.title,
-                    price:e.target.dataset.price
-                }
-                console.log(obj);
+                
                 let wishlist = window.localStorage.getItem('wishList');
                 if(wishlist){
                     wishlist = JSON.parse(wishlist);
@@ -425,14 +487,64 @@
                 }
                 window.localStorage.setItem('wishList',JSON.stringify(wishlist));
             }
+            const icon = e.target.querySelector('i');
+            if(icon.classList.contains('fas')){
+                icon.classList.remove('fas');
+                if(icon.parentElement.textContent){
+                    icon.parentElement.innerHTML = '<i class="far fa-heart" style="pointer-events: none;"></i> Add to wishlist'
+                }
+            }
+            else{
+                icon.classList.add('fas');
+                if(icon.parentElement.textContent){
+                    icon.parentElement.innerHTML = '<i class="far fa-heart fas" style="pointer-events: none;"></i> Remove From Wishlist'
+                }
+            }
         }
         function add_wishlist_event(){
+            let wishList = window.localStorage.getItem('wishList');
+            if(wishList&&wishList.length>2){
+
+            }
+            else{
+                wishList = window.localStorage.getItem('user_wishlist');
+            }
             document.querySelectorAll('.add-wishlist').forEach(a=>{
+                if(wishList.includes(a.dataset.id)){
+                    a.querySelector('i').classList.add('fas');
+                    if(a.textContent){
+                        a.innerHTML = '<i class="far fa-heart fas" style="pointer-events: none;"></i>Remove From Wishlist'
+                    }
+                }
                 a.addEventListener('click',wishlistHandler);
             })
         }
         if(user_id){
-
+            $.get(`/api/account/${user_id}/wishlist`,(data,status)=>{
+                if(status==='success'){
+                    const wishList = window.localStorage.getItem('wishList');
+                    if(wishList&&wishList.length>2){
+                        const list_item = JSON.parse(wishList);
+                        list_item.forEach(item=>{
+                            if(!data.some(i=>i.id===item.id)){
+                                $.post('/api/account/wishlist',{
+                                    user_id:user_id,
+                                    pro_id:item.id
+                                },(data,status)=>{
+                                    if(status==='success'){
+                                        data.push(item);
+                                    }
+                                })
+                            }
+                        })
+                    }
+                    window.localStorage.setItem('wishList','[]');
+                    window.localStorage.setItem('user_wishlist',JSON.stringify(data));
+                }
+            })
+        }
+        else{
+            window.localStorage.setItem('user_wishlist','');
         }
     </script>
     {{{_sections.script}}}
