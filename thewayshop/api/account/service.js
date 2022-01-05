@@ -36,3 +36,32 @@ exports.removeWishlist = (user_id,pro_id)=>{
         WHERE user_id= $1 AND product_id =$2;`,[user_id,pro_id]
     )
 }
+
+exports.getCart = (user_id)=>{
+    return pool.query(
+        `SELECT id,image,title,price,quantity FROM product,cart
+        WHERE user_id=$1
+        AND product_id=id;`,[user_id]
+    )
+}
+exports.postCart = (user_id,product_id,quantity)=>{
+    return pool.query(
+        `INSERT INTO cart(user_id,product_id,quantity) 
+        VALUES ($1,$2,$3) 
+        ON CONFLICT(user_id,product_id) 
+        DO UPDATE SET quantity = cart.quantity+1 
+        WHERE  cart.user_id=$1
+        AND cart.product_id=$2;`,[user_id,product_id,quantity]
+    )
+}
+exports.updateCart = (user_id,product_id,quantity)=>{
+    return pool.query(
+        `UPDATE cart SET quantity=$1 
+        WHERE user_id=$2 AND product_id = $3;`,[user_id,product_id,quantity]
+    )
+}
+exports.removeCart = (user_id,product_id)=>{
+    return pool.query(
+        `DELETE FROM cart WHERE user_id=$1 AND product_id = $2;`,[user_id,product_id]
+    )
+}

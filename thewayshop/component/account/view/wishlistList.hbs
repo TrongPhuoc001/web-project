@@ -78,7 +78,7 @@
                         </td>
                         <td class="quantity-box">In Stock</td>
                         <td class="add-pr">
-                            <a class="btn hvr-hover" href="#">Add to Cart</a>
+                            <a class="btn hvr-hover cart" data-id="${pro.id}" data-image="${pro.image}"  data-title="${pro.title}" data-price="${pro.price}">Add to Cart</a>
                         </td>
                         <td class="remove-pr">
                         <i class="fas fa-times remove-wishlist" style="cursor:pointer;" data-id=${pro.id}></i>
@@ -87,6 +87,7 @@
             wishList_container.innerHTML+=tr;
         })
         add_remove_event();
+        add_cart_event();
     }
     function removeWishlistHandler(e){
         const id = e.target.dataset.id

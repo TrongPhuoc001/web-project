@@ -73,3 +73,34 @@ exports.postWishList = async(req,res)=>{
         res.status(400).json(e);
     }
 }
+
+exports.getCart = async(req,res)=>{
+    const {user_id} = req.params;
+    try{
+        const data = await service.getCart(user_id);
+        res.status(200).json(data.rows);
+    }
+    catch(e){
+        res.status(400).json(e);
+    }
+}
+exports.postCart = async(req,res)=>{
+    const {user_id,pro_id,quantity} = req.body;
+    try{
+        await service.postCart(user_id,pro_id,quantity);
+        res.status(200).json('success');
+    }
+    catch(e){
+        res.status(400).json(e);
+    }
+}
+exports.updateCart = async(req,res)=>{
+    const {user_id,pro_id,quantity} = req.body;
+    try{
+        await service.updateCart(user_id,pro_id,quantity);
+        res.status(200).json('success');
+    }
+    catch(e){
+        res.status(400).json(e);
+    }
+}

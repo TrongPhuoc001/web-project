@@ -43,7 +43,7 @@
                                 <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
                                 <li><a class="add-wishlist" data-id="${pro.id}" data-image="${pro.image}"  data-title="${pro.title}" data-price="${pro.price}" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart" style="pointer-events:none;"></i></a></li>
                             </ul>
-                            <a class="cart" href="./myaccount/cart">Add to Cart</a>
+                            <a class="cart" data-id="${pro.id}" data-image="${pro.image}"  data-title="${pro.title}" data-price="${pro.price}">Add to Cart</a>
                         </div>
                     </div>
                     <div class="why-text">
@@ -76,7 +76,7 @@
                         <h4>${pro.title}</h4>
                         <h5>$${pro.price}</h5>
                         <p>${pro.description}</p>
-                        <a class="btn hvr-hover" href="#">Add to Cart</a>
+                        <a class="btn hvr-hover cart" data-id="${pro.id}" data-image="${pro.image}"  data-title="${pro.title}" data-price="${pro.price}">Add to Cart</a>
                     </div>
                 </div>
             </div>
@@ -86,6 +86,7 @@
         });
         $('#product-container').fadeIn(500);
         add_wishlist_event();
+        add_cart_event();
     }
 
 
