@@ -54,6 +54,10 @@
     <style>
         .add-wishlist{
             color: white!important;
+            cursor: pointer;
+        }
+        .cart{
+            cursor: pointer;
         }
         #loader{
             display: flex;
@@ -466,9 +470,10 @@
                     }
                     window.localStorage.setItem('cart','[]');
                     window.localStorage.setItem('user_cart',JSON.stringify(data));
+                    updateCartBar();
                 }
             })
-            updateCartBar();
+            
         }
         else{
             window.localStorage.setItem('user_wishlist','');
@@ -612,6 +617,7 @@
                 }
                 window.localStorage.setItem('cart',JSON.stringify(cart));
             }
+            e.target.textContent = "Add one more";
             updateCartBar();
         }
         function add_cart_event(){
@@ -623,6 +629,9 @@
                 cart = window.localStorage.getItem('user_cart');
             }
             document.querySelectorAll('.cart').forEach(a=>{
+                if(cart.includes(a.dataset.id)){
+                    a.textContent="Add one more"
+                }
                 a.addEventListener('click',cartHandler);
             })
         }
@@ -650,6 +659,7 @@
                 total+=Math.round(parseFloat(item.price)*parseInt(item.quantity)*100,2)/100;
                 cart_box.innerHTML+=li;
             })
+            total = Math.round(total*100)/100;
             document.querySelector('#cart-total').textContent = total;
             document.querySelector('#cart-total-item').textContent = cart.length;
         }

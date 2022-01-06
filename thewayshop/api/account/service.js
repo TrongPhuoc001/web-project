@@ -57,7 +57,7 @@ exports.postCart = (user_id,product_id,quantity)=>{
 exports.updateCart = (user_id,product_id,quantity)=>{
     return pool.query(
         `UPDATE cart SET quantity=$1 
-        WHERE user_id=$2 AND product_id = $3;`,[user_id,product_id,quantity]
+        WHERE user_id=$2 AND product_id = $3;`,[quantity,user_id,product_id]
     )
 }
 exports.removeCart = (user_id,product_id)=>{

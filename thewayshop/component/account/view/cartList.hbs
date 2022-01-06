@@ -52,7 +52,7 @@
             </div>
             <div class="col-lg-6 col-sm-6">
                 <div class="update-box">
-                    <input value="Update Cart" type="submit">
+                    <input id="update-cart"value="Update Cart" type="submit">
                 </div>
             </div>
         </div>
@@ -128,14 +128,14 @@
                         </a>
                             </td>
                             <td class="name-pr">
-                                <a href="/prodcuct/${cart.id}">
+                                <a href="/product/${cart.id}">
                             ${cart.title}
                         </a>
                             </td>
                             <td class="price-pr">
                                 <p>$ ${cart.price}</p>
                             </td>
-                            <td class="quantity-box"><input type="number" size="4" value="${cart.quantity}" min="0" step="1" class="c-input-text qty text"></td>
+                            <td class="quantity-box"><input type="number" size="4" value="${cart.quantity}" min="0" step="1" class="c-input-text qty text" data-id="${cart.id}"></td>
                             <td class="total-pr">
                                 <p>$ ${Math.round(cart.price*cart.quantity*100)/100}</p>
                             </td>
@@ -143,7 +143,6 @@
                                 <i class="fas fa-times cart-remove" data-id=${cart.id} style="cursor:pointer;"></i>
                             </td>
                         </tr>`;
-            console.log(Math.round(cart.price*cart.quantity*100));
             total += Math.round(cart.price*cart.quantity*100)/100;
             cart_container.innerHTML+=tr;
         })
@@ -184,6 +183,17 @@
     function cartRemoveHandler(e){
         let cart = window.localStorage.cart;
         const pro_id = e.target.dataset.id;
+        e.target.innerHTML=`<tr>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <div id="loader" style="">
+                                         <div class="clock-loader"></div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>`;
         if(user_id){
             cart = window.localStorage.user_cart;
             cart = JSON.parse(cart);
@@ -196,9 +206,11 @@
                     pro_id:pro_id
                 }),
                 dataType: 'json',
-                success: function(data){
-                    window.localStorage.setItem('user_cart',JSON.stringify(cart));
+                success: function(data){   
                     cart = cart.filter(c=>c.id!=pro_id);
+                    window.localStorage.setItem('user_cart',JSON.stringify(cart));
+                    updateView(cart)
+                    updateCartBar()
                 },
             })
         }
@@ -215,5 +227,48 @@
             i.addEventListener('click',cartRemoveHandler);
         })
     }
+
+    // update cart 
+
+    document.querySelector('#update-cart').addEventListener('click',()=>{
+        document.querySelectorAll('.qty').forEach(qty=>{
+            const id = qty.dataset.id;
+            const value = qty.value;
+            if(user_id){
+                let cart = window.localStorage.user_cart;
+                cart = JSON.parse(cart);
+                const changeCart = cart.filter(c=>c.id==id)[0];
+                if(changeCart&&changeCart.quantity!=value){
+                    $.ajax({
+                        url:'/api/account/cart',
+                        type:"PUT",
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            user_id:user_id,
+                            pro_id:id,
+                            quantity:value
+                        }),
+                        dataType: 'json',
+                        success: function(data){
+                            cart.filter(c=>c.id!=id)[0].quantity=value;
+                            window.localStorage.setItem('user_cart',JSON.stringify(cart));
+                        },
+                    })
+                }
+            }
+            else{
+                let cart = window.localStorage.cart;
+                cart = JSON.parse(cart);
+                const changeCart = cart.filter(c=>c.id==id)[0];
+                if(changeCart.quantity!=value){
+                    cart.filter(c=>c.id==id)[0].quantity=value;
+                    window.localStorage.setItem('cart',JSON.stringify(cart));
+                }
+            }
+        })
+        let data = user_id?window.localStorage.user_cart:window.localStorage.cart;
+        updateView(JSON.parse(data));
+        updateCartBar();
+    })
 </script>
 {{/section}}

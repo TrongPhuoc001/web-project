@@ -96,6 +96,7 @@ exports.postCart = async(req,res)=>{
 }
 exports.updateCart = async(req,res)=>{
     const {user_id,pro_id,quantity} = req.body;
+    console.log(user_id,pro_id,quantity)
     try{
         await service.updateCart(user_id,pro_id,quantity);
         res.status(200).json('success');
