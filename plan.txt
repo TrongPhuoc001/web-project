@@ -32,7 +32,8 @@ Vẽ biểu đồ
 paypal sandbox
 
 
-Phương:
+Phương: 
+cần bây giờ : tìm kiếm nâng cao(filter), giỏ hàng khi chưa đăng nhập, giỏ hàng khi đã đăng nhập, đặt hàng, xem danh sách đơn hàng 
 *Tìm kiếm - trang chủ
 Tìm kiếm nâng cao - trang chủ
 Phân trang tìm kiếm - trang chủ
