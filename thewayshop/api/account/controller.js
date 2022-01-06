@@ -104,3 +104,14 @@ exports.updateCart = async(req,res)=>{
         res.status(400).json(e);
     }
 }
+
+exports.delCart = async(req,res)=>{
+    const {user_id,pro_id} = req.body
+    try{
+        await service.removeCart(user_id,pro_id);
+        res.status(200).json('success');
+    }
+    catch(e){
+        res.status(400).json(e);
+    }
+}

@@ -569,7 +569,8 @@
             if(user_id){
                 $.post('/api/account/cart',{
                     user_id :user_id,
-                    pro_id:e.target.dataset.id
+                    pro_id:e.target.dataset.id,
+                    quantity:obj.quantity
                 },(data,status)=>{
                     if(status === 'success'){
                         console.log('success');
@@ -587,6 +588,7 @@
                             cart =[obj];
                         }
                         window.localStorage.setItem('user_cart',JSON.stringify(cart));
+                        updateCartBar();
                     }
                     else{
                         console.log(data);
