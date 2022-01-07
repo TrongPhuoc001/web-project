@@ -41,6 +41,12 @@ exports.profile = async (req,res)=>{
     })
 }
 
+exports.yourorder = async (req,res) => {
+    res.render(view+'yourorder',{
+        title: 'Your order',
+    });
+}
+
 exports.editProfile = async(req,res)=>{
     if(!req.user){
         return res.redirect('/login');

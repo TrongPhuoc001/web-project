@@ -132,7 +132,8 @@
     // Handle search
 
     const inp_search = document.getElementById('inp-search');
-    const btn_search = document.getElementById('btn-search');
+    const btn_search = document.getElementById('btn-search')
+
     btn_search.addEventListener('click', (e) => {
         e.preventDefault();
         const value = inp_search.value;
@@ -146,6 +147,13 @@
             
         })
     })
+    
+    // filter
+    const filter_select = document.querySelector('#basicfilter');
+    filter_select.addEventListener('change', (e) => {
+        console.log(e.target.value)
+    })
+
 
 </script>
 {{/section}}

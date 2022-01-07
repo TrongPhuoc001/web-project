@@ -11,4 +11,5 @@ router.post('/changepass', accCon.postchangepass);
 router.get('/cart', accCon.cart);
 router.get('/wishlist', accCon.wishlist);
 router.get('/checkout', accCon.checkout);
+router.get('/yourorder', accCon.yourorder);
 module.exports = router;
