@@ -21,7 +21,11 @@ exports.checkout = (req,res)=>{
         title: 'Check Out', 
     });
 }
-
+exports.status = (req,res)=>{
+    res.render(view+'status', { 
+        title: 'status order', 
+    });
+}
 exports.wishlist = (req,res)=>{
     res.render(view+'wishlistList', { 
         title: 'Wish List', 
