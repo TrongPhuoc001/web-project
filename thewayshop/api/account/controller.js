@@ -44,3 +44,75 @@ exports.forgot = async(req,res)=>{
         res.status(400).json({error:"email not found"})
     }
 }
+
+exports.getWishList = async(req,res)=>{
+    const user_id = req.params.user_id;
+    const page = Math.max(parseInt(req.query.page)||1,1);
+    try{
+        const data = await service.getWishlist(user_id,page);
+        res.status(200).json(data.rows);
+    }
+    catch(e){
+        res.status(400).json(e);
+    }
+}
+exports.postWishList = async(req,res)=>{
+    const {user_id,pro_id} = req.body;
+    try{
+        const checkExist = await service.checkWishlistExist(user_id,pro_id);
+        if(checkExist.rows.length>0){
+            await service.removeWishlist(user_id,pro_id);
+        }
+        else{
+            await service.addWishList(user_id,pro_id);
+        }
+        
+        res.status(200).json('success');
+    }
+    catch(e){
+        res.status(400).json(e);
+    }
+}
+
+exports.getCart = async(req,res)=>{
+    const {user_id} = req.params;
+    try{
+        const data = await service.getCart(user_id);
+        res.status(200).json(data.rows);
+    }
+    catch(e){
+        res.status(400).json(e);
+    }
+}
+exports.postCart = async(req,res)=>{
+    const {user_id,pro_id,quantity} = req.body;
+    try{
+        await service.postCart(user_id,pro_id,quantity);
+        res.status(200).json('success');
+    }
+    catch(e){
+        res.status(400).json(e);
+    }
+}
+exports.updateCart = async(req,res)=>{
+    const {user_id,pro_id,quantity} = req.body;
+    console.log(user_id,pro_id,quantity)
+    try{
+        await service.updateCart(user_id,pro_id,quantity);
+        res.status(200).json('success');
+    }
+    catch(e){
+        res.status(400).json(e);
+    }
+}
+
+exports.delCart = async(req,res)=>{
+    const {user_id,pro_id} = req.body
+    try{
+        await service.removeCart(user_id,pro_id);
+        res.status(200).json('success');
+    }
+    catch(e){
+        res.status(400).json(e);
+    }
+}
