@@ -21,7 +21,11 @@ exports.checkout = (req,res)=>{
         title: 'Check Out', 
     });
 }
-
+exports.status = (req,res)=>{
+    res.render(view+'status', { 
+        title: 'status order', 
+    });
+}
 exports.wishlist = (req,res)=>{
     res.render(view+'wishlistList', { 
         title: 'Wish List', 
@@ -39,6 +43,12 @@ exports.profile = async (req,res)=>{
         title:'My profile',
         user_info:user_info.rows[0]
     })
+}
+
+exports.yourorder = async (req,res) => {
+    res.render(view+'yourorder',{
+        title: 'Your order',
+    });
 }
 
 exports.editProfile = async(req,res)=>{

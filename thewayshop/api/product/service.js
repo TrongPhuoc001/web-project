@@ -79,3 +79,28 @@ exports.searchProduct = (q,page) => {
     )
 
 }
+
+exports.searchFilter_popu = (q,page) => {
+    return pool.query(
+        `select * from product order by available desc limit $1 offset $2`, [limit,(page-1)*limit]
+    )
+
+}
+exports.searchFilter_high = (q,page) => {
+    return pool.query(
+        `select * from product order by price desc limit $1 offset $2`, [limit,(page-1)*limit]
+    )
+
+}
+exports.searchFilter_low = (q,page) => {
+    return pool.query(
+        `select * from product order by price asc limit $1 offset $2`, [limit,(page-1)*limit]
+    )
+
+}
+exports.searchFilter_best = (q,page) => {
+    return pool.query(
+        `select * from product order by sold desc limit $1 offset $2`, [limit,(page-1)*limit]
+    )
+
+}
