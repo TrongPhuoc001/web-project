@@ -1,8 +1,6 @@
 const {product_cache,filter_cache} = require('../../helper/lruCache'); 
 const view = '../component/product/view/'
 
-
-const productModel = require('../../models/product');
 const service = require('./service');
 
 exports.mainPage = async(req,res)=>{
@@ -11,7 +9,7 @@ exports.mainPage = async(req,res)=>{
     let max_page = product_cache.get('max_product_page');
     try{
         if(!max_page){
-            let max_page_data = await productModel.maxPage;
+            let max_page_data = await service.maxPage;
             max_page = parseInt(max_page_data.rows[0].max_page);
             product_cache.set('max_product_page',max_page);
         }

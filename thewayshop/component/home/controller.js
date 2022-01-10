@@ -1,5 +1,3 @@
-const productModel = require('../../models/product');
-
 
 const service = require('./service')
 const view = '../component/home/view/'

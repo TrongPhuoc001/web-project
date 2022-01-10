@@ -75,14 +75,14 @@ exports.addComment = (user_name,product_id,content)=>{
 
 exports.searchProduct = (q,page) => {
     return pool.query(
-        `sELECT * FROM product WHERE title ~ $1 LIMIT 9 OFFsET $2`, [q,(page-1)*9]
+        `sELECT * FROM product WHERE title ~ $1 AND is_delete = 'f' LIMIT 9 OFFsET $2`, [q,(page-1)*9]
     )
 
 }
 
 exports.searchFilter_popu = (q,page) => {
     return pool.query(
-        `select * from product order by available desc limit $1 offset $2`, [limit,(page-1)*limit]
+        `select * from product where is_delete = 'f' order by available desc limit $1 offset $2`, [limit,(page-1)*limit]
     )
 
 }

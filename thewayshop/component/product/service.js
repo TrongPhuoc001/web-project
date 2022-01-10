@@ -31,7 +31,7 @@ exports.getCateId = (cate_name)=>{
 
 exports.maxPageTag = (tag_name)=>{
     return pool.query(
-        `SELECT ceil(COUNT(*)/$1::numeric) as max_page FROM product,tag WHERE tag_id=tag.id AND tag.name=$2;`,[limit,tag_name]
+        `SELECT ceil(COUNT(*)/$1::numeric) as max_page FROM product,tag WHERE tag_id=tag.id AND tag.name=$2 AND is_delete = 'f';`,[limit,tag_name]
     )
 }
 exports.maxPageCate = (cate_name)=>{
@@ -39,7 +39,8 @@ exports.maxPageCate = (cate_name)=>{
         `SELECT ceil(COUNT(*)/$1::numeric) as max_page FROM product,tag_category,category 
         WHERE category.name = $2
         AND tag_category.category_id=category.id
-        AND tag_category.tag_id = product.tag_id;`,[limit,cate_name]
+        AND tag_category.tag_id = product.tag_id
+        AND is_delete = 'f';`,[limit,cate_name]
     )
 }
 
@@ -68,6 +69,7 @@ exports.getCatePro = (cate_name,page)=>{
 
 exports.getRecent = pool.query(
     `SELECT id,title,price,image,state FROM product
+    WHERE is_delete = 'f'
     ORDER BY create_date DESC
     LIMIT 4;`
 )
@@ -86,7 +88,7 @@ exports.getBrand = pool.query(
     `SELECT DISTINCT brand FROM product;`
 )
 exports.maxPage = pool.query(
-    `SELECT ceil(COUNT(*)/$1::numeric) as max_page FROM product;`,[limit]
+    `SELECT ceil(COUNT(*)/$1::numeric) as max_page FROM product WHERE is_delete = 'f';`,[limit]
 )
 
 exports.getRelate = (pro_id)=>{
@@ -96,7 +98,8 @@ exports.getRelate = (pro_id)=>{
                     WHERE order_id IN (SELECT order_id FROM order_product 
                                         WHERE product_id=$1) 
                     EXCEPT SELECT product_id FROM order_product 
-                    WHERE product_id=$1);`,[pro_id]
+                    WHERE product_id=$1)
+        AND is_delete = 'f';`,[pro_id]
     )
 }
 
@@ -117,7 +120,7 @@ exports.countProduct = pool.query(
 )
 exports.countProductTag = (tag_name)=>{
     return pool.query(
-        `SELECT COUNT(*) FROM tag,product WHERE tag.id = product.tag_id AND tag.name=$1;`,[tag_name]
+        `SELECT COUNT(*) FROM tag,product WHERE tag.id = product.tag_id AND tag.name=$1 AND is_delete = 'f';`,[tag_name]
     )
 }
 
@@ -126,6 +129,7 @@ exports.countProductCate = (cate_name)=>{
         `SELECT COUNT(*) FROM category, tag_category, product 
         WHERE category.id=tag_category.category_id
         AND tag_category.tag_id = product.tag_id
-        AND category.name=$1;`,[cate_name]
+        AND category.name=$1
+        AND is_delete = 'f';`,[cate_name]
     )
 }
