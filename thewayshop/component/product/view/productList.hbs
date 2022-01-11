@@ -21,7 +21,7 @@
 <!-- End Shop Page -->
 {{#section 'script'}}
 <script>
-    const maxPage = {{{max_page}}}
+    let maxPage = {{{max_page}}}
     const page_cache=[];
     let curr_page = {{{page}}}||1;
     const product_container = document.querySelector('#product-container');
@@ -128,6 +128,7 @@
                 updateView(page_cache[page])
                 history.pushState('','',url.replace('api/',''));
             }
+            curr_page = page;
         }
     })
 
@@ -153,7 +154,18 @@
     // filter
     const filter_select = document.querySelector('#basicfilter');
     filter_select.addEventListener('change', (e) => {
-        console.log(e.target.value)
+        const sort = e.target.value;
+        const path = '/api' + window.location.pathname + `?sort_by=${sort}&page=${curr_page}`;
+        product_container.innerHTML=`<div id="loader" style="">
+                                                <div class="clock-loader"></div>
+                                        </div>`;
+        $.get(path,(data,status)=>{
+            if(status==="success"){
+                updateView(data);
+                history.pushState('','',path.replace('/api',''));
+                page_cache[curr_page] = data;
+            }
+        })
     })
 
 

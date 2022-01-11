@@ -3,12 +3,11 @@
         <div class="toolbar-sorter-right">
             <span>Sort by </span>
             <select id="basicfilter" class="selectpicker show-tick form-control" data-placeholder="$ USD">
-            <option data-display="Select">Nothing</option>
-            <option value="1">Popularity</option>
-            <option value="2">High Price → High Price</option>
-            <option value="3">Low Price → High Price</option>
-            <option value="4">Best Selling</option>
-        </select>
+                <option {{#ifeq sort_by 'nothing'}}data-display="Select"{{/ifeq}} value="nothing">Nothing</option>
+                <option {{#ifeq sort_by 'price-desc'}}data-display="Select"{{/ifeq}} value="price-desc">High Price → Low Price</option>
+                <option {{#ifeq sort_by 'price-asc'}}data-display="Select"{{/ifeq}} value="price-asc">Low Price → High Price</option>
+                <option {{#ifeq sort_by 'best-seller'}}data-display="Select"{{/ifeq}} value="best-seller">Best Selling</option>
+            </select>
         </div>
         <p>{{total_product}} results</p>
     </div>

@@ -26,33 +26,33 @@ exports.getRating = (product_id,page)=>{
     )
 }
 
-exports.getAll = (page)=>{
+exports.getAll = (page,sqlOrder)=>{
     return pool.query(
         `SELECT id,title,description,price,image,state FROM product
         WHERE is_delete = 'f'
-        ORDER BY create_date DESC
+        `+sqlOrder+`
         LIMIT $1 OFFSET $2;`,[limit,(page-1)*limit]
     )
 }
-exports.getTagPro = (tag_name, page)=>{
+exports.getTagPro = (tag_name, page,sqlOrder)=>{
     return pool.query(
         `SELECT product.id,title,description,price,image,state FROM product,tag
         WHERE tag.name = $1
         AND product.is_delete = 'f'
         AND product.tag_id = tag.id
-        ORDER BY product.create_date DESC
+        `+sqlOrder+`
         LIMIT $2 OFFSET $3;`,[tag_name, limit,(page-1)*limit]
     )
 }
 
-exports.getCatePro = (cate_name,page)=>{
+exports.getCatePro = (cate_name,page,sqlOrder)=>{
     return pool.query(
         `SELECT product.id,title,description,price,image,state FROM product,tag_category,category
         WHERE category.name = $1
         AND product.is_delete = 'f'
         AND tag_category.category_id = category.id
         AND tag_category.tag_id=product.tag_id
-        ORDER BY create_date DESC
+        `+sqlOrder+`
         LIMIT $2 OFFSET $3;`,[cate_name, limit,(page-1)*limit]
     )
 }
@@ -75,7 +75,7 @@ exports.addComment = (user_name,product_id,content)=>{
 
 exports.searchProduct = (q,page) => {
     return pool.query(
-        `sELECT * FROM product WHERE title ~ $1 AND is_delete = 'f' LIMIT 9 OFFsET $2`, [q,(page-1)*9]
+        `sELECT * FROM product WHERE lower(title) ~ lower($1) AND is_delete = 'f' LIMIT 9 OFFsET $2`, [q,(page-1)*9]
     )
 
 }

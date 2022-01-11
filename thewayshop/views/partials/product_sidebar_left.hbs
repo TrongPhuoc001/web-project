@@ -45,11 +45,11 @@
                 <h3>Brand</h3>
             </div>
             <div class="brand-box">
-                <ul>
+                <ul id="brand-select">
                     {{#each brands}}
                     <li>
                         <div class="radio radio-danger">
-                            <input name="survey" id="Radios{{this.brand}}" value="Yes" type="radio">
+                            <input name="survey" id="Radios{{this.id}}" value="{{this.brand}}" type="radio">
                             <label for="Radios{{this.brand}}"> {{this.brand}} </label>
                         </div>
                     </li>
