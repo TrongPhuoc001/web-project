@@ -11,3 +11,4 @@ const LRU = require("lru-cache")
   module.exports.filter_cache = filter_cache;
   module.exports.rating_cache = rating_cache;
   module.exports.comment_cache = new LRU(options);
+  module.exports.layout_cache = new LRU(options);

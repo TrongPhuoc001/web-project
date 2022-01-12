@@ -234,6 +234,16 @@
             padding-bottom: 20px
         }
 
+        #advandce-form select{
+            color: #dadada;
+            background-color: black;
+        }
+        #advandce-form label{
+            color: #dadada;
+        }
+        #advandce-form .form-control{
+            background-color: #000;
+        }
         @media screen and (max-width: 992px) {
             .icon-content {
                 width: 50%
@@ -379,13 +389,41 @@
     <!-- End Main Top -->
     <!-- Start Top Search -->
     <div class="top-search">
-        <div class="container">
+        <form action="/search" class="container">
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control" placeholder="Search">
-                <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
+                <input type="text" name="q" class="form-control" placeholder="Search">
+                <span class="input-group-addon close-search"><i class="fa fa-times" ></i></span>
+                <span class="input-group-addon" style="margin-left:10px;cursor: pointer;"><i class="fa fa-chevron-circle-down" id="search-more" ></i></span>
             </div>
-        </div>
+            <div class="input-group" id="advandce-form" style="display: none;">
+                <div class="form-control">
+                    <label for="tag">Choose tag:</label>
+                    <select name="tag" id="tag" class="form-control">
+                        <option value="" selected>All</option>
+                        {{#each tags}}
+                        <option value="{{this.id}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </div>  
+                <div class="form-control">
+                    <label for="brand">Choose tag:</label>
+                    <select name="brand" id="brand" class="form-control">
+                        <option value="" selected>All</option>
+                        {{#each brands}}
+                        <option value="{{this.brand}}">{{this.brand}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="price-box-slider form-control">
+                    <div id="slider-range-layout"></div>
+                    <p>
+                        <input type="text" id="amount-layout" name="price" readonly style="border:0; color:#fbb714; font-weight:bold;background:black;">
+                    </p>
+                </div>
+                <button class="btn hvr-hover" type="submit">Search</button>
+            </div>
+        </form>
     </div>
     <!-- End Top Search -->
 
@@ -796,6 +834,27 @@
             document.querySelector('#cart-total-item').textContent = cart.length;
         }
         updateCartBar();
+
+        //
+        (function($) {
+            "use strict";
+            $(function() {
+                $("#slider-range-layout").slider({
+                    range: true,
+                    min: 0,
+                    max: 20000,
+                    values: [0, 20000],
+                    slide: function(event, ui) {
+                        $("#amount-layout").val("$" + ui.values[0] + " - $" + ui.values[1]);
+                    }
+                });
+                $("#amount-layout").val("$" + $("#slider-range-layout").slider("values", 0) +
+                    " - $" + $("#slider-range-layout").slider("values", 1));
+            });
+        }(jQuery));
+        $('#search-more').click(()=>{
+            $('#advandce-form').toggle("slow");
+        })
     </script>
     {{{_sections.script}}}
 </body>

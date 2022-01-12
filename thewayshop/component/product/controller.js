@@ -17,16 +17,9 @@ exports.mainPage = async(req,res)=>{
             page=max_page;
         }
         const total_product = await service.countProduct;
-        let brands = product_cache.get('brands');
-        if(!brands){
-            const data_brands = await service.getBrand;
-            brands = data_brands.rows;
-            product_cache.set('brands',brands);
-        }
         const maxCost = await service.getAllMostCost;
         res.render(view+'productList', { 
             title: 'All Product', 
-            brands:brands,
             page:page,
             max_cost:maxCost.rows[0].max,
             total_product: total_product.rows[0].count,
@@ -66,12 +59,6 @@ exports.filterCategory = async (req,res)=>{
     const cate_name = req.params.category_name;
     let page = Math.max(parseInt(req.query.page)||1,1);
 
-    let brands = product_cache.get('brands');
-    if(!brands){
-        const data_brands = await service.getBrand;
-        brands = data_brands.rows;
-        product_cache.set('brands',brands);
-    }
     let max_page = filter_cache.get(`${cate_name}_max_page`);
     if(!max_page){
         let max_page_data = await service.maxPageCate(cate_name);
@@ -85,7 +72,6 @@ exports.filterCategory = async (req,res)=>{
     const maxCost = await service.getTagMostCost(cate_name);
     res.render(view+'productList', { 
         title: cate_name, 
-        brands:brands,
         max_cost:maxCost.rows[0].max,
         total_product:total_product.rows[0].count,
         page:page,
@@ -100,12 +86,6 @@ exports.filterTag = async (req,res)=>{
     const tag_name = req.params.tag_name;
     let page = Math.max(parseInt(req.query.page)||1,1);
 
-    let brands = product_cache.get('brands');
-    if(!brands){
-        const data_brands = await service.getBrand;
-        brands = data_brands.rows;
-        product_cache.set('brands',brands);
-    }
     let max_page = filter_cache.get(`${tag_name}_max_page`);
     if(!max_page){
         let max_page_data = await service.maxPageTag(tag_name);
@@ -119,7 +99,6 @@ exports.filterTag = async (req,res)=>{
     const maxCost = await service.getTagMostCost(tag_name);
     res.render(view+'productList', { 
         title: tag_name, 
-        brands:brands,
         max_cost:maxCost.rows[0].max,
         total_product:total_product.rows[0].count,
         page:page,
