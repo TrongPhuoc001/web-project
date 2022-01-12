@@ -28,7 +28,7 @@ exports.getRating = (product_id,page)=>{
 
 exports.getAll = (page,sqlOrder)=>{
     return pool.query(
-        `SELECT id,title,description,price,image,state FROM product
+        `SELECT id,title,description,price,image,state,brand FROM product
         WHERE is_delete = 'f'
         `+sqlOrder+`
         LIMIT $1 OFFSET $2;`,[limit,(page-1)*limit]
@@ -36,7 +36,7 @@ exports.getAll = (page,sqlOrder)=>{
 }
 exports.getTagPro = (tag_name, page,sqlOrder)=>{
     return pool.query(
-        `SELECT product.id,title,description,price,image,state FROM product,tag
+        `SELECT product.id,title,description,price,image,state,brand FROM product,tag
         WHERE tag.name = $1
         AND product.is_delete = 'f'
         AND product.tag_id = tag.id
@@ -47,7 +47,7 @@ exports.getTagPro = (tag_name, page,sqlOrder)=>{
 
 exports.getCatePro = (cate_name,page,sqlOrder)=>{
     return pool.query(
-        `SELECT product.id,title,description,price,image,state FROM product,tag_category,category
+        `SELECT product.id,title,description,price,image,state,brand FROM product,tag_category,category
         WHERE category.name = $1
         AND product.is_delete = 'f'
         AND tag_category.category_id = category.id

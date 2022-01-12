@@ -23,11 +23,12 @@ exports.mainPage = async(req,res)=>{
             brands = data_brands.rows;
             product_cache.set('brands',brands);
         }
-        
+        const maxCost = await service.getAllMostCost;
         res.render(view+'productList', { 
             title: 'All Product', 
             brands:brands,
             page:page,
+            max_cost:maxCost.rows[0].max,
             total_product: total_product.rows[0].count,
             max_page:max_page,
             next:page<max_page?page+1 : false,
@@ -81,9 +82,11 @@ exports.filterCategory = async (req,res)=>{
         page=max_page
     }
     const total_product = await service.countProductCate(cate_name);
+    const maxCost = await service.getTagMostCost(cate_name);
     res.render(view+'productList', { 
         title: cate_name, 
         brands:brands,
+        max_cost:maxCost.rows[0].max,
         total_product:total_product.rows[0].count,
         page:page,
         max_page:max_page,
@@ -113,9 +116,11 @@ exports.filterTag = async (req,res)=>{
         page=max_page;
     }
     const total_product = await service.countProductTag(tag_name);
+    const maxCost = await service.getTagMostCost(tag_name);
     res.render(view+'productList', { 
         title: tag_name, 
         brands:brands,
+        max_cost:maxCost.rows[0].max,
         total_product:total_product.rows[0].count,
         page:page,
         max_page:max_page,

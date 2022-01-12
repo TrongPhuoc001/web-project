@@ -36,7 +36,7 @@
                 <div id="slider-range"></div>
                 <p>
                     <input type="text" id="amount" readonly style="border:0; color:#fbb714; font-weight:bold;">
-                    <button class="btn hvr-hover" type="submit">Filter</button>
+                    <button class="btn hvr-hover" id="btn-price-filter">Filter</button>
                 </p>
             </div>
         </div>
@@ -49,8 +49,8 @@
                     {{#each brands}}
                     <li>
                         <div class="radio radio-danger">
-                            <input name="survey" id="Radios{{this.id}}" value="{{this.brand}}" type="radio">
-                            <label for="Radios{{this.brand}}"> {{this.brand}} </label>
+                            <input name="survey" id="Radios{{@key}}" value="{{this.brand}}" type="checkbox">
+                            <label for="Radios{{@key}}"> {{this.brand}} </label>
                         </div>
                     </li>
                     {{/each}}

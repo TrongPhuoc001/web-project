@@ -133,3 +133,20 @@ exports.countProductCate = (cate_name)=>{
         AND is_delete = 'f';`,[cate_name]
     )
 }
+
+exports.getAllMostCost = pool.query(
+    `SELECT MAX(price) FROM product;`
+)
+exports.getTagMostCost = (tag_name)=>{
+    return pool.query(
+        `SELECT MAX(price) FROM product,tag WHERE tag_id=tag.id AND tag.name=$1;`,[tag_name]
+    )
+}
+exports.getCateMostCost = (cate_name)=>{
+    return pool.query(
+        `SELECT MAX(price) FROM product,tag_category,category 
+        WHERE product.tag_id=tag_category.tag_id
+        AND tag_category.category_id = category.id
+        AND category.name= $1;`,[cate_name]
+    )
+}
