@@ -212,7 +212,7 @@ CREATE TABLE order_state(
 ALTER TABLE wishlist ADD CONSTRAINT wishlist_unique UNIQUE (user_id,product_id);
 ALTER TABLE cart ADD CONSTRAINT cart_unique UNIQUE (user_id,product_id);
 ALTER TABLE orders ADD CONSTRAINT fk_order_state FOREIGN KEY (state) REFERENCES order_state(id) ON DELETE SET NULL;
-
+-- Update avi/sold on product each insret on order_product
 CREATE OR REPLACE FUNCTION function_update_sold_order() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -235,6 +235,26 @@ CREATE TRIGGER trig_copy
      AFTER INSERT ON order_product
      FOR EACH ROW
      EXECUTE PROCEDURE function_update_sold_order();
+-- clear cart and insert to order_product
+CREATE OR REPLACE FUNCTION function_checkout_order() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    INSERT INTO order_product(order_id , product_id, quantity)
+    SELECT new.id, product_id, quantity
+    FROM cart
+    WHERE user_id = new.user_id;
+
+    DELETE FROM cart WHERE user_id = new.user_id;
+    RETURN new;
+END;
+$BODY$
+language plpgsql;
+
+CREATE TRIGGER trig_checkout
+     AFTER INSERT ON orders
+     FOR EACH ROW
+     EXECUTE PROCEDURE function_checkout_order();
+
 
 INSERT INTO order_state(id,description)
 VALUES (0,'Verify'),(1,'Delivering'),(2,'Delivered');
