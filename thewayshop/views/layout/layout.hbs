@@ -402,12 +402,12 @@
                     <select name="tag" id="tag" class="form-control">
                         <option value="" selected>All</option>
                         {{#each tags}}
-                        <option value="{{this.id}}">{{this.name}}</option>
+                        <option value="{{this.name}}">{{this.name}}</option>
                         {{/each}}
                     </select>
                 </div>  
                 <div class="form-control">
-                    <label for="brand">Choose tag:</label>
+                    <label for="brand">Choose Brand:</label>
                     <select name="brand" id="brand" class="form-control">
                         <option value="" selected>All</option>
                         {{#each brands}}
@@ -577,6 +577,7 @@
 
     <!-- ALL JS FILES -->
     <script src="/js/jquery-3.2.1.min.js"></script>
+    <script src="/js/jquery.twbsPagination.js"></script>
     <script src="/js/jquery-ui.js"></script>
     <script src="/js/jquery.nicescroll.min.js"></script>
     <script src="/js/popper.min.js"></script>
@@ -593,7 +594,7 @@
     <script src="/js/form-validator.min.js"></script>
     <script src="/js/contact-form-script.js"></script>
     <script src="/js/custom.js"></script>
-    <script src="/js/jquery.twbsPagination.js"></script>
+    
     <script>
         const user_id = '{{{user.id}}}';
         if (user_id) {

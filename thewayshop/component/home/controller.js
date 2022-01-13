@@ -19,16 +19,21 @@ exports.search = async(req,res)=>{
     q='';
   }
   if(!tag){
-    tag=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+    tag=''
   }
   if(!brand){
     brand='';
   }
+
   const priceLow = parseInt(price.split('-')[0].slice(1));
   const priceHigh = parseInt(price.split('-')[0].slice(2));
-  const result = await service.searchProduct(q,tag,brand,priceLow,priceHigh,page);
+  const maxPage = await service.countSearch(q,tag,brand,priceLow,priceHigh);
+  if(page > parseInt(maxPage.rows[0].max_page)){
+    page=parseInt(maxPage.rows[0].max_page)
+  }
   return res.render(view+'search',{
     title:'Search',
-    search_product:result.rows
+    max_page:maxPage.rows[0].max_page,
+    page:page
   });
 }

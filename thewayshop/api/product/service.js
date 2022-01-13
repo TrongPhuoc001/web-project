@@ -104,3 +104,14 @@ exports.searchFilter_best = (q,page) => {
     )
 
 }
+exports.searchProduct = (q,tag,brand,priceLow,priceHigh,page)=>{
+    return pool.query(
+        `SELECT product.id,title,description,price,image,state FROM product,tag
+        WHERE lower(title) ~ lower($1)
+        AND tag_id = tag.id
+        AND tag.name ~ $2
+        AND brand ~ $3
+        AND price BETWEEN $4 AND $5
+        LIMIT $6 OFFSET $7;`,[q,tag,brand,priceLow,priceHigh,8,(page-1)*8]
+    )
+}

@@ -179,35 +179,22 @@ exports.postComment = async (req, res) => {
 };
 
 exports.searchProduct = async (req, res) => {
-  const q = req.query.q;
-  const page = Math.max(parseInt(req.query.page) || 1, 1);
-  const result = await service.searchProduct(q, page);
+  let {q,tag,brand,price} = req.query;
+  let page = Math.max(parseInt(req.query.page)||1,1);
+  if(!q){
+    q='';
+  }
+  if(!tag){
+    tag=''
+  }
+  if(!brand){
+    brand='';
+  }
+
+  const priceLow = parseInt(price.split('-')[0].slice(1));
+  const priceHigh = parseInt(price.split('-')[0].slice(2));
+  const result = await service.searchProduct(q,tag,brand,priceLow,priceHigh,page);
 
   res.json(result.rows);
 };
 
-exports.searchFilter = async (req, res) => {
-  const q = req.query.filter;
-  const page = Math.max(parseInt(req.query.page) || 1, 1);
-  let result;
-  switch (q) {
-    case 1:
-      result = await service.searchFilter_popu(q, page);
-      return res.json(result.rows);
-      break;
-    case 1:
-      result = await service.searchFilter_high(q, page);
-      return res.json(result.rows);
-      break;
-    case 1:
-      result = await service.searchFilter_low(q, page);
-      return res.json(result.rows);
-      break;
-    case 1:
-      result = await service.searchFilter_best(q, page);
-      return res.json(result.rows);
-      break;
-    default:
-      break;
-  }
-};
