@@ -15,6 +15,7 @@ const tableRouter = require('./component/table/route');
 const productRouter = require('./component/product/route');
 const managerRouter = require('./component/manager/route');
 const userRouter = require('./component/users/route');
+const ordersRouter = require('./component/orders/route');
 const apiRouter = require('./api/route');
 
 const verify = require('./middleware/verifyUser')
@@ -51,6 +52,7 @@ app.use('/',userRouter);
 app.use('/api',apiRouter);
 app.use('/tables', tableRouter);
 app.use('/product',productRouter);
+app.use('/orders',ordersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
