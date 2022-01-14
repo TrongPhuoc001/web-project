@@ -30,3 +30,11 @@ exports.getRecord = (page, tb_name)=>{
         LIMIT $1 OFFSET $2;`,[limit,(page-1)*limit]
       )
 }
+
+exports.recordOrder = (page, record_id)=>{
+    return pool.query(
+        `SELECT order_product.order_id, order_product.product_id, product.title, order_product.quantity  
+        FROM order_product, product 
+        WHERE order_product.order_id =$1 and order_product.product_id = product.id LIMIT $2 OFFSET $3;`,[record_id, limit,(page-1)*limit]
+    )
+}
