@@ -21,6 +21,26 @@ exports.checkout = (req,res)=>{
         title: 'Check Out', 
     });
 }
+
+exports.confirm = (req,res)=>{
+    res.json(req.body)
+    console.log("helo")
+}
+
+exports.confirm = async (req,res)=>{
+    const order = req.body;
+    if(!req.user){
+        return res.redirect('/login');
+    }
+    const user_id = req.user.id;
+
+    const user_info = await service.confirm_order(order,user_id);
+    
+    if(user_info){
+        res.render(view+'status', {title:'status order'})
+    }
+}
+
 exports.status = (req,res)=>{
     res.render(view+'status', { 
         title: 'status order', 
@@ -45,7 +65,7 @@ exports.profile = async (req,res)=>{
     })
 }
 
-exports.yourorder = async (req,res) => {
+exports.yourorder = (req,res) => {
     res.render(view+'yourorder',{
         title: 'Your order',
     });

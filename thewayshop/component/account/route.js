@@ -13,4 +13,5 @@ router.get('/wishlist', accCon.wishlist);
 router.get('/checkout', accCon.checkout);
 router.get('/yourorder', accCon.yourorder);
 router.get('/status', accCon.status);
+router.post('/confirm',accCon.confirm);
 module.exports = router;
