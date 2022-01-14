@@ -31,7 +31,7 @@ exports.editOrders = async (req,res)=>{
   delete (await data).rows[0].id;
   res.render(view+'edit_orders',{
     title:`Edit table Orders}`,
-    table_name:tb_name,
+    table_name:`orders`,
     record_id:recordId,
     record:data.rows[0],
     order_active:true
