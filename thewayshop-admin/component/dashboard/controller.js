@@ -2,7 +2,7 @@
 const productModel = require('../../models/product')
 const service = require('./service')
 const tagModel = require('../../models/tag')
-
+const userModel = require('../../models/user')
 
 const view = '../component/dashboard/view/';
 
@@ -29,7 +29,8 @@ exports.getTopSellingProduct = async (req,res)=>{
     const member = await service.getMember;
     const tag = await tagModel.getAllTag;
     const bestProduct = await productModel.getTopSellingProduct;
-    console.log(bestProduct.rows[0]);
+    const bestUser = await userModel.getTotalUserRecord;
+    
     const visit = await service.getVisit(7);
     const y_axis =[];
     const bar =[];
@@ -71,6 +72,7 @@ exports.getTopSellingProduct = async (req,res)=>{
         bar:bar,
         label:label,
         data:data,
+        bestUser: bestUser.rows[0], 
         month_income: JSON.stringify(monthlyIncome.rows)
     });
 }
