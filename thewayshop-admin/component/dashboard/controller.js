@@ -2,7 +2,7 @@
 const productModel = require('../../models/product')
 const service = require('./service')
 const tagModel = require('../../models/tag')
-
+const userModel = require('../../models/user')
 
 const view = '../component/dashboard/view/';
 
@@ -28,6 +28,9 @@ exports.getTopSellingProduct = async (req,res)=>{
 
     const member = await service.getMember;
     const tag = await tagModel.getAllTag;
+    const bestProduct = await productModel.getTopSellingProduct;
+    const bestUser = await userModel.getTotalUserRecord;
+    
     const visit = await service.getVisit(7);
     const y_axis =[];
     const bar =[];
@@ -38,13 +41,13 @@ exports.getTopSellingProduct = async (req,res)=>{
         for(let i=0;i<6;i++){
             y_axis.push(max_count - i*step);
         }
-        visit.rows.forEach(row=>{
+        for(let i=visit.rows.length-1;i>=0;i--){
             bar.push({
-                month:mon[parseInt(row._month)-1],
-                value:row._count,
-                percent:Math.round(((parseInt(row._count)/max_count)*100)*100)/100
+                month:mon[parseInt(visit.rows[i]._month)-1],
+                value:visit.rows[i]._count,
+                percent:Math.round(((parseInt(visit.rows[i]._count)/max_count)*100)*100)/100
             })
-        })
+        }
     }
 
     const soldByTag = await service.soldByTag;
@@ -60,6 +63,7 @@ exports.getTopSellingProduct = async (req,res)=>{
 
     res.render(view+'index', { 
         title: 'TheWayShop Adminsite',
+        bestProduct:bestProduct.rows[0],
         team_members:member.rows,
         dashboard_active:true,
         tag: tag.rows,
@@ -68,6 +72,7 @@ exports.getTopSellingProduct = async (req,res)=>{
         bar:bar,
         label:label,
         data:data,
+        bestUser: bestUser.rows[0], 
         month_income: JSON.stringify(monthlyIncome.rows)
     });
 }

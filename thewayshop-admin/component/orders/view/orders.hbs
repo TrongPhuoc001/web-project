@@ -1,0 +1,85 @@
+{{#section 'style'}}
+<style>
+    #order-card{
+        width: 300px;
+        height: 600px;
+        position: fixed;
+        background-color: #9be3ee;
+        left: 50%;
+        top: 30%;
+    }
+</style>
+{{/section}}
+<section id="main-content">
+    <section class="wrapper">
+        <div class="row mt">
+            <div class="col-lg-12">
+                <div class="content-panel">
+                    <h4><i class="fa fa-angle-right"></i>Orders</h4>
+                    <section id="no-more-tables">
+                        <table class="table table-bordered table-striped table-condensed cf">
+                            <thead class="cf">
+                                <tr>
+                                    {{#each record.[0]}}
+                                    <th>{{@key}}</th>
+                                    {{/each}}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each record}}
+                                    <tr>
+                                    {{#each this}}
+                                        <td data-title="{{@key}}">{{this}}</td>
+                                    {{/each}}
+                                    {{#if this.id}}
+                                        <td><a href="/orders/edit?recordId={{this.id}}"><button>Edit</button></a></td>
+                                        <td><a href="/orders/view?recordId={{this.id}}?page=1"><button>View Order</button></a></td>
+                                    {{/if}}
+                                    </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </section>
+                </div><!-- /content-panel -->
+                <div class="row">
+                    <nav aria-label="...">
+                        <ul class="pagination">
+                            {{#if previous}}
+                            <li class="page-item ">
+                            <a class="page-link" href="/orders?page={{previous}}">Previous</a>
+                            </li>
+                            {{else}}
+                            <li class="page-item disabled">
+                            <span class="page-link">Previous</span>
+                            </li>
+                            {{/if}}
+                            {{#each pages}}
+                            {{#ifeq this ../page}}
+                            <li class="page-item active">
+                            <span class="page-link">
+                                {{this}}
+                                <span class="sr-only">(current)</span>
+                            </span>
+                            </li>
+                            {{else}}
+                            <li class="page-item"><a class="page-link" href="/orders?page={{this}}">{{this}}</a></li>
+                            {{/ifeq}}
+                            {{/each}}
+                            {{#if next}}
+                            <li class="page-item ">
+                            <a class="page-link" href="/orders?page={{next}}">Next</a>
+                            </li>
+                            {{else}}
+                            <li class="page-item disabled">
+                            <span class="page-link">Next</span>
+                            </li>
+                            {{/if}}
+                        </ul>
+                    </nav>
+                </div>
+                <div id="order-card"></div>
+            </div><!-- /col-lg-12 -->
+        </div><!-- /row -->
+
+    </section><! --/wrapper -->
+</section><!-- /MAIN CONTENT -->

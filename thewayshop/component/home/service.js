@@ -5,12 +5,14 @@ const limit = 8;
 exports.getRecent = pool.query(
     `SELECT id,title,price,image,state FROM product
     WHERE is_delete = 'f'
+    AND state ='new'
     ORDER BY create_date DESC
     LIMIT $1;`,[limit]
 )
 exports.getTopSelling = pool.query(
     `SELECT id,title,price,image,state FROM product
     WHERE is_delete = 'f'
+    AND state='top'
     ORDER BY sold DESC
     LIMIT $1;`,[limit]
 )

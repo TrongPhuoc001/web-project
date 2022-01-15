@@ -11,12 +11,10 @@ exports.getMember = pool.query(
 
 exports.getVisit = (limit)=>{
     return pool.query(
-        `SELECT * FROM 
-                (SELECT * FROM visit
+        `SELECT * FROM visit
                 ORDER BY _year DESC,
                 _month DESC
-                LIMIT $1) as res
-        ORDER BY _month ASC;`,[limit]
+                LIMIT $1;`,[limit]
     )
 }
 

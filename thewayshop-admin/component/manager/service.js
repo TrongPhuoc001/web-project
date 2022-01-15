@@ -1,4 +1,3 @@
-const { PayloadTooLarge } = require('http-errors');
 const pool = require('../../models/config/dbconnect')
 
 const limit = 8;

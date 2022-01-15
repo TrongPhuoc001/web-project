@@ -8,10 +8,16 @@ exports.maxPage = ()=> {
 }
 exports.getRecord = (page)=>{
     return pool.query(
-        `SELECT users.id, users.email, users.name, users.address,users.balance,count(orders.id),sum(orders.total), users.is_delete
-        FROM users left join orders on users.email = orders.email
-        group by users.id, users.email, orders.fullname, users.address,users.balance, users.is_delete
-        ORDER BY users.id ASC
+        `SELECT foo.id, foo.email, foo.name, foo.address,foo.balance,sum(foo.total_order) as total_order,sum(foo.total_spend) as total_spend
+        FROM(SELECT id, email, name, address,balance, 0 as total_order ,0 as total_spend
+            FROM users 
+            UNION 
+            SELECT users.id, users.email, name,users.address,balance,count(*) as total_order, sum(total) as total_spend
+            FROM orders,users 
+            WHERE users.id=orders.user_id  
+            GROUP BY users.id, users.email, users.name, users.address,users.balance) 
+            as foo 
+        GROUP BY foo.id, foo.email, foo.name, foo.address,foo.balance
         LIMIT $1 OFFSET $2;`,[limit,(page-1)*limit]
       )
 }
