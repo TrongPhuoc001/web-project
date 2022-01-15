@@ -114,3 +114,13 @@ exports.delCart = async (req, res) => {
     res.status(400).json(e);
   }
 };
+
+exports.loadMore = async (req, res) => {
+  if (!req.user) {
+    return res.redirect("/login");
+  }
+  const user_id = req.user.id;
+  let info_loadmore = await service.loadMore(user_id);
+  return info_loadmore.json();
+};
+

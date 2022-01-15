@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const service = require("./service");
-
+const fs = require("fs");
 const { profileValid, changepassValid } = require("../../helper/joiValidation");
 const view = "../component/account/view/";
 
@@ -28,18 +28,38 @@ exports.confirm = async (req, res) => {
     return res.redirect("/login");
   }
   const user_id = req.user.id;
-  const order_ids = await service.get_order_id(user_id);
-  let order_product = await service.get_order_product(order_ids[1]);
-
-  console.log(order_product);
+  let order_product = await service.confirm_order(user_id);
+  if (order_product) {
+    return res.redirect("/myaccount/status");
+  }
 };
 
 // /////////////////////////////////////////
 
-exports.status = (req, res) => {
-  res.render(view + "status", {
-    title: "status order",
-  });
+exports.status = async (req, res) => {
+  if (!req.user) {
+    return res.redirect("/login");
+  }
+  const user_id = req.user.id;
+  const data = await service.get_data(user_id);
+
+  res.render(view + "status", { title: "Status", data: data.rows });
+
+  tmp = data.rows;
+ let data_write = ''
+  for (let i = 1; i < tmp.length; i++) {
+    data_write += JSON.stringify(tmp[i]); 
+    data_write += '\n'
+  }
+    // write file to disk
+    fs.writeFile(
+      "E:/Năm 2/Web/Web-project/web-project/data.json",data_write,"utf8",(err) => {
+        if (!err) {
+          console.log(`File is written successfully!`);
+        }
+      }
+    );
+ 
 };
 exports.wishlist = (req, res) => {
   res.render(view + "wishlistList", {

@@ -37,16 +37,8 @@ exports.confirm_order = (order, user_id) => {
   );
 };
 
-// return array order_id
-exports.get_order_id = (user_id) => {
+exports.get_data = (user_id) => {
   return pool.query(
-    `select id from orders where user_id='${user_id}'`
-  )
-}
-
-// return product_id
-exports.get_order_product = (order_id) => {
-  return pool.query(
-    `select product_id from order_product where order_id='${order_id}'`
+    `select id,email,detail_address,address from orders where user_id = '${user_id}'`
   )
 }
