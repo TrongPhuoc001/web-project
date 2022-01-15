@@ -28,6 +28,8 @@ exports.getTopSellingProduct = async (req,res)=>{
 
     const member = await service.getMember;
     const tag = await tagModel.getAllTag;
+    const bestProduct = await productModel.getTopSellingProduct;
+    console.log(bestProduct.rows[0]);
     const visit = await service.getVisit(7);
     const y_axis =[];
     const bar =[];
@@ -60,6 +62,7 @@ exports.getTopSellingProduct = async (req,res)=>{
 
     res.render(view+'index', { 
         title: 'TheWayShop Adminsite',
+        bestProduct:bestProduct.rows[0],
         team_members:member.rows,
         dashboard_active:true,
         tag: tag.rows,
