@@ -38,13 +38,13 @@ exports.getTopSellingProduct = async (req,res)=>{
         for(let i=0;i<6;i++){
             y_axis.push(max_count - i*step);
         }
-        visit.rows.forEach(row=>{
+        for(let i=visit.rows.length-1;i>=0;i--){
             bar.push({
-                month:mon[parseInt(row._month)-1],
-                value:row._count,
-                percent:Math.round(((parseInt(row._count)/max_count)*100)*100)/100
+                month:mon[parseInt(visit.rows[i]._month)-1],
+                value:visit.rows[i]._count,
+                percent:Math.round(((parseInt(visit.rows[i]._count)/max_count)*100)*100)/100
             })
-        })
+        }
     }
 
     const soldByTag = await service.soldByTag;

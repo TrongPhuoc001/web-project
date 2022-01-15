@@ -243,6 +243,8 @@ BEGIN
     SELECT new.id, product_id, quantity
     FROM cart
     WHERE user_id = new.user_id;
+    
+    UPDATE product SET state = 'top' WHERE sold >=10;
 
     DELETE FROM cart WHERE user_id = new.user_id;
     RETURN new;

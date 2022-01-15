@@ -1,36 +1,16 @@
 const pool = require('../../models/config/dbconnect');
 const limit = 9;
-exports.getColumnName= (tb_name)=>{
+exports.maxPage = ()=> {
     return pool.query(
-        `SELECT column_name FROM information_schema.columns
-        WHERE table_schema = 'public'
-        AND table_name = '`+tb_name+`';`
-    );
-}
-
-exports.getAllRecord = (tb_name)=>{
-    return pool.query(
-        `SELECT * FROM ${tb_name};`
-      )
-}
-
-exports.recordData = (tb_name,record_id)=>{
-    return pool.query(
-        `SELECT * FROM   ${tb_name}  WHERE id =$1;`,[record_id]
+        `SELECT ceil(COUNT(*)/$1::numeric) as max_page FROM orders;`,[limit]
     )
 }
-exports.maxPage = (tb_name)=> {
+exports.getAllRecord = (page)=>{
     return pool.query(
-        `SELECT ceil(COUNT(*)/$1::numeric) as max_page FROM ${tb_name};`,[limit]
-    )
-}
-exports.getRecord = (page, tb_name)=>{
-    return pool.query(
-        `SELECT * FROM ${tb_name}
+        `SELECT orders.id,user_id,fullname,email,address,detail_address,payment,total,order_state.description as state,TO_CHAR(create_date::date, 'dd-mm-yyyy') as create_date FROM orders,order_state WHERE state=order_state.id
         LIMIT $1 OFFSET $2;`,[limit,(page-1)*limit]
-      )
+    )
 }
-
 exports.recordOrder = (page, record_id)=>{
     return pool.query(
         `SELECT order_product.order_id, order_product.product_id, product.title, order_product.quantity  

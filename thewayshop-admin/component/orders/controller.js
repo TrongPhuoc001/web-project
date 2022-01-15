@@ -5,14 +5,11 @@ const view = '../component/orders/view/';
 exports.viewOrders = async function(req, res) {
 
   const page = parseInt(req.query.page)||1;
-  const column_name = await service.getColumnName('orders');
-  const record = await service.getRecord(page, 'orders');
-  let max_page = await service.maxPage('orders');
+  const record = await service.getAllRecord(page);
+  let max_page = await service.maxPage();
   max_page = parseInt(max_page.rows[0].max_page);
   return res.render(view+'orders',{
     title:`Data for orders`,
-    table_name:`orders`,
-    column_name:column_name.rows,
     record: record.rows,
     order_active:true,
     page:page,
