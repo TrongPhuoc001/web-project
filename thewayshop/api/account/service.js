@@ -14,6 +14,13 @@ exports.addWishList = (user_id,pro_id)=>{
     )
 }
 
+exports.confirm_order = (order, user_id) => {
+    return pool.query(
+      `insert into orders(user_id, fullname, email, address,detail_address,payment) values ('${user_id}',
+      '${order.firstName} + ${order.lastName}','${order.email}', '${order.address}', '${order.address2}', '${order.paymentMethod}')`
+    );
+  };
+
 exports.getWishlist = (user_id,page)=>{
     return pool.query(
         `SELECT id,title,image,price FROM product,wishlist 
