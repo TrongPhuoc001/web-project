@@ -1,9 +1,9 @@
 const pool = require('../../models/config/dbconnect')
 
-exports.addSubImage = (product_id,simg1,simg2)=>{
+exports.addSubImage = (product_id,simg)=>{
     return pool.query(
         `INSERT INTO product_image(product_id,image)
-        VALUES ($1,$2),($1,$3)`,[product_id,simg1,simg2]
+        VALUES ($1,$2);`,[product_id,simg]
     )
 }
 
@@ -17,7 +17,7 @@ exports.getSubImage = (product_id)=>{
 exports.addPro = (title,description,price,image,brand,tag_id,available)=>{
     return pool.query(
         `INSERT INTO product(title,description,price,image,brand,tag_id,available)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id`,[title,description,price,image,brand,tag_id,available]
+        VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id`,[title,description,price,image,brand,tag_id,available]
     )
 }
 
@@ -38,4 +38,8 @@ exports.updatePro = (pro_id,title,description,price,image,brand,tag_id,available
 
 exports.getTag = pool.query(
     `SELECT * FROM tag ORDER BY id;`
+)
+
+exports.setClearCache = pool.query(
+    `UPDATE cache_action SET action = true WHERE name='clear';`
 )

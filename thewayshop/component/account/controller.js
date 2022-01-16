@@ -44,21 +44,6 @@ exports.status = async (req, res) => {
   const data = await service.get_data(user_id);
 
   res.render(view + "status", { title: "Status", data: data.rows });
-
-  tmp = data.rows;
- let data_write = ''
-  for (let i = 1; i < tmp.length; i++) {
-    data_write += JSON.stringify(tmp[i]); 
-    data_write += '\n'
-  }
-    // write file to disk
-    fs.writeFile(
-      "E:/Năm 2/Web/Web-project/web-project/data.json",data_write,"utf8",(err) => {
-        if (!err) {
-          console.log(`File is written successfully!`);
-        }
-      }
-    );
  
 };
 exports.wishlist = (req, res) => {

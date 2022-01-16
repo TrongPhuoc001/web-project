@@ -18,4 +18,7 @@ module.exports = {
             accum += block.fn(i);
         return accum;
     },
+    inc: function(value, options){
+        return parseInt(value) + 1;
+    },
 }

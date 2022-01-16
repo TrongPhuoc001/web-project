@@ -7,6 +7,8 @@ Phim hướng dẫn
 *Sử dụng một thư viện chuyên về authentication
 *Website đã được đăng và hoạt động tốt trên host thực tế
 
+-- multi image, order , clear cache
+ 
 -- số lần xem sản phẩm,
 tùy chỉnh hiển thị,
 Thống kê doanh số bán hàng theo

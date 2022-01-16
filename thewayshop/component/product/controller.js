@@ -39,19 +39,25 @@ exports.mainPage = async(req,res)=>{
 exports.proDetail = async (req,res)=>{
 
     const pro_id = req.params.product_id;
-    const product = await service.getOne(pro_id);
-    const relate = await service.getRelate(pro_id);
-    const pro_image = await service.getProImage(pro_id);
-    const numberRating = await service.numberRating(pro_id);
-    const numberComment = await service.numerComment(pro_id);
-    res.render(view+'productDetail',{
-        title: product.rows[0].title, 
-        product:product.rows[0],
-        products:relate.rows,
-        number_rating:numberRating.rows[0].max_rating,
-        number_comment:numberComment.rows[0].max_comment,
-        pro_image:pro_image.rows
-    })
+    try{
+        const product = await service.getOne(pro_id);
+        const relate = await service.getRelate(pro_id);
+        const pro_image = await service.getProImage(pro_id);
+        const numberRating = await service.numberRating(pro_id);
+        const numberComment = await service.numerComment(pro_id);
+        res.render(view+'productDetail',{
+            title: product.rows[0].title, 
+            product:product.rows[0],
+            products:relate.rows,
+            number_rating:numberRating.rows[0].max_rating,
+            number_comment:numberComment.rows[0].max_comment,
+            pro_image:pro_image.rows
+        })
+    }
+    catch(err){
+        res.render('error');
+    }
+    
 }
 
 exports.filterCategory = async (req,res)=>{

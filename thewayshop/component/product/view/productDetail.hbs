@@ -137,12 +137,11 @@
                         <li data-target="#carousel-example-1" data-slide-to="0" class="active">
                             <img class="d-block w-100 img-fluid" src="{{product.image}}" alt="" />
                         </li>
-                        <li data-target="#carousel-example-1" data-slide-to="1">
-                            <img class="d-block w-100 img-fluid" src="{{pro_image.[0].image}}" alt="" />
+                        {{#each pro_image}}
+                        <li data-target="#carousel-example-1" data-slide-to="{{inc @index}}">
+                            <img class="d-block w-100 img-fluid" src="{{this.image}}" alt="" />
                         </li>
-                        <li data-target="#carousel-example-1" data-slide-to="2">
-                            <img class="d-block w-100 img-fluid" src="{{pro_image.[1].image}}" alt="" />
-                        </li>
+                        {{/each}}
                     </ol>
                 </div>
             </div>
@@ -156,29 +155,7 @@
                     <h4 style="display: inline-block;margin-top:0px;">Category:</h4>
                     <a href="/product/category/{{product.cate_name}}">{{product.cate_name}}</a>/<a href="/product/tag/{{product.tag_name}}">{{product.tag_name}}</a>
                     
-                    <ul>
-                        <li>
-                            <div class="form-group size-st">
-                                <label class="size-label">Size</label>
-                                <select id="basic" class="selectpicker show-tick form-control">
-                        <option value="0">Size</option>
-                        <option value="0">S</option>
-                        <option value="1">M</option>
-                        <option value="1">L</option>
-                        <option value="1">XL</option>
-                        <option value="1">XXL</option>
-                        <option value="1">3XL</option>
-                        <option value="1">4XL</option>
-                    </select>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="form-group quantity-box">
-                                <label class="control-label">Quantity</label>
-                                <input class="form-control" value="0" min="0" max="20" type="number">
-                            </div>
-                        </li>
-                    </ul>
+                    <h4 style="display: inline-block;margin-top:0px;">Brand:{{product.brand}}</h4>
 
                     <div class="price-box-bar">
                         <div class="cart-and-bay-btn">

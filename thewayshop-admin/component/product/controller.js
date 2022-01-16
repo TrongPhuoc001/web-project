@@ -34,28 +34,35 @@ exports.get = async (req,res)=>{
 }
 exports.getProduct = async (req,res)=>{
 
-    const {product_id} = req.params;
-    const product = await productModel.getOne(product_id);
-    const taglist = await service.getTag;
-    const subimage = await service.getSubImage(product_id);
-    if(subimage.rows.length === 0){
-        const temp = [
-            {
-                'image':''
-            },
-            {
-                'image':''
-            }
-        ];
-        subimage.rows = temp;
+    try{
+        const {product_id} = req.params;
+        const product = await productModel.getOne(product_id);
+        const taglist = await service.getTag;
+        const subimage = await service.getSubImage(product_id);
+        if(subimage.rows.length === 0){
+            const temp = [
+                {
+                    'image':''
+                },
+                {
+                    'image':''
+                }
+            ];
+            subimage.rows = temp;
+        }
+        res.render(view+'productEdit', { 
+            title: product.rows[0].title,
+            product:product.rows[0],
+            tagList:taglist.rows,
+            subimage:subimage.rows,
+            product_active:true
+        });
     }
-    res.render(view+'productEdit', { 
-        title: product.rows[0].title,
-        product:product.rows[0],
-        tagList:taglist.rows,
-        subimage:subimage.rows,
-        product_active:true
-    });
+    catch(err){
+        console.log(err);
+        res.render('error');
+    }
+    
 }
 
 exports.postProduct = async (req,res)=>{
@@ -86,11 +93,12 @@ exports.getAddProduct = async (req,res)=>{
         brand:'Brand of the product',
         tag_id:'Id of 1 of the tag',
         available:'Have in store',
-        sold:'Have sold'
     }
+    const tag = await service.getTag;
     res.render(view+'productAdd', { 
         title: 'New product',
         product:product,
+        tag:tag.rows,
         product_active:true
     });
 }
@@ -104,14 +112,15 @@ exports.postAddProduct = async(req,res)=>{
         brand:'Brand of the product',
         tag_id:'Id of 1 of the tag',
         available:'Have in store',
-        sold:'Have sold'
     }
     try{
-        const {title,description,price,image,subimage1,subimage2,brand,tag_id,available,sold} = req.body
-        const newProId = await service.addPro(title,description,price,image,brand,tag_id,available,sold)
-        if(!subimage1)subimage1='';
-        if(!subimage2)subimage2='';
-        await service.addSubImage(newProId.rows[0].id,subimage1,subimage2)
+        const {title,description,price,image,subimage,brand,tag_id,available} = req.body;
+        const subimg_arr = JSON.parse(subimage);
+        const newProId = await service.addPro(title,description,price,image,brand,tag_id,available);
+        for await(const img of subimg_arr){
+            await service.addSubImage(newProId.rows[0].id,img)
+        }
+        service.setClearCache;
         res.render(view+'productAdd', { 
             title: 'New product',
             product:product,
@@ -121,10 +130,11 @@ exports.postAddProduct = async(req,res)=>{
         });
     }
     catch(err){
+        console.log(err);
         res.render(view+'productAdd', { 
             title: 'New product',
             product:product,
-            error:err.routine,
+            error:err.detail,
             product_active:true
         });
     }
@@ -156,7 +166,8 @@ exports.delete = async(req,res)=>{
     const {id} = req.params;
     if(!id) throw false;
 
-   await productModel.delete(id);
-
+    await productModel.delete(id);
+    service.setClearCache;
+    productCache.reset();
     res.redirect('/product')
 }

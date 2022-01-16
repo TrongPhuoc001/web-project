@@ -18,12 +18,14 @@
                             {{#ifeq @key 'image'}}
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" name="{{@key}}" value="{{this}}">
-                                <input type="text" class="form-control" name="subimage1" value="{{../subimage.[0].image}}">
-                                <input type="text" class="form-control" name="subimage2" value="{{../subimage.[1].image}}">
+                                {{#each ../subimage}}
+                                <input type="text" class="form-control" name="subimage1" value="{{this.image}}">
+                                {{/each}}
                             </div>
                             <img src="{{this}}" width="80">
-                            <img src="{{../subimage.[0].image}}" width="80">
-                            <img src="{{../subimage.[1].image}}" width="80">
+                            {{#each ../subimage}}
+                            <img src="{{this.image}}" width="80">
+                            {{/each}}
                             {{else}}
                             {{#ifeq @key 'tag_id'}}
                             <div class="col-sm-10">
@@ -38,7 +40,6 @@
                             <div class="col-sm-10">
                                 <select name="state" class="form-control" style="width: 30%;">
                                     <option value="new" {{#ifeq this 'new'}}selected{{/ifeq}}>NEW</option>
-                                    <option value="sale" {{#ifeq this 'sale'}}selected{{/ifeq}}>SALE</option>
                                     <option value="top" {{#ifeq this 'top'}}selected{{/ifeq}}>TOP</option>
                                     <option value="out" {{#ifeq this 'out'}}selected{{/ifeq}}>OUT</option>
                                 </select>
