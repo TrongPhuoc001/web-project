@@ -67,17 +67,7 @@ app.use(function (req, res, next) {
   next(createError(404));
 });
 
-app2.get("/getdata", function (req, res) {
-  fs.readFile("E:/Năm 2/Web/Web-project/web-project" + "/" + "data.json", "utf8", function (err, data) {
-    res.end(data);
-  });
-});
 
-var server = app2.listen(8080, function () {
-  var host = server.address().address;
-  var port = server.address().port;
-  console.log("restfull API demo", host, port);
-});
 
 // error handler
 app.use(function (err, req, res, next) {

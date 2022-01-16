@@ -13,4 +13,5 @@ router.post('/cart',controller.postCart);
 router.put('/cart',controller.updateCart);
 router.delete('/cart',controller.delCart);
 router.post('/placeorder', controller.placeorder)
+router.get('/get_infor_order/:user_id', controller.loadMore)
 module.exports = router;

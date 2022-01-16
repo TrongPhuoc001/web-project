@@ -40,26 +40,8 @@ exports.status = async (req, res) => {
   if (!req.user) {
     return res.redirect("/login");
   }
-  const user_id = req.user.id;
-  const data = await service.get_data(user_id);
-
-  res.render(view + "status", { title: "Status", data: data.rows });
-
-  tmp = data.rows;
- let data_write = ''
-  for (let i = 1; i < tmp.length; i++) {
-    data_write += JSON.stringify(tmp[i]); 
-    data_write += '\n'
-  }
-    // write file to disk
-    fs.writeFile(
-      "E:/Năm 2/Web/Web-project/web-project/data.json",data_write,"utf8",(err) => {
-        if (!err) {
-          console.log(`File is written successfully!`);
-        }
-      }
-    );
- 
+  const page = Math.max(parseInt(req.query.page) || 1, 1);
+  res.render(view + "status", { title: "Status", page:page });
 };
 exports.wishlist = (req, res) => {
   res.render(view + "wishlistList", {

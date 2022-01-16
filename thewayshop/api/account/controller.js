@@ -94,6 +94,7 @@ exports.postCart = async (req, res) => {
     res.status(400).json(e);
   }
 };
+
 exports.updateCart = async (req, res) => {
   const { user_id, pro_id, quantity } = req.body;
   console.log(user_id, pro_id, quantity);
@@ -116,11 +117,8 @@ exports.delCart = async (req, res) => {
 };
 
 exports.loadMore = async (req, res) => {
-  if (!req.user) {
-    return res.redirect("/login");
-  }
-  const user_id = req.user.id;
-  let info_loadmore = await service.loadMore(user_id);
-  return info_loadmore.json();
+  const user_id = req.params.user_id;
+  const page = req.query.page;
+  let info_loadmore = await service.loadMore(user_id,page);
+  return res.status(200).json(info_loadmore.rows);
 };
-
