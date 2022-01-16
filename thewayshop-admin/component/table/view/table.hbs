@@ -9,8 +9,8 @@
                         <table class="table table-bordered table-striped table-condensed cf">
                             <thead class="cf">
                                 <tr>
-                                    {{#each column_name}}
-                                    <th>{{this.column_name}}</th>
+                                    {{#each record.[0]}}
+                                    <th>{{@key}}</th>
                                     {{/each}}
                                 </tr>
                             </thead>

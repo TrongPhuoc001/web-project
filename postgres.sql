@@ -150,6 +150,7 @@ CREATE TABLE orders(
     payment VARCHAR(255) NOT NULL,
     total DECIMAL(12,2) NOT NULL DEFAULT 0,
     state INT DEFAULT 0,
+    cancel BOOLEAN DEFAULT false;
     create_date TIMESTAMP DEFAULT NOW(),
 
     CONSTRAINT fk_order_userid
