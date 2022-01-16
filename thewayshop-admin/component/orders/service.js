@@ -7,7 +7,7 @@ exports.maxPage = ()=> {
 }
 exports.getAllRecord = (page)=>{
     return pool.query(
-        `SELECT orders.id,user_id,fullname,email,address,detail_address,payment,total,order_state.description as state,TO_CHAR(create_date::date, 'dd-mm-yyyy') as create_date FROM orders,order_state WHERE state=order_state.id
+        `SELECT orders.id,user_id,fullname,email,address,detail_address,payment,total,state as state_id,order_state.description as state,TO_CHAR(create_date::date, 'dd-mm-yyyy') as create_date FROM orders,order_state WHERE state=order_state.id
         LIMIT $1 OFFSET $2;`,[limit,(page-1)*limit]
     )
 }
