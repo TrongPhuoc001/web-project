@@ -14,4 +14,6 @@ router.put('/cart',controller.updateCart);
 router.delete('/cart',controller.delCart);
 router.post('/placeorder', controller.placeorder)
 router.get('/get_infor_order/:user_id', controller.loadMore)
+router.get('/order/:order_id',controller.getOrderPro);
+router.delete('/:user_id/order/:order_id',controller.cancelOrder);
 module.exports = router;

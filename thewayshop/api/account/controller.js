@@ -122,3 +122,18 @@ exports.loadMore = async (req, res) => {
   let info_loadmore = await service.loadMore(user_id,page);
   return res.status(200).json(info_loadmore.rows);
 };
+
+exports.getOrderPro = async(req,res)=>{
+  const order_id = req.params.order_id;
+  const data = await service.getOrderPro(order_id);
+  res.status(200).json(data.rows)
+}
+
+exports.cancelOrder = async(req,res)=>{
+  const {user_id,order_id} = req.params;
+  const check = await service.cancelOrder(order_id,user_id);
+  if(!check.rows.length>0){
+    return res.status(400).json("cancel failed");
+  }
+  res.status(200).json('success');
+}

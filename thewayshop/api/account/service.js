@@ -67,6 +67,18 @@ exports.removeCart = (user_id,product_id)=>{
 }
 exports.loadMore = (user_id,page) => {
     return pool.query(
-      `select id,address,detail_address,email,state from orders where user_id=$1 LIMIT 3 OFFSET $2;`, [user_id,(page-1)*3] 
+      `select id,address,detail_address,email,state,TO_CHAR(create_date::date,'dd-mm-yyyy') as createDate,total,cancel from orders where user_id=$1 ORDER BY create_date DESC LIMIT 3 OFFSET $2;`, [user_id,(page-1)*3] 
     )
   }
+exports.getOrderPro = (order_id)=>{
+    return pool.query(
+        `SELECT title,price,image,quantity FROM product, order_product 
+        WHERE order_id =$1 
+        AND product_id = id;`,[order_id]
+    )
+}
+exports.cancelOrder = (order_id,user_id)=>{
+    return pool.query(
+        `UPDATE orders SET cancel=true WHERE id=$1 AND user_id=$2 AND state=0 RETURNING id;`,[order_id,user_id]
+    )
+}
