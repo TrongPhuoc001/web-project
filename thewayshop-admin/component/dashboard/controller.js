@@ -60,7 +60,6 @@ exports.getTopSellingProduct = async (req,res)=>{
     }
 
     const monthlyIncome = await service.monthIncome;
-
     res.render(view+'index', { 
         title: 'TheWayShop Adminsite',
         bestProduct:bestProduct.rows[0],

@@ -23,5 +23,5 @@ exports.soldByTag = pool.query(
 )
 
 exports.monthIncome = pool.query(
-    `SELECT TO_CHAR(create_date, 'MM') as month,SUM(total) FROM orders GROUP BY month ORDER BY month;`
+    `SELECT TO_CHAR(create_date, 'MM') as month,TO_CHAR(create_date, 'yyyy') as year,SUM(total) FROM orders GROUP BY month,year ORDER BY year, month;`
 )

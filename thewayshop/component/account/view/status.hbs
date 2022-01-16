@@ -15,7 +15,6 @@
                 <ul id="progressbar" class="text-center">
                     <li class="active step0"></li>
                     <li class="active step0"></li>
-                    <li class="active step0"></li>
                     <li class="step0"></li>
                 </ul>
             </div>
@@ -63,7 +62,7 @@
 
     function appendInfor(infos) {
         let html = '';
-        #.each(infors, function (index, infor) {
+        $.each(infors, function (index, infor) {
             html += '<div class="row d-flex justify-content-between px-3 top>'
              html += '< div class="d-flex" >'
                html += '<h5>Mã đơn hàng: <span class="text-primary font-weight-bold">{{ this.id }}</span></h5>'
@@ -76,7 +75,6 @@
         html += '<div class="row d-flex justify-content-center">'
             html += '<div class="col-12">'
                 html += '<ul id="progressbar" class="text-center">'
-                    html += '<li class="active step0"></li>'
                     html += '<li class="active step0"></li>'
                     html += '<li class="active step0"></li>'
                     html += '<li class="step0"></li>'

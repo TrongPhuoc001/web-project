@@ -5,6 +5,7 @@
         top: 5%;
         left: 50%;
         transform: translateX(-50%);
+        z-index: 10000;
     }
     figure {
         position: relative;
@@ -115,7 +116,10 @@
                             <thead class="cf">
                                 <tr>
                                     {{#each record.[0]}}
+                                    {{#ifeq @key 'state_id'}}
+                                    {{else}}
                                     <th>{{@key}}</th>
+                                    {{/ifeq}}
                                     {{/each}}
                                 </tr>
                             </thead>
@@ -123,7 +127,10 @@
                                 {{#each record}}
                                     <tr>
                                     {{#each this}}
+                                        {{#ifeq @key 'state_id'}}
+                                        {{else}}
                                         <td data-title="{{@key}}">{{this}}</td>
+                                        {{/ifeq}}
                                     {{/each}}
                                     {{#if this.id}}
                                         <td><a class="btn-view-order" data-id="{{this.id}}" data-state="{{this.state_id}}"><button>View Order</button></a></td>
