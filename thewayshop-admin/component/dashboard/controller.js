@@ -26,6 +26,7 @@ exports.getTopSellingProductByTag = async (req,res)=>{
 }
 
 exports.getTopSellingProduct = async (req,res)=>{
+    var month_name = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
 
     const member = await service.getMember;
     const tag = await tagModel.getAllTag;
@@ -33,8 +34,8 @@ exports.getTopSellingProduct = async (req,res)=>{
     const bestUser = await userModel.getTotalUserRecord;
     const countSent = await orderModel.countOrderSenT();
     const countOrder = await orderModel.countOrderMonth();
-    const dataOrder = {count1: countSent.rows[0].count, 
-        count2: countOrder.rows[0].count, percent: parseInt(countSent.rows[0].count/countOrder.rows[0].count)*100  }
+    const dataOrder = {count1: countSent.rows[0].count, count2: countOrder.rows[0].count, 
+        percent: parseInt(countSent.rows[0].count/countOrder.rows[0].count)*100, month: month_name[new Date().getMonth()]}
     const visit = await service.getVisit(7);
     const y_axis =[];
     const bar =[];
