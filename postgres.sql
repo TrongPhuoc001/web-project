@@ -209,6 +209,12 @@ CREATE TABLE order_state(
     id INT PRIMARY KEY,
     description VARCHAR(20) NOT NULL
 );
+
+CREATE TABLE cache_action(
+    name TEXT NOT NULL,
+    action BOOLEAN DEFAULT false
+);
+INSERT INTO cache_action(name) VALUES ('clear');
 ALTER TABLE wishlist ADD CONSTRAINT wishlist_unique UNIQUE (user_id,product_id);
 ALTER TABLE cart ADD CONSTRAINT cart_unique UNIQUE (user_id,product_id);
 ALTER TABLE orders ADD CONSTRAINT fk_order_state FOREIGN KEY (state) REFERENCES order_state(id) ON DELETE SET NULL;
@@ -248,6 +254,8 @@ BEGIN
 
     DELETE FROM cart WHERE user_id = new.user_id;
     RETURN new;
+
+    UPDATE orders SET total = total*1.02 WHERE id=new.id;
 END;
 $BODY$
 language plpgsql;

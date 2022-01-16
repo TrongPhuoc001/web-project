@@ -3,6 +3,7 @@ const productModel = require('../../models/product')
 const service = require('./service')
 const tagModel = require('../../models/tag')
 const userModel = require('../../models/user')
+const orderModel = require('../../models/order')
 
 const view = '../component/dashboard/view/';
 
@@ -25,12 +26,16 @@ exports.getTopSellingProductByTag = async (req,res)=>{
 }
 
 exports.getTopSellingProduct = async (req,res)=>{
+    var month_name = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
 
     const member = await service.getMember;
     const tag = await tagModel.getAllTag;
     const bestProduct = await productModel.getTopSellingProduct;
     const bestUser = await userModel.getTotalUserRecord;
-    
+    const countSent = await orderModel.countOrderSenT();
+    const countOrder = await orderModel.countOrderMonth();
+    const dataOrder = {count1: countSent.rows[0].count, count2: countOrder.rows[0].count, 
+        percent: parseInt(countSent.rows[0].count/countOrder.rows[0].count)*100, month: month_name[new Date().getMonth()]}
     const visit = await service.getVisit(7);
     const y_axis =[];
     const bar =[];
@@ -60,7 +65,6 @@ exports.getTopSellingProduct = async (req,res)=>{
     }
 
     const monthlyIncome = await service.monthIncome;
-
     res.render(view+'index', { 
         title: 'TheWayShop Adminsite',
         bestProduct:bestProduct.rows[0],
@@ -70,6 +74,7 @@ exports.getTopSellingProduct = async (req,res)=>{
         tagNow:'All',
         y_axis:y_axis,
         bar:bar,
+        dataOrder: dataOrder,
         label:label,
         data:data,
         bestUser: bestUser.rows[0], 

@@ -4,22 +4,22 @@
     <div class="col-md-4 col-sm-4 mb">
         <div class="white-panel pn donut-chart">
             <div class="white-header">
-                <h5>SERVER LOAD</h5>
+                <h5>DELIVERY STATUS {{dataOrder.month}}</h5>
             </div>
             <div class="row">
                 <div class="col-sm-6 col-xs-6 goleft">
-                    <p><i class="fa fa-database"></i> 70%</p>
+                    <p><i class="fa fa-database"></i> {{dataOrder.percent}}% delivered</p>
                 </div>
             </div>
             <canvas id="serverstatus01" height="120" width="120"></canvas>
             <script>
-                var doughnutData = [
+                var doughnutData = [    
                         {
-                            value: 70,
+                            value: {{dataOrder.count1}},
                             color:"#68dff0"
                         },
                         {
-                            value : 30,
+                            value : {{dataOrder.count2}},
                             color : "#fdfdfd"
                         }
                     ];

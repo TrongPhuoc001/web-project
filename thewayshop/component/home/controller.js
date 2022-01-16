@@ -3,8 +3,8 @@ const service = require('./service')
 const view = '../component/home/view/'
 const {layout_cache} = require('../../helper/lruCache');
 exports.homePage = async (req,res)=>{
-    const recent_pro = await service.getRecent;
-    const top_pro = await service.getTopSelling;
+    const recent_pro = await service.getRecent();
+    const top_pro = await service.getTopSelling();
     res.render(view+'index', { 
         title: 'The Way Shop', 
         recent_product: recent_pro.rows,
