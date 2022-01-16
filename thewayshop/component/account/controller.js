@@ -1,141 +1,159 @@
-const bcrypt = require('bcrypt')
-const service = require('./service');
-
-const {profileValid,changepassValid} = require('../../helper/joiValidation')
+const bcrypt = require("bcrypt");
+const service = require("./service");
+const fs = require("fs");
+const { profileValid, changepassValid } = require("../../helper/joiValidation");
 const view = "../component/account/view/";
 
-exports.myaccount = (req,res)=>{
-    res.render(view+'myaccountList', { 
-        title: 'My Account', 
+exports.myaccount = (req, res) => {
+  res.render(view + "myaccountList", {
+    title: "My Account",
+  });
+};
+
+exports.cart = (req, res) => {
+  res.render(view + "cartList", {
+    title: "Cart",
+  });
+};
+
+exports.checkout = (req, res) => {
+  res.render(view + "checkoutList", {
+    title: "Check Out",
+  });
+};
+
+// ////////////////////////////////////////////
+exports.confirm = async (req, res) => {
+  if (!req.user) {
+    return res.redirect("/login");
+  }
+  const user_id = req.user.id;
+  let order_product = await service.confirm_order(user_id);
+  if (order_product) {
+    return res.redirect("/myaccount/status");
+  }
+};
+
+// /////////////////////////////////////////
+
+exports.status = async (req, res) => {
+  if (!req.user) {
+    return res.redirect("/login");
+  }
+  const user_id = req.user.id;
+  const data = await service.get_data(user_id);
+
+  res.render(view + "status", { title: "Status", data: data.rows });
+
+  tmp = data.rows;
+ let data_write = ''
+  for (let i = 1; i < tmp.length; i++) {
+    data_write += JSON.stringify(tmp[i]); 
+    data_write += '\n'
+  }
+    // write file to disk
+    fs.writeFile(
+      "E:/Năm 2/Web/Web-project/web-project/data.json",data_write,"utf8",(err) => {
+        if (!err) {
+          console.log(`File is written successfully!`);
+        }
+      }
+    );
+ 
+};
+exports.wishlist = (req, res) => {
+  res.render(view + "wishlistList", {
+    title: "Wish List",
+  });
+};
+
+exports.profile = async (req, res) => {
+  if (!req.user) {
+    return res.redirect("/login");
+  }
+  const user_id = req.user.id;
+  const user_info = await service.profile(user_id);
+
+  return res.render(view + "profile", {
+    title: "My profile",
+    user_info: user_info.rows[0],
+  });
+};
+
+exports.yourorder = (req, res) => {
+  res.render(view + "yourorder", {
+    title: "Your order",
+  });
+};
+
+exports.editProfile = async (req, res) => {
+  if (!req.user) {
+    return res.redirect("/login");
+  }
+  const { error } = profileValid(req.body);
+  if (error) {
+    return res.render(view + "profile", {
+      title: "Profile",
+      error: "Invalid infomation:" + error.details[0].message,
     });
-}
-
-exports.cart = (req,res)=>{
-    res.render(view+'cartList', { 
-        title: 'Cart', 
+  }
+  const user_id = req.user.id;
+  const { name, birthday, address, image } = req.body;
+  try {
+    console.log(name, birthday, address, image, user_id);
+    const user_info = await service.editProfile(
+      name,
+      birthday,
+      address,
+      image,
+      user_id
+    );
+    return res.render(view + "profile", {
+      title: "My profile",
+      user_info: user_info.rows[0],
     });
-}
+  } catch (e) {
+    console.log(e);
+    res.send("error");
+  }
+};
 
-exports.checkout = (req,res)=>{
-    res.render(view+'checkoutList', { 
-        title: 'Check Out', 
+exports.changepass = async (req, res) => {
+  if (!req.user) {
+    return res.redirect("/login");
+  }
+  res.render(view + "changepass");
+};
+
+exports.postchangepass = async (req, res) => {
+  if (!req.user) {
+    return res.redirect("/login");
+  }
+  const { error } = changepassValid(req.body);
+  if (error) {
+    return res.render(view + "changepass", {
+      title: "Profile",
+      error: "Invalid infomation:" + error.details[0].message,
     });
-}
-
-exports.confirm = (req,res)=>{
-    res.json(req.body)
-    console.log("helo")
-}
-
-exports.confirm = async (req,res)=>{
-    const order = req.body;
-    if(!req.user){
-        return res.redirect('/login');
-    }
-    const user_id = req.user.id;
-
-    const user_info = await service.confirm_order(order,user_id);
-    
-    if(user_info){
-        res.render(view+'status', {title:'status order'})
-    }
-}
-
-exports.status = (req,res)=>{
-    res.render(view+'status', { 
-        title: 'status order', 
+  }
+  const { oldpassword, newpassword } = req.body;
+  const user_id = req.user.id;
+  const password = await service.getpass(user_id);
+  const match = await bcrypt.compare(oldpassword, password.rows[0].password);
+  if (!match) {
+    return res.render(view + "changepass", {
+      title: "Profile",
+      error: "Invalid infomation: Old password isn't correct.",
     });
-}
-exports.wishlist = (req,res)=>{
-    res.render(view+'wishlistList', { 
-        title: 'Wish List', 
+  }
+  const hashedPassword = await bcrypt.hash(newpassword, 10);
+  try {
+    await service.changepass(hashedPassword, user_id);
+    return res.render(view + "changepass", {
+      title: "Profile",
+      message: "Password change successfully.",
     });
-}
-
-exports.profile = async (req,res)=>{
-    if(!req.user){
-        return res.redirect('/login');
-    }
-    const user_id = req.user.id;
-    const user_info = await service.profile(user_id);
-
-    return res.render(view+'profile',{
-        title:'My profile',
-        user_info:user_info.rows[0]
-    })
-}
-
-exports.yourorder = (req,res) => {
-    res.render(view+'yourorder',{
-        title: 'Your order',
-    });
-}
-
-exports.editProfile = async(req,res)=>{
-    if(!req.user){
-        return res.redirect('/login');
-    }
-    const {error} = profileValid(req.body);
-    if(error){ 
-        return res.render(view+'profile', { 
-            title: 'Profile', 
-            error:'Invalid infomation:'+ error.details[0].message
-        })
-    }
-    const user_id = req.user.id;
-    const {name,birthday,address,image} = req.body;
-    try{
-        console.log(name,birthday,address,image,user_id);
-        const user_info = await service.editProfile(name,birthday,address,image,user_id);
-        return res.render(view+'profile',{
-            title:'My profile',
-            user_info:user_info.rows[0]
-        })
-    }
-    catch(e){
-        console.log(e);
-        res.send('error');
-    }
-}
-
-exports.changepass = async(req,res)=>{
-    if(!req.user){
-        return res.redirect('/login');
-    }
-    res.render(view+'changepass');
-}
-
-exports.postchangepass = async(req,res)=>{
-    if(!req.user){
-        return res.redirect('/login');
-    }
-    const {error} = changepassValid(req.body);
-    if(error){ 
-        return res.render(view+'changepass', { 
-            title: 'Profile', 
-            error:'Invalid infomation:'+ error.details[0].message
-        })
-    }
-    const {oldpassword,newpassword} = req.body;
-    const user_id = req.user.id;
-    const password = await service.getpass(user_id);
-    const match = await bcrypt.compare(oldpassword,password.rows[0].password)
-    if(!match){
-        return res.render(view+'changepass', { 
-            title: 'Profile', 
-            error:"Invalid infomation: Old password isn't correct."
-        })
-    }
-    const hashedPassword = await bcrypt.hash(newpassword,10);
-    try{
-        await service.changepass(hashedPassword,user_id);
-        return res.render(view+'changepass', { 
-            title: 'Profile', 
-            message:"Password change successfully."
-        })
-    }
-    catch(e){
-        res.send('error')
-    }
-    
-}
+  } catch (e) {
+    res.send("error");
+  }
+};

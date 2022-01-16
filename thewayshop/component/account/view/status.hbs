@@ -1,12 +1,13 @@
 <div class="container px-1 px-md-4 py-5 mx-auto">
+    {{#each data}}
     <div class="card">
         <div class="row d-flex justify-content-between px-3 top">
             <div class="d-flex">
-                <h5>ORDER <span class="text-primary font-weight-bold">#Y34XDHR</span></h5>
+                <h5>Mã đơn hàng: <span class="text-primary font-weight-bold">{{this.id}}</span></h5>
             </div>
             <div class="d-flex flex-column text-sm-right">
-                <p class="mb-0">Expected Arrival <span>01/12/21</span></p>
-                <p>USPS <span class="font-weight-bold">234094567242423422898</span></p>
+                <p class="mb-0">Địa chỉ giao hàng : <span>{{this.address}}</span></p>
+                <p>Email liên hệ: <span class="font-weight-bold">{{this.email}}</span></p>
             </div>
         </div> <!-- Add class 'active' to progress -->
         <div class="row d-flex justify-content-center">
@@ -35,8 +36,75 @@
                     <p class="font-weight-bold">Order<br>Arrived</p>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
-    <hr> <a href="/myaccount/yourorder" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Back to orders</a>
+    {{/each}}
+    <hr> <a href="/myaccount/yourorder" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Back
+        to orders</a>
 </div>
 
+{{#section "script"}}
+<script>
+    // ajax load more 
+    $(function () {
+        get_inforOrder();
+    });
+    function get_inforOrder() {
+        $.ajax({
+            type: "get",
+            url: 'http://localhost:8080/getdata',
+            dataType: 'json',
+            success: function (infors) {
+                console.log('aaa', infors)
+                appendInfor(infors)
+            }
+        })
+    }
+
+    function appendInfor(infos) {
+        let html = '';
+        #.each(infors, function (index, infor) {
+            html += '<div class="row d-flex justify-content-between px-3 top>'
+             html += '< div class="d-flex" >'
+               html += '<h5>Mã đơn hàng: <span class="text-primary font-weight-bold">{{ this.id }}</span></h5>'
+           html += ' </div >'
+              html += '<div class="d-flex flex-column text-sm-right">'
+               html += '<p class="mb-0">Địa chỉ giao hàng :  <span>{{ this.address }}</span></p>'
+                html += '<p>Email liên hệ:  <span class="font-weight-bold">{{ this.email }}</span></p>'
+              html += '</div>'
+        html += '</div > < !--Add class 'active' to progress-- >'
+        html += '<div class="row d-flex justify-content-center">'
+            html += '<div class="col-12">'
+                html += '<ul id="progressbar" class="text-center">'
+                    html += '<li class="active step0"></li>'
+                    html += '<li class="active step0"></li>'
+                    html += '<li class="active step0"></li>'
+                    html += '<li class="step0"></li>'
+                html += '</ul>'
+            html += '</div>'
+        html += '</div>'
+        html += '<div class="row justify-content-between top">'
+            html += '<div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/9nnc9Et.png">'
+                html += '<div class="d-flex flex-column">'
+                    html += '<p class="font-weight-bold">Order<br>Processed</p>'
+                html += '</div>'
+            html += '</div>'
+            html += '<div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/u1AzR7w.png">'
+                html += '<div class="d-flex flex-column">'
+                    html += '<p class="font-weight-bold">Order<br>Shipped</p>'
+                html += '</div>'
+            html += '</div>'
+            html += '<div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/HdsziHP.png">'
+                html += '<div class="d-flex flex-column">'
+                    html += '<p class="font-weight-bold">Order<br>Arrived</p>'
+                html += '</div>'
+            html += '</div>'
+        html += '</div>'
+
+        });
+
+        $('.card').append(html);
+
+    }
+</script>
+{{/section}}

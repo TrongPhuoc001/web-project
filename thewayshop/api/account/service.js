@@ -65,3 +65,8 @@ exports.removeCart = (user_id,product_id)=>{
         `DELETE FROM cart WHERE user_id=$1 AND product_id = $2;`,[user_id,product_id]
     )
 }
+exports.loadMore = (user_id) => {
+    return pool.query(
+      `select id,address,detail_address,email from orders where user_id='${user_id}'`
+    )
+  }

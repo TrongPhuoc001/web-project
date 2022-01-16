@@ -1,4 +1,5 @@
 const express = require('express');
+const { route } = require('../../app');
 const router = express.Router();
 const controller = require('./controller');
 /* GET home page. */
@@ -11,4 +12,5 @@ router.get('/:user_id/cart',controller.getCart);
 router.post('/cart',controller.postCart);
 router.put('/cart',controller.updateCart);
 router.delete('/cart',controller.delCart);
+router.post('/placeorder', controller.placeorder)
 module.exports = router;

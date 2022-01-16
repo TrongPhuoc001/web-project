@@ -36,3 +36,9 @@ exports.confirm_order = (order, user_id) => {
     '${order.firstName} + ${order.lastName}','${order.email}', '${order.address}', '${order.address2}', '${order.paymentMethod}')`
   );
 };
+
+exports.get_data = (user_id) => {
+  return pool.query(
+    `select id,email,detail_address,address from orders where user_id = '${user_id}'`
+  )
+}
