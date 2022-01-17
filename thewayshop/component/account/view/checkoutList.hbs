@@ -43,12 +43,12 @@
                             <div class="title"> <span>Payment</span> </div>
                             <div class="d-block my-3">
                                 <div class="custom-control custom-radio">
-                                    <input id="cash" name="paymentMethod" type="radio" class="custom-control-input"
+                                    <input value= "cash" id="cash" name="paymentMethod" type="radio" class="custom-control-input"
                                         required>
                                     <label class="custom-control-label" for="debit">Cash</label>
                                 </div>
                                 <div class="custom-control custom-radio">
-                                    <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input"
+                                    <input value="paypal" id="paypal" name="paymentMethod" type="radio" class="custom-control-input"
                                         required>
                                     <label class="custom-control-label" for="paypal">Paypal</label>
                                 </div>
@@ -122,7 +122,7 @@
                 <hr>
             </div>
         </div>
-        <button class="btn btn-primary pull-right" type="submit"> Place Order </button>
+        <button id= "confirm-btn"class="btn btn-primary pull-right" type="submit"> Place Order </button>
     </div>
 </div>
 
@@ -147,6 +147,9 @@
             cart = window.localStorage.cart;
         }
         cart = JSON.parse(cart);
+        if(cart === null){
+           document.querySelector('#confirm-btn').disabled = true;
+        }
         console.log(cart);
         updateView(cart);
     })

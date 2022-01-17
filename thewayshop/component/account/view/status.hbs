@@ -7,8 +7,8 @@
 {{#section "script"}}
 <script>
     // ajax load more 
-    let curr_page = {{{page}}}
-    $('document').ready(()=>{
+    let curr_page = {{{ page }}}
+    $('document').ready(() => {
         $.ajax({
             type: "get",
             url: `/api/account/get_infor_order/${user_id}?page=${curr_page}`,
@@ -21,7 +21,7 @@
     function get_inforOrder() {
         $.ajax({
             type: "get",
-            url: `/api/account/get_infor_order/${user_id}?page=${curr_page+1}`,
+            url: `/api/account/get_infor_order/${user_id}?page=${curr_page + 1}`,
             dataType: 'json',
             success: function (infors) {
                 console.log('aaa', infors)
@@ -30,28 +30,28 @@
             }
         })
     }
-    document.querySelector('#load-more').addEventListener('click',get_inforOrder);
+    document.querySelector('#load-more').addEventListener('click', get_inforOrder);
     function appendInfor(infors) {
         let html = '';
         $.each(infors, function (index, infor) {
-            let lis='';
-            for (let i =0;i<3;i++) {
-                if ( i<=parseInt(infor.state) ){
-                    lis +=`<li class="active step0"></li>`;
+            let lis = '';
+            for (let i = 0; i < 3; i++) {
+                if (i <= parseInt(infor.state)) {
+                    lis += `<li class="active step0"></li>`;
                 }
-                else{
-                    lis +=`<li class="step0"></li>`;
+                else {
+                    lis += `<li class="step0"></li>`;
                 }
             }
-            let styleCancel =''
-            if(infor.cancel){
-                styleCancel=`style="background-color:#ffc107;"`
-                lis=''
+            let styleCancel = ''
+            if (infor.cancel) {
+                styleCancel = `style="background-color:gray;"`
+                lis = ''
             }
-            html+=`<div class="card" id="${infor.id}" ${styleCancel}>
+            html += `<div class="card" id="${infor.id}" ${styleCancel}>
                     <div class="row d-flex justify-content-between px-3 top">
                         <div class="d-flex">
-                            <h5>Mã đơn hàng: <span onmouseover="hoverdiv(event,'divtoshow')" onmouseout="hoverdiv(event,'divtoshow')" class="text-primary font-weight-bold">${infor.id}</span></h5>
+                            <h5>Order Id: <span onmouseover="hoverdiv(event,'divtoshow')" onmouseout="hoverdiv(event,'divtoshow')" class="text-primary font-weight-bold">${infor.id}</span></h5>
                         </div>
                         
                         <div class="d-flex flex-column text-sm-right">
@@ -99,39 +99,39 @@
 
     }
     const order_cache = {};
-    function hoverdiv(e,divid){
+    function hoverdiv(e, divid) {
 
-        const left  = e.clientX  + "px";
-        const top  = e.clientY  + "px";
+        const left = e.clientX + "px";
+        const top = e.clientY + "px";
 
         const div = document.getElementById(divid);
-        $("#"+divid).toggle();
+        $("#" + divid).toggle();
         const order_id = e.target.textContent;
-        if(!order_cache[order_id]){
-            order_cache[order_id]=[];
-            $.get(`/api/account/order/${order_id}`,(data,status)=>{
-                if(status==="success"){
-                    div.innerHTML="";
-                    data.forEach(pro=>{
+        if (!order_cache[order_id]) {
+            order_cache[order_id] = [];
+            $.get(`/api/account/order/${order_id}`, (data, status) => {
+                if (status === "success") {
+                    div.innerHTML = "";
+                    data.forEach(pro => {
                         const p = `<div class="row">
                                         <img src="${pro.image}" width=30 height=30>
                                         <p>${pro.title}, quantity:${pro.quantity}, price:${pro.price}</p>
                                     </div>`;
-                        div.innerHTML+=p;
+                        div.innerHTML += p;
                     })
-                    order_cache[order_id]=data;
+                    order_cache[order_id] = data;
                 }
             })
         }
-        else{
+        else {
             const data = order_cache[order_id];
-            div.innerHTML='';
-            data.forEach(pro=>{
+            div.innerHTML = '';
+            data.forEach(pro => {
                 const p = `<div class="row">
                                 <img src="${pro.image}" width=30 height=30>
                                 <p>${pro.title}, quantity:${pro.quantity}, price:${pro.price}</p>
                             </div>`;
-                div.innerHTML+=p;
+                div.innerHTML += p;
             })
         }
         div.style.left = left;
@@ -139,25 +139,31 @@
         return false;
     }
 
-    function addCancelEvent(){
-        document.querySelectorAll('.btn-cancel').forEach(btn=>{
+    function addCancelEvent() {
+
+        document.querySelectorAll('.btn-cancel').forEach(btn => {
             const order_id = btn.dataset.id;
             const cancel = btn.dataset.cancel;
             const state = btn.dataset.state;
-            if(cancel==="true"||parseInt(state)>0){
-                btn.disabled= true;
-            }
-            btn.addEventListener('click',()=>{
-                $.ajax({
-                    type: "delete",
-                    url: `/api/account/${user_id}/order/${order_id}`,
-                    dataType: 'json',
-                    success: function (data){
-                        btn.disabled=true;
-                        document.querySelector(`#${order_id}`).style.backgroundColor='#ffc107';
-                    }
+            if (cancel === "true" || parseInt(state) > 0) {
+                btn.disabled = true;
+                btn.textContent = "Order cancelled";
+                document.querySelector(`#${order_id}`).style.backgroundColor = 'gray';
+            } else {
+                btn.addEventListener('click', () => {
+                    $.ajax({
+                        type: "delete",
+                        url: `/api/account/${user_id}/order/${order_id}`,
+                        dataType: 'json',
+                        success: function (data) {
+                            btn.disabled = true;
+                            btn.textContent = "Order cancelled";
+                            document.querySelector(`#${order_id}`).style.backgroundColor = 'gray';
+                        }
+                    })
                 })
-            })
+            }
+
         })
     }
 </script>

@@ -33,9 +33,10 @@ exports.getTopSellingProduct = async (req,res)=>{
     const bestProduct = await productModel.getTopSellingProduct;
     const bestUser = await userModel.getTotalUserRecord;
     const countSent = await orderModel.countOrderSenT();
-    const countOrder = await orderModel.countOrderMonth();
-    const dataOrder = {count1: countSent.rows[0].count, count2: countOrder.rows[0].count, 
-        percent: parseInt(countSent.rows[0].count/countOrder.rows[0].count)*100, month: month_name[new Date().getMonth()]}
+    const countOrderDelivering = await orderModel.countOrderUnSentMonth();
+    let sum = parseInt(countOrderDelivering.rows[0].count) + parseInt(countSent.rows[0].count);
+    const dataOrder = {count1: countSent.rows[0].count, count2: countOrderDelivering.rows[0].count, 
+        percent: parseInt(countSent.rows[0].count)*100/sum, month: month_name[new Date().getMonth()]}
     const visit = await service.getVisit(7);
     const y_axis =[];
     const bar =[];
