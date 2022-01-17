@@ -40,6 +40,8 @@ exports.getTag = pool.query(
     `SELECT * FROM tag ORDER BY id;`
 )
 
-exports.setClearCache = pool.query(
-    `UPDATE cache_action SET action = true WHERE name='clear';`
-)
+exports.setClearCache = ()=>{
+    return pool.query(
+        `UPDATE cache_action SET action = true WHERE name='clear';`
+    )
+}

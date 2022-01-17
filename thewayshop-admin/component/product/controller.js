@@ -120,7 +120,7 @@ exports.postAddProduct = async(req,res)=>{
         for await(const img of subimg_arr){
             await service.addSubImage(newProId.rows[0].id,img)
         }
-        service.setClearCache;
+        service.setClearCache();
         res.render(view+'productAdd', { 
             title: 'New product',
             product:product,
@@ -145,19 +145,18 @@ exports.searchProduct = async (req,res)=>{
     let {q,page} = req.query;
     page = Math.max(parseInt(page)||1,1);
 
-    const search_result = await productModel.searchName(q,page);
     let max_page = await productModel.countName(q);
     max_page = max_page.rows[0].max_page;
-
+    if(page>parseInt(max_page)){
+        page=max_page;
+    }
     res.render(view+'productpage',{
         title: 'Search',
         head : 'Search : '+q,
-        products:search_result.rows,
+        product_active:true,
         q:q,
         page:page,
-        next:page<max_page?page+1 : false,
-        pages:Array.from({length: max_page}, (v, k) => k+1),
-        previous:page>1?page-1:false,
+        max_page:max_page,
         product_active:true
     })
 }
@@ -167,7 +166,7 @@ exports.delete = async(req,res)=>{
     if(!id) throw false;
 
     await productModel.delete(id);
-    service.setClearCache;
+    service.setClearCache();
     productCache.reset();
     res.redirect('/product')
 }

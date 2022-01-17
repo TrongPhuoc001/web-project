@@ -31,59 +31,6 @@
     const max_page ={{{max_page}}}
     let curr_page = {{{page}}};
     const product_container = document.querySelector('#product-container');
-    const a_pages = document.querySelectorAll('.page-link');
-    a_pages.forEach(link=>{
-        link.addEventListener('click',(e)=>{
-            e.preventDefault();
-            const ref = link.href||'';
-            if(ref===''){
-                return;
-            }
-            const path = ref.replace(/^.*\/\/[^\/]+/, '');
-            const getPage = parseInt(path[path.length-1]);
-            $('#product-container').fadeOut(500);
-            setTimeout(function() {
-                if(!page_cache[getPage]){
-                    $.get('/api'+path,(data,status)=>{
-                        if(status==='success'){
-                            updateView(data);
-                            changePage(getPage,path);
-                            page_cache[curr_page] = data;
-                        }
-                        else{
-                            console.log('error',data);
-                        }
-                    })
-                }
-                else{
-                    updateView(page_cache[getPage])
-                    changePage(getPage,path);
-                }
-            }, 450);
-            
-            
-        })
-
-    })
-
-    function changePage(getPage,path){
-        history.pushState('','',path);
-        document.querySelector(`#page-${curr_page}`).setAttribute('href',`?page=${curr_page}`);
-        curr_page = getPage;
-        if(curr_page===1){
-            document.querySelector('#page-previous').removeAttribute('href');
-        }
-        else{
-            document.querySelector('#page-previous').setAttribute('href', `?page=${curr_page-1}`);
-        }
-        document.querySelector(`#page-${curr_page}`).removeAttribute('href')
-        if(!document.querySelector(`#page-${curr_page+1}`)){
-            document.querySelector('#page-next').removeAttribute('href');
-        }
-        else{
-            document.querySelector('#page-next').setAttribute('href',`?page=${curr_page+1}`);
-        }
-    }
 
     function updateView(data){
         product_container.innerHTML=''
@@ -122,16 +69,27 @@
         visiblePages: 2,
         startPage:curr_page,
         onPageClick: function (event, page) {
-            const path  = window.location.pathname;
+            const href = window.location.href;
+            const path  = href.replace(window.location.host,window.location.host+'/api');
+            let url = '';
+            if(!path.includes('?')){
+                url = path+`?page=${page}`;
+            }
+            else if(!path.includes('page')){
+                url = path+`&page=${page}`;
+            }
+            else{
+                url=path.replace(/page=[0-9]+/,`page=${page}`);
+            }
             $("HTML, BODY").animate({ scrollTop: $("#product-container").offset().top-100 }, 1000);
             $('#product-container').fadeOut(500);
             setTimeout(()=>{
                 product_container.innerHTML=''
                 if(!page_cache[page]){
-                    $.get('/api'+path+`?page=${page}`,(data,status)=>{
+                    $.get(url,(data,status)=>{
                         if(status==='success'){
                             updateView(data);
-                            history.pushState('','',path+`?page=${page}`);
+                            history.pushState('','',url.replace('api/',''));
                             page_cache[page] = data;
                         }
                         else{
@@ -141,7 +99,7 @@
                 }
                 else{
                     updateView(page_cache[page])
-                    history.pushState('','',path+`?page=${page}`);
+                    history.pushState('','',url.replace('api/',''));
                 }
             },500)
         }

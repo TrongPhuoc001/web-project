@@ -45,6 +45,7 @@
             }
             let styleCancel = ''
             if (infor.cancel) {
+                console.log(infor.cancel);
                 styleCancel = `style="background-color:gray;"`
                 lis = ''
             }
@@ -145,10 +146,18 @@
             const order_id = btn.dataset.id;
             const cancel = btn.dataset.cancel;
             const state = btn.dataset.state;
+            
             if (cancel === "true" || parseInt(state) > 0) {
                 btn.disabled = true;
-                btn.textContent = "Order cancelled";
-                document.querySelector(`#${order_id}`).style.backgroundColor = 'gray';
+                
+                if(parseInt(state) > 0){
+                    document.querySelector(`#${order_id}`).style.backgroundColor = '#d33b33';
+                }
+                else{
+                    btn.textContent = "Order cancelled";
+                    document.querySelector(`#${order_id}`).style.backgroundColor = 'gray';
+                }
+                
             } else {
                 btn.addEventListener('click', () => {
                     $.ajax({

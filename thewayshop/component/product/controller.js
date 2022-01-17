@@ -75,7 +75,7 @@ exports.filterCategory = async (req,res)=>{
         page=max_page
     }
     const total_product = await service.countProductCate(cate_name);
-    const maxCost = await service.getTagMostCost(cate_name);
+    const maxCost = await service.getCateMostCost(cate_name);
     res.render(view+'productList', { 
         title: cate_name, 
         max_cost:maxCost.rows[0].max,

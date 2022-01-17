@@ -50,7 +50,7 @@
                                 </span>
                                 </li>
                                 {{else}}
-                                <li class="page-item"><a class="page-link" href="/tables/{{table_name}}?page={{this}}">{{this}}</a></li>
+                                <li class="page-item"><a class="page-link" href="/tables/{{../table_name}}?page={{this}}">{{this}}</a></li>
                                 {{/ifeq}}
                                 {{/each}}
                                 {{#if next}}

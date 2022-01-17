@@ -49,7 +49,7 @@ exports.countName = (q)=>{
     return pool.query(
         `SELECT ceil(COUNT(*)/$1::numeric) as max_page 
         FROM product
-        WHERE lower(title) LIKE $2
+        WHERE lower(title) LIKE lower($2)   
         AND is_delete = 'f';`,[limit,title]
     )
 }

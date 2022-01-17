@@ -18,5 +18,9 @@ exports.getProductPage = async(req,res)=>{
 }
 
 exports.searchProduct = async(req,res)=>{
+    let {q,page} = req.query;
+    page = Math.max(parseInt(page)||1,1);
 
+    const search_result = await service.searchName(q,page);
+    res.json(search_result.rows)
 }

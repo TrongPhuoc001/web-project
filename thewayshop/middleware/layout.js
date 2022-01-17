@@ -32,11 +32,11 @@ module.exports = async(req,res,next)=>{
         brand = brand.rows;
         layout_cache.set("brand",brand);
     }
-    const checkClear = await checkCache.checkClear;
+    const checkClear = await checkCache.checkClear();
     if(checkClear.rows[0].action){
         product_cache.reset();
         filter_cache.reset();
-        await checkCache.setClear;
+        checkCache.setClear();
     }
     res.locals.coupons = coupons;
     res.locals.tags=tag;
