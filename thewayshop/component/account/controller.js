@@ -28,10 +28,11 @@ exports.confirm = async (req, res) => {
     return res.redirect("/login");
   }
   const user_id = req.user.id;
-  let order_product = await service.confirm_order(user_id);
+  console.log(user_id);
+  let order_product = await service.confirm_order(req.body, user_id);
   if (order_product) {
     return res.redirect("/myaccount/status");
-  }
+  } 
 };
 
 // /////////////////////////////////////////

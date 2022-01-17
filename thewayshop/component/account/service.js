@@ -32,13 +32,11 @@ exports.changepass = (newpass, user_id) => {
 };
 exports.confirm_order = (order, user_id) => {
   return pool.query(
-    `insert into orders(user_id, fullname, email, address,detail_address,payment) values ('${user_id}',
-    '${order.firstName} + ${order.lastName}','${order.email}', '${order.address}', '${order.address2}', '${order.paymentMethod}')`
-  );
+    `insert into orders(user_id, fullname, email, address,detail_address,payment) values ($1,
+    $2,$3, $4,$5,$6)`, [user_id,order.fullname+order.lastname, order.email,order.address, order.address2, order.paymentMethod])
 };
-
 exports.get_data = (user_id) => {
   return pool.query(
     `select id,email,detail_address,address from orders where user_id = '${user_id}'`
-  )
-}
+  );
+};
