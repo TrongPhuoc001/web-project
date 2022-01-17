@@ -150,7 +150,7 @@ CREATE TABLE orders(
     payment VARCHAR(255) NOT NULL,
     total DECIMAL(12,2) NOT NULL DEFAULT 0,
     state INT DEFAULT 0,
-    cancel BOOLEAN DEFAULT false;
+    cancel BOOLEAN DEFAULT false, 
     create_date TIMESTAMP DEFAULT NOW(),
 
     CONSTRAINT fk_order_userid
@@ -266,6 +266,28 @@ CREATE TRIGGER trig_checkout
      FOR EACH ROW
      EXECUTE PROCEDURE function_checkout_order();
 
+--restore porduct on cancel order
+CREATE OR REPLACE FUNCTION function_order_cancel() RETURNS TRIGGER AS
+$BODY$
+declare
+    r record;
+BEGIN
+    FOR r IN SELECT * FROM order_product WHERE order_id = new.id
+    LOOP 
+    UPDATE product 
+    SET available = product.available + r.quantity, sold = product.sold - r.quantity
+    WHERE id = r.product_id;
+    END LOOP;
+    UPDATE orders SET total=0 WHERE id=new.id;
+    RETURN new;
+END;
+$BODY$
+language plpgsql;
+
+CREATE TRIGGER trig_order_cancel
+     AFTER UPDATE OF cancel ON orders
+     FOR EACH ROW
+     EXECUTE PROCEDURE function_order_cancel();
 
 INSERT INTO order_state(id,description)
 VALUES (0,'Verify'),(1,'Delivering'),(2,'Delivered');
