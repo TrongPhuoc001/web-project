@@ -24,14 +24,14 @@
                             </div>
                             <div class="mb-3">
                                 <label for="email">Email Address *</label>
-                                <input type="email" class="form-control" name="email" id="email" placeholder="">
+                                <input type="email" class="form-control" name="email" id="email" placeholder="" value="{{infor.email}}" readonly>
                                 <div class="invalid-feedback"> Please enter a valid email address for shipping updates.
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label for="address">Address *</label>
                                 <input type="text" class="form-control" name="address" id="address" placeholder=""
-                                    required>
+                                    value="{{infor.address}}" required>
                                 <div class="invalid-feedback"> Please enter your shipping address. </div>
                             </div>
                             <div class="mb-3">

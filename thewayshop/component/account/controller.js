@@ -16,10 +16,18 @@ exports.cart = (req, res) => {
   });
 };
 
-exports.checkout = (req, res) => {
-  res.render(view + "checkoutList", {
-    title: "Check Out",
-  });
+exports.checkout = async(req, res) => {
+  if(!req.user){
+    return res.redirect('/login');
+  }
+  else{
+    const infor = await service.profile(req.user.id);
+    res.render(view + "checkoutList", {
+      title: "Check Out",
+      infor:infor.rows[0]
+    });
+  }
+  
 };
 
 // ////////////////////////////////////////////
